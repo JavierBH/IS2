@@ -1,0 +1,19 @@
+{% block title %}
+Register
+{% endblock %}
+{% block content %}
+<h1>Register</h1>
+<form method="post" action="{{ url_for('register') }}">
+        Usuario: <input type="text" name="usuario"><a>(obligatorio)</a><br>
+        Contraseña: <input type="text" name="contrasena"><a>(obligatorio)</a><br>
+        Repite contraseña: <input type="text" name="repite_contrasena"><a>(obligatorio)</a><br>
+        Email: <input type="text" name="email"><a>(obligatorio)</a><br>
+        Nombre: <input type="text" name="nombre"><br>
+        Nacionalidad: <input type="text" name="nacionalidad"><br>
+        Introducción: <input type="text" name="introduccion"><br>
+        Fecha: <input type="date" name="fecha"><br>
+        Foto: <input type="BLOB" name="foto"><br>
+
+        <input type="submit" value="Submit"><br>
+</form>
+{% endblock %}
