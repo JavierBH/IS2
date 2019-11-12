@@ -1,21 +1,28 @@
 import sqlite3
 from flask import Flask, redirect, url_for, render_template, request, flash
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import smtplib
+import mimetypes
 import os
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from os.path import join, dirname, realpath
 
+
+MY_ADDRESS = "norao97@gmail.com"
+PASSWORD = "ratillas"
 UPLOAD_FOLDER = join(dirname(realpath(__file__)), '/home/xiaojing/Documentos/IS2/img')
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-
 app = Flask(__name__)
 app.secret_key = 'random string'
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
     
-@app.route("/")
+@app.route("/home")
 def home():
     conectar_db()
-    return render_template("home.html")
+    return render_template("index.html")
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -80,22 +87,80 @@ def register():
         return redirect(url_for("home"))
     return render_template("register.html")
 
-
-
-@app.route("/login", methods = ["GET","POST"])
+@app.route("/", methods = ["GET","POST"])
 def login():
     if request.method == "POST":
         conexion = conectar_db()
         cursor = conexion.cursor()
-        cursor.execute("SELECT password FROM Users WHERE name = ? AND password=?",(request.form["username"],request.form["password"]))
+        cursor.execute("SELECT password FROM Users WHERE usuario = ? AND password=?",(request.form["username"],request.form["password"]))
         rows = cursor.fetchone()
         if rows is not None:
-            flash("You are logged. Welcome !!!!")
+            flash("You are logged. Welcome !!!!","success")
             return redirect(url_for("home"))
+        else:
+            flash("Error in login. Check credentials","error")
+            #return redirect(url_for("login.html"))
     return render_template("login.html")
 
-"""@app.route("/recuperar", methods = ["GET","POST"])
-def recuperar():"""
+@app.route("/recuperar", methods = ["GET","POST"])
+def recuperar():
+    if request.method == "POST":
+        conexion = conectar_db()
+        cursor = conexion.cursor()
+        cursor.execute("SELECT usuario FROM Users WHERE email = ?",(request.form["correo"],))
+        rows = cursor.fetchone()
+        if rows is not None:
+            if enviar_correo(request.form["correo"]) == 0:
+                flash("E-mail sent. Look at your mail","success")
+                return redirect(url_for("new_pass"))
+        else:
+            flash("Email not valid. Try again","error")
+    return render_template("recuperar.html")
+
+@app.route("/recuperar/password", methods = ["GET","POST"])
+def new_pass():
+    if request.method == "POST":
+        conexion = conectar_db()
+        cursor = conexion.cursor()
+        cursor.execute("SELECT usuario FROM Users WHERE usuario = ?",(request.form["username"],))
+        rows = cursor.fetchone()
+        if rows is not None:
+            print(request.form["password"])
+            print(request.form["username"])
+            cursor.execute("UPDATE Users SET password=? WHERE usuario=?",(request.form["password"],request.form["username"]))
+            conexion.commit()
+            flash("Password change with success","success")
+            return redirect(url_for("login"))
+        else:
+            flash("Username not valid. Try again","error")
+    return render_template("new_pass.html")
+
+def enviar_correo(correo):
+    try:
+        destino = correo
+        #message = "Hello, world!"
+        message =  "http://127.0.0.1:5000/recuperar/password"
+        
+        s = smtplib.SMTP("smtp.gmail.com",587)
+        s.ehlo()
+        s.starttls()
+        s.ehlo()
+        s.login(MY_ADDRESS,PASSWORD)
+
+        mime_message = MIMEText(message, "plain")
+        mime_message["From"] = MY_ADDRESS
+        mime_message["To"] = destino
+        mime_message["Subject"] = "Correo de prueba"
+        #mime_message.attach(MIMEText(message, 'plain'))
+        
+        s.send_message(mime_message)
+        del mime_message
+        s.quit()
+    except Exception:
+        return -1
+    return 0
+
+    #return render_template("recuperar.html")
 
 
 def conectar_db():
@@ -103,8 +168,8 @@ def conectar_db():
     cursor = conn.cursor()
     sqlite_create_table_query = '''CREATE TABLE IF NOT EXISTS Users (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                usuario TEXT NOT NULL UNIQUE,
-                                password TEXT NOT NULL,
+                                usuario TEXT NOT NULL,
+                                password TEXT NOT NULL UNIQUE,
                                 email TEXT NOT NULL UNIQUE,
                                 name TEXT,
                                 fecha DATE,
@@ -117,4 +182,4 @@ def conectar_db():
     return conn
 
 if __name__== "__main__":
-    app.run(debug=True)
+    app.run(debug=True,port='8000')
