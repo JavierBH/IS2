@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% from "_render_macros.html" import render_messages_error %}
+
+{% block title %}
+Recuperar
+{% endblock %}
+{% block content %}
+<form method="post" action="{{ url_for('recuperar') }}">
+    <p><input name="correo" type="text"></p>
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}

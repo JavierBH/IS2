@@ -1,29 +1,9 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Home</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    </head>
+{% extends "base.html" %}
+{% from "_render_macros.html" import render_messages %}
+
+{% block title %}
+Home
+{% endblock %}
     <body>
-        <div class="container">
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-              {% for message in messages %}
-              <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>{{message}}</strong>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-              {% endfor %}
-            {% endif %}
-          {% endwith %}
-        </div>
-        <h1>Welcome!!!</h1>
+        <h1>{% block content %} Hola buenos dias{% endblock %}</h1>
     </body>
-</html>
