@@ -10,7 +10,7 @@ PASSWORD = "ratillas"
 app = Flask(__name__)
 app.secret_key = 'random string'
     
-@app.route("/")
+@app.route("/home")
 def home():
     conectar_db()
     return render_template("index.html")
@@ -43,7 +43,7 @@ def register():
         return "<h1>Registro Completo</h1>"
     return render_template("register.html")
 
-@app.route("/login", methods = ["GET","POST"])
+@app.route("/", methods = ["GET","POST"])
 def login():
     if request.method == "POST":
         conexion = conectar_db()
