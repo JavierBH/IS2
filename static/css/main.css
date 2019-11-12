@@ -48,23 +48,28 @@
   /* Create two unequal columns that sits next to each other */
   /* Sidebar/left column */
   .side {
-    flex: 25%;
+    flex: 50%;
     background-color: #f1f1f1;
     padding: 20px;
+    border-right-style: solid;
+    border-left-style: solid;
   }
   
   /* Main column */
   .main {   
-    flex: 50%;
     background-color: white;
     padding: 20px;
   }
   
+  .section1,.section2,.section3{
+    display: flex;
+  }
   /* Fake image, just for this example */
   .degus_img {
     background-color: #aaa;
     width: 100%;
     padding: 20px;
+    flex: 50%;
   }
   
   /* Secondary menus css*/
