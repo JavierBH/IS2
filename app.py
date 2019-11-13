@@ -162,6 +162,20 @@ def enviar_correo(correo):
 
     #return render_template("recuperar.html")
 
+@app.route("/perfil/<string:usuario>")
+def mostrar_perfil(usuario):
+    conexion = conectar_db()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT usuario,email,name,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
+    for row in cursor:
+        return render_template("perfil.html",usuario = row[0],
+                                                    email = row[1],
+                                                    name = row[2],
+                                                    fecha = row[3],
+                                                    foto = row[4],
+                                                    nacionalidad = row[5],
+                                                    introduccion = row[6])
+    return "No existe usuario"
 
 def conectar_db():
     conn = sqlite3.connect('datos.db')
