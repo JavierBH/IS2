@@ -1,33 +1,63 @@
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
+* {
+    box-sizing: border-box;
+}
 
 body{
-    background-image: url("https://www.arrayanesalamos.edu.ec/themes/themes_configuration/images/images/login/fondo.png");
-    padding: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: lightgray;
 }
+
+ /* Overwrite default styles of hr */
+ hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+  }
+
 .login{
-    margin-left: 400px;
-    margin-right: 400px;
-    background-color: aqua;
-    padding-left: 150px;
-    
+    background-color: aqua;    
 }
+
 .center{
-    display: block;
-    background-color: aqua;
-    margin-left: 400px;
-    margin-right: 400px;
-}
-.user {
-    display: flex;
-    height: 30px;
-
+    padding: 16px;
+    background-color: white;
 }
 
-.forget{
-    display: flex;
-    height: 50px;
+/* Full-width input fields */
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+  }
+  
+  input[type=text]:focus, input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+  }
 
-}
-
-.accept{
-    margin-left: 275px;
-}
+  /* Set a style for the submit button */
+  .accept {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+  }
+  
+  .accept:hover {
+    opacity: 1;
+  }

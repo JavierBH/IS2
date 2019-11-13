@@ -1,42 +1,61 @@
 <!DOCTYPE html>
 <html>
+  
     <head>
         <meta charset="utf-8">
         <title>Register</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/register.css') }}" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     </head>
+
     <body>
+        <form method="post" action="{{ url_for('register') }}">
+            <div class="container">
+                <h1>Registro</h1>
+                <hr>
+
+                <label for="email"><b>Nombre de usuario</b></label>
+                <input type="text" placeholder="Nombre de usuario" name="usuario" required>
+
+                <label for="email"><b>Email</b></label>
+                <input type="text" placeholder="Email" name="email" required>
+            
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Contraseña" name="psw" required>
+            
+                <label for="psw-repeat"><b>Repeat Password</b></label>
+                <input type="password" placeholder="Repita la contraseña" name="psw-repeat" required>
+                
+                <label ><b>Nombre y apellidos</b></label>
+                <input type="text" placeholder="Nombre Apellido1 Apellido2" name="nombre" required>
+              
+                <label ><b>Nacionalidad</b></label>
+                <input type="text" placeholder="Introduzca su nacionalidad" name="nacionalidad" required>
+
+                <hr>
+                <button type="submit" class="registerbtn">Register</button>
+             
+              </div>
+
+        </form>
         <div class="container">
             {% with messages = get_flashed_messages() %}
             {% if messages %}
               {% for message in messages %}
-              
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>{{message}}</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
               {% endfor %}
             {% endif %}
           {% endwith %}
-       
-        <form method="post" action="{{ url_for('register') }}" method="POST" enctype="multipart/form-data">
-                        Usuario: <input type="text" name="usuario"><a>(obligatorio)</a><br>
-                        Contraseña: <input type="text" name="contrasena"><a>(obligatorio)</a><br>
-                        Repite contraseña: <input type="text" name="repite_contrasena"><a>(obligatorio)</a><br>
-                        Email: <input type="text" name="email"><a>(obligatorio)</a><br>
-                        Nombre: <input type="text" name="nombre"><br>
-                        Nacionalidad: <input type="text" name="nacionalidad"><br>
-                        Introducción: <input type="text" name="introduccion"><br>
-                        Fecha: <input type="date" name="fecha"><br>
-                        
-                        <input type=file name=file>
-                        
-                      
-                
-                        <input type="submit" value="Submit"><br>
-        </form>
-
-
         </div>
     </body>
+
 </html>

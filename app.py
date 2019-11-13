@@ -87,7 +87,7 @@ def register():
         return redirect(url_for("home"))
     return render_template("register.html")
 
-@app.route("/", methods = ["GET","POST"])
+@app.route("/login", methods = ["GET","POST"])
 def login():
     if request.method == "POST":
         conexion = conectar_db()
@@ -196,4 +196,4 @@ def conectar_db():
     return conn
 
 if __name__== "__main__":
-    app.run(debug=True,port='8000')
+    app.run(debug=True,port='5000')
