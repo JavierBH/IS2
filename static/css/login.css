@@ -1,31 +1,28 @@
+html, body {
+    margin: 0;
+    height: 100%;
+}
 
 body{
     background-image: url("https://www.arrayanesalamos.edu.ec/themes/themes_configuration/images/images/login/fondo.png");
-    padding: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .login{
-    margin-left: 400px;
-    margin-right: 400px;
-    background-color: aqua;
-    padding-left: 150px;
-    
+    background-color: aqua;    
 }
 .center{
     display: block;
     background-color: aqua;
-    margin-left: 400px;
-    margin-right: 400px;
+
 }
 .user {
     display: flex;
-    height: 30px;
-
 }
 
 .forget{
     display: flex;
-    height: 50px;
-
 }
 
 .accept{
