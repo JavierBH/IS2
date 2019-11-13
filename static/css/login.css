@@ -8,21 +8,13 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
 }
-.login{
-    background-color: aqua;    
-}
+
 .center{
     display: block;
-    background-color: aqua;
+    background-color: cadetblue;
 
-}
-.user {
-    display: flex;
-}
-
-.forget{
-    display: flex;
 }
 
 .accept{
