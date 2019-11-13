@@ -3,19 +3,30 @@ html, body {
     height: 100%;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 body{
-    background-image: url("https://www.arrayanesalamos.edu.ec/themes/themes_configuration/images/images/login/fondo.png");
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: lightgray;
 }
+
+ /* Overwrite default styles of hr */
+ hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+  }
+
 .login{
     background-color: aqua;    
 }
 .center{
-    display: block;
-    background-color: aqua;
-
+    padding: 16px;
+    background-color: white;
 }
 .user {
     display: flex;
