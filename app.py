@@ -166,7 +166,7 @@ def enviar_correo(correo):
 def mostrar_perfil(usuario):
     conexion = conectar_db()
     cursor = conexion.cursor()
-    cursor.execute("SELECT usuario,email,name,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
+    cursor.execute("SELECT usuario,email, name,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
     for row in cursor:
         return render_template("perfil.html",usuario = row[0],
                                                     email = row[1],
