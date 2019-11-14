@@ -4,16 +4,35 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import smtplib
 import mimetypes
+import os
+from flask import Flask, flash, request, redirect, url_for
+from werkzeug.utils import secure_filename
+from os.path import join, dirname, realpath
 
-MY_ADDRESS = "norao97@gmail.com"
-PASSWORD = "ratillas"
+
+MY_ADDRESS = "proyectois2upm@gmail.com"
+PASSWORD = "softwareupm"
+UPLOAD_FOLDER = join(dirname(realpath(__file__)), '/home/xiaojing/Documentos/IS2/img')
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
 app.secret_key = 'random string'
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
     
 @app.route("/")
 def home():
     conectar_db()
-    return render_template("home.html")
+    return render_template("index.html")
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def convertToBinaryData(filename):
+    #Convert digital data to binary format
+    with open(filename, 'rb') as file:
+        blobData = file.read()
+    return blobData
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -26,21 +45,47 @@ def register():
         nacionalidad = request.form.get('nacionalidad')
         intro = request.form.get('introduccion')
         fecha = request.form['fecha']
-        foto = request.form.get('foto')
-
+        foto = None
+        
+        """#EXTRAE FOTO
+        if 'file' not in request.files:
+            file = None
+            return "file = None"
+        file = request.files['file']
+        foto = None
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            #Hay que poner el directorio completo!
+            filename = "/home/xiaojing/Documentos/IS2/img/" + filename
+            foto = convertToBinaryData(filename)"""
+        #COMPROBACION DE CAMPOS OBLIGATORIOS
         if (usuario == "") or (contrasena == "") or (repite_contrasena == "") or (email == ""):
-            return "Campo obligatorio no ha sido completado"
+            return "Campo incompleto"
+        #COMPROBACION DE CONTRASEÑA
         if (contrasena != repite_contrasena):
             return "Contraseñas no coinciden"
         conn = conectar_db()
         cursor = conn.cursor()
+        #COMPROBACION DE USUARIO UNICO
+        cursor.execute("SELECT * FROM Users WHERE usuario = ?",(usuario, ))
+        rows = cursor.fetchone()
+        if rows is not None:
+            return "Usuario existed !"
+        #COMPROBACION DE EMAIL UNICO
+        cursor.execute("SELECT * FROM Users WHERE email = ?",(usuario, ))
+        rows = cursor.fetchone()
+        if rows is not None:
+            return "Email existed !!!!"
+        #INSERTAR
         cursor.execute('''INSERT INTO Users ('usuario','password','email','name',
         'fecha','foto','nacionalidad','introduccion') VALUES (?,?,?,?,?,?,?,?)'''
         ,(usuario,contrasena,email,nombre,fecha,foto,nacionalidad,intro))
         conn.commit()
         cursor.close()
         conn.close()
-        return "<h1>Registro Completo</h1>"
+        flash("You are registered. Welcome !!!!","success")
+        return redirect(url_for("home"))
     return render_template("register.html")
 
 @app.route("/login", methods = ["GET","POST"])
@@ -118,6 +163,20 @@ def enviar_correo(correo):
 
     #return render_template("recuperar.html")
 
+@app.route("/perfil/<string:usuario>")
+def mostrar_perfil(usuario):
+    conexion = conectar_db()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT usuario,email, name,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
+    for row in cursor:
+        return render_template("perfil.html",usuario = row[0],
+                                                    email = row[1],
+                                                    name = row[2],
+                                                    fecha = row[3],
+                                                    foto = row[4],
+                                                    nacionalidad = row[5],
+                                                    introduccion = row[6])
+    return "No existe usuario"
 
 def conectar_db():
     conn = sqlite3.connect('datos.db')

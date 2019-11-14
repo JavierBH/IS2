@@ -1,36 +1,88 @@
-  <!DOCTYPE html>
-<html>
+{% from "_render_macros.html" import render_messages_success %}
 
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DesTapIS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/main.css') }}" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
-
 <body>
-  <section class="header">
-    <div class="menu1"> Ayuda(Porfavor)</div>
-    <div class="menu2"> Disgustaciones </div>
-    <div class="menu3"> Perfil (De lado)</div>
-  </section>
-  <section class="body"> 
-    
-    <section class="search">
-      AARON COME POLLAS
-      <input type="text" placeholder="¿Cuantas pollas se come aaron?">
-    </section>
-    
-    <section class="main_menus">
-      <div class="friends_request"></div>
-      <div class="main"></div>
-      <div class="stadistics"></div>
-    </section>
-    <section class="secondary_menus">
-        <div class="friends"></div>
-        <div class="awards"></div>
-        <div class="stadistics"></div>
-        <div class="stadistics"></div>
-    </section>
-  </section>
+  {{render_messages_success(messages)}}
+<div class="navbar">
+  <a href="#">Auida</a>
+  <a href="#">Disgustaciones</a>
+  <a href="#">Perfil</a>
+</div>
+
+<section class= "main_page">
+    <div class="main">
+        <div class="navbar">
+            <a href="#">Disgustaciones</a>
+            <a href="#">Locales</a>
+          </div>
+      <div class="section1">
+          <div class="degus_img" >Image</div>
+          <div class="degus_img" >Image</div>
+      </div>    
+      <div class="section2">
+          <div class="degus_img" >Image</div>
+          <div class="degus_img" >Image</div>
+      </div>
+      <div class="section3">
+          <div class="degus_img" >Image</div>
+          <div class="degus_img" >Image</div>
+      </div>
+   </div>
+
+  <div class="row">
+  <div class="side">
+    <h2>Actividades recientes</h2>
+    <h5>Photo of me:</h5>
+    <div class="fakeimg" style="height:200px;">Image</div>
+    <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
+    <h3>More Text</h3>
+    <p>Lorem ipsum dolor sit ame.</p>
+    <div class="fakeimg" style="height:60px;">Image</div><br>
+    <div class="fakeimg" style="height:60px;">Image</div><br>
+    <div class="fakeimg" style="height:60px;">Image</div>
+  </div>
+  <div class="side">
+    <div class="navbar">
+          <a href="#">Perfil</a>    
+          <a href="#">Estadísticas</a>
+          <a href="#">Solicitudes de amistad</a>       
+    </div>
+    <h2>Perfil</h2>
+    <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod doloribus illo sit, cupiditate fugit quis consequatur esse veniam quidem ab, voluptatem incidunt libero nesciunt ipsum vitae amet accusamus numquam qui!</h3>
+  </div>
+</section>
+
+
+<section class="secondary-menus1">
+  <div class="menus">
+   <div class="menu1">
+     <h2>Submenu1</h2>
+   </div>
+   <div class="menu1">
+      <h2>Submenu2</h2>
+   </div>
+  </div>
+</section>
+<section class="secondary-menus2">
+  <div class="menus">
+    <div class="menu3">
+        <h2>Submenu3</h2>
+    </div>
+    <div class="menu4">
+        <h2>Submenu4</h2>
+    </div>
+  </div>
+</section>
+
 </body>

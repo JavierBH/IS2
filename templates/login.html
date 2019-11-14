@@ -1,17 +1,52 @@
-{% extends "base.html" %}
 {% from "_render_macros.html" import render_messages_error %}
-{% from "_render_macros.html" import render_messages_success %}
 
+<!DOCTYPE html>
+<html>
 
-{% block title %}
-Login
-{% endblock %}
+<head>
+  <title>DesTapIS</title>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/login.css') }}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
 
-{% block content %}
-<form method="post" action="{{ url_for('login') }}">
-    <p><input name="username" type="text"></p>
-    <p><input name = "password" type="password"></p>
-    <input type="submit" value="Login">
-</form>
-    
-{% endblock %}
+<body>
+  <section class="center">
+    <form method="post" action="{{ url_for('login') }}">
+    <h1>LOGIN</h1> 
+      <hr>
+
+      <label for="email"><b>Username</b></label>
+      <input type="text" placeholder="Username" name="username" required>
+
+      <label for="email"><b>Contraseña</b></label>
+      <input type="password" placeholder="Contraseña" name="password" required>
+        
+      <div class="forget">
+          <p>
+            <a href="{{ url_for('recuperar') }}" target="_blank">
+            ¿Olvidó su contraseña?</a>
+          </p>
+        </div>
+      
+        <hr>
+        <button type="submit" class="accept">Login</button>
+        </button>
+
+        <div class="create">
+          <p>
+            <a href="{{ url_for('register') }}" target="_blank">
+            Crear cuenta</a>
+          </p>
+        </div>
+        {{render_messages_error(messages)}}
+  </section>
+  
+  
+</body>
