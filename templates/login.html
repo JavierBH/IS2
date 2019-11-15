@@ -16,15 +16,15 @@
     <h1>LOGIN</h1> 
       <hr>
 
-      <label for="email"><b>Email</b></label>
-      <input type="text" placeholder="Email" name="usuario" required>
+      <label for="email"><b>Nombre Usuario</b></label>
+      <input type="text" placeholder="Usuario" name="username" required>
 
       <label for="email"><b>Contraseña</b></label>
-      <input type="password" placeholder="Contraseña" name="contrasena" required>
+      <input type="password" placeholder="Contraseña" name="password" required>
         
       <div class="forget">
           <p>
-            <a href="http://laurel.datsi.fi.upm.es/docencia/asignaturas/so5" target="_blank">
+            <a href="{{ url_for('recuperar') }}" target="_blank">
             ¿Olvidó su contraseña?</a>
           </p>
         </div>

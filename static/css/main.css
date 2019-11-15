@@ -24,10 +24,14 @@
     text-align: center;
     padding: 14px 20px;
     text-decoration: none;
-    border-style: dotted;
+    border-style: solid;
     flex-grow: 1;
   }
   
+.navbar a:hover{
+  opacity: 1;
+}
+
   /* Right-aligned link */
   .navbar a.right {
     float: right;
