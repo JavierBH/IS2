@@ -23,10 +23,10 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 def home():
     return render_template("index.html")
 
-@app.route("/")
+"""@app.route("/")
 def a():
     conectar_db()
-    return render_template("login.html")
+    return render_template("login.html")"""
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -92,7 +92,7 @@ def register():
         return redirect(url_for("home"))
     return render_template("register.html")
 
-@app.route("/login", methods = ["GET","POST"])
+@app.route("/", methods = ["GET","POST"])
 def login():
     if request.method == "POST":
         conexion = conectar_db()
@@ -187,8 +187,8 @@ def conectar_db():
     cursor = conn.cursor()
     sqlite_create_table_query = '''CREATE TABLE IF NOT EXISTS Users (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                usuario TEXT NOT NULL,
-                                password TEXT NOT NULL UNIQUE,
+                                usuario TEXT NOT NULL UNIQUE,
+                                password TEXT NOT NULL,
                                 email TEXT NOT NULL UNIQUE,
                                 name TEXT,
                                 fecha DATE,
