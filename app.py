@@ -23,11 +23,6 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 def home():
     return render_template("index.html")
 
-"""@app.route("/")
-def a():
-    conectar_db()
-    return render_template("login.html")"""
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -104,7 +99,6 @@ def login():
             return redirect(url_for("home"))
         else:
             flash("Error in login. Check credentials","error")
-            #return redirect(url_for("login.html"))
     return render_template("login.html")
 
 @app.route("/recuperar", methods = ["GET","POST"])
@@ -117,7 +111,6 @@ def recuperar():
         if rows is not None:
             if enviar_correo(request.form["correo"]) == 0:
                 flash("E-mail sent. Look at your mail","success")
-                return redirect(url_for("new_pass"))
         else:
             flash("Email not valid. Try again","error")
     return render_template("recuperar.html")
@@ -135,7 +128,7 @@ def new_pass():
             cursor.execute("UPDATE Users SET password=? WHERE usuario=?",(request.form["password"],request.form["username"]))
             conexion.commit()
             flash("Password change with success","success")
-            return redirect(url_for("login"))
+            return redirect(url_for("/"))
         else:
             flash("Username not valid. Try again","error")
     return render_template("new_pass.html")

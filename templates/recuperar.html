@@ -1,12 +1,36 @@
-{% extends "base.html" %}
 {% from "_render_macros.html" import render_messages_error %}
+<!DOCTYPE html>
+<html>
 
-{% block title %}
-Recuperar
-{% endblock %}
-{% block content %}
-<form method="post" action="{{ url_for('recuperar') }}">
-    <p><input name="correo" type="text"></p>
-    <input type="submit" value="Submit">
-</form>
-{% endblock %}
+<head>
+  <title>DesTapIS</title>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/login.css') }}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <section class="center">
+    <form method="post" action="{{ url_for('recuperar') }}">
+            {{render_messages_error(messages)}}
+    <h1>Recuperar contraseña </h1> 
+      <hr>
+
+        <label for="email"><b>Introduce tu Email</b></label>
+         <input type="text" placeholder="Email" name="correo" required>
+
+      <hr>
+        <button type="submit" class="accept" >Aceptar</button>
+        </button>
+
+  </section>
+  
+  
+</body>
+
