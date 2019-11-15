@@ -18,11 +18,15 @@ app = Flask(__name__)
 app.secret_key = 'random string'
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-    
-@app.route("/")
+
+@app.route("/home")
 def home():
-    conectar_db()
     return render_template("index.html")
+
+@app.route("/")
+def a():
+    conectar_db()
+    return render_template("login.html")
 
 def allowed_file(filename):
     return '.' in filename and \

@@ -19,6 +19,7 @@
 <body>
   <section class="center">
     <form method="post" action="{{ url_for('login') }}">
+        {{render_messages_error(messages)}}
     <h1>LOGIN</h1> 
       <hr>
 
@@ -36,16 +37,16 @@
         </div>
       
         <hr>
-        <button type="submit" class="accept">Login</button>
+        <button type="submit" class="accept " onclick="{{ url_for('recuperar') }}">Login</button>
         </button>
 
         <div class="create">
           <p>
-            <a href="{{ url_for('register') }}" target="_blank">
+            <a href="{{ url_for('home') }}" target="_blank">
             Crear cuenta</a>
           </p>
         </div>
-        {{render_messages_error(messages)}}
+
   </section>
   
   
