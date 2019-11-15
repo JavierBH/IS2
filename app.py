@@ -10,8 +10,8 @@ from werkzeug.utils import secure_filename
 from os.path import join, dirname, realpath
 
 
-MY_ADDRESS = "norao97@gmail.com"
-PASSWORD = "ratillas"
+MY_ADDRESS = "proyectois2upm@gmail.com"
+PASSWORD = "softwareupm"
 UPLOAD_FOLDER = join(dirname(realpath(__file__)), '/home/xiaojing/Documentos/IS2/img')
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
@@ -19,7 +19,7 @@ app.secret_key = 'random string'
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
     
-@app.route("/home")
+@app.route("/")
 def home():
     conectar_db()
     return render_template("index.html")
@@ -45,8 +45,9 @@ def register():
         nacionalidad = request.form.get('nacionalidad')
         intro = request.form.get('introduccion')
         fecha = request.form['fecha']
+        foto = None
         
-        #EXTRAE FOTO
+        """#EXTRAE FOTO
         if 'file' not in request.files:
             file = None
             return "file = None"
@@ -57,7 +58,7 @@ def register():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             #Hay que poner el directorio completo!
             filename = "/home/xiaojing/Documentos/IS2/img/" + filename
-            foto = convertToBinaryData(filename)
+            foto = convertToBinaryData(filename)"""
         #COMPROBACION DE CAMPOS OBLIGATORIOS
         if (usuario == "") or (contrasena == "") or (repite_contrasena == "") or (email == ""):
             return "Campo incompleto"
@@ -83,7 +84,7 @@ def register():
         conn.commit()
         cursor.close()
         conn.close()
-        flash("You are registered. Welcome !!!!")
+        flash("You are registered. Welcome !!!!","success")
         return redirect(url_for("home"))
     return render_template("register.html")
 
@@ -162,6 +163,20 @@ def enviar_correo(correo):
 
     #return render_template("recuperar.html")
 
+@app.route("/perfil/<string:usuario>")
+def mostrar_perfil(usuario):
+    conexion = conectar_db()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT usuario,email, name,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
+    for row in cursor:
+        return render_template("perfil.html",usuario = row[0],
+                                                    email = row[1],
+                                                    name = row[2],
+                                                    fecha = row[3],
+                                                    foto = row[4],
+                                                    nacionalidad = row[5],
+                                                    introduccion = row[6])
+    return "No existe usuario"
 
 def conectar_db():
     conn = sqlite3.connect('datos.db')
@@ -182,4 +197,4 @@ def conectar_db():
     return conn
 
 if __name__== "__main__":
-    app.run(debug=True,port='5000')
+    app.run(debug=True)

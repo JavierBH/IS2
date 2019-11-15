@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html>
-  
+<html>  
     <head>
         <meta charset="utf-8">
         <title>Register</title>
@@ -25,10 +24,10 @@
                 <input type="text" placeholder="Email" name="email" required>
             
                 <label for="psw"><b>Password</b></label>
-                <input type="password" placeholder="Contraseña" name="psw" required>
+                <input type="password" placeholder="Contraseña" name="contrasena" required>
             
                 <label for="psw-repeat"><b>Repeat Password</b></label>
-                <input type="password" placeholder="Repita la contraseña" name="psw-repeat" required>
+                <input type="password" placeholder="Repita la contraseña" name="repite_contrasena" required>
                 
                 <label ><b>Nombre y apellidos</b></label>
                 <input type="text" placeholder="Nombre Apellido1 Apellido2" name="nombre" >
@@ -39,8 +38,18 @@
                 <label ><b>Fecha</b></label>
                 <input type="text" placeholder="Introduzca la fecha actual" name="fecha" >
 
+                <label ><b>Fecha</b></label>
+                <input type="date" placeholder="Introduzca su fecha de nacimiento" name="fecha" required>
+
+                <label ><b>Foto de perfil</b></label>
+                <input type="BLOB" placeholder="Foto de perfil" name="foto">
+
+                <label ><b>Introducción</b></label>
+                <input type="text" placeholder="Introduccion" name="introduccion">
+
                 <hr>
-                <button type="submit" class="registerbtn">Register</button>
+                <!--<button type="submit" class="registerbtn">Register</button>-->
+                <input type="submit" value="Submit"><br>
              
               </div>
 
