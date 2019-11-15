@@ -1,16 +1,35 @@
-{% extends "base.html" %}
 {% from "_render_macros.html" import render_messages_error %}
-{% from "_render_macros.html" import render_messages_success %}
+<!DOCTYPE html>
+<html>  
+    <head>
+        <meta charset="utf-8">
+        <title>Register</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/register.css') }}" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    </head>
 
-{% block title %}
-New_Password
-{% endblock %}
-
-{% block content %}
-<form method="post" action="{{ url_for('new_pass') }}">
-    Usuario:<p><input name="username" type="text"></p>
-    Nueva Contraseña:<p><input name = "password" type="password"></p>
-    <input type="submit" value="Submit">
-</form>
-    
-{% endblock %}
+<body>
+        <section class="center">
+          <form method="post" action="{{ url_for('new_pass') }}">
+                  {{render_messages_error(messages)}}
+                  <div class="container">
+          <h1>Recuperar contraseña </h1> 
+            <hr>
+      
+              <label for="email"><b>Nombre de Usuario</b></label>
+               <input type="text" placeholder="Nombre de Usuario" name="username" required>
+      
+               <label for="psw"><b>Password</b></label>
+               <input type="password" placeholder="Contraseña" name="contrasena" required>
+           
+               <label for="psw-repeat"><b>Repeat Password</b></label>
+               <input type="password" placeholder="Repita la contraseña" name="repite_contrasena" required>
+               </div>
+            <hr>
+              <button type="submit" class="accept" >Aceptar</button>
+            </form>
+        </html>
