@@ -1,3 +1,5 @@
+{% from "_render_macros.html" import render_messages_error %}
+
 <!DOCTYPE html>
 <html>  
     <head>
@@ -13,6 +15,7 @@
 
     <body>
         <form method="post" action="{{ url_for('register') }}">
+                {{render_messages_error(messages)}}
             <div class="container">
                 <h1>Registro</h1>
                 <hr>
@@ -50,20 +53,6 @@
               </div>
 
         </form>
-        <div class="container">
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-              {% for message in messages %}
-              <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>{{message}}</strong>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-              {% endfor %}
-            {% endif %}
-          {% endwith %}
-        </div>
     </body>
 
 </html>

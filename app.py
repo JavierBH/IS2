@@ -1,10 +1,10 @@
 import sqlite3
-from flask import Flask, redirect, url_for, render_template, request, flash
+from flask import Flask, redirect, url_for, render_template, request, flash, session, escape
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import smtplib
 import mimetypes
-import os
+import os, re
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from os.path import join, dirname, realpath
@@ -17,6 +17,8 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
 app.secret_key = 'random string'
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+format_email = ["gmail","yahoo"]
+format_end = ["com","es"]
 
 
 @app.route("/home")
@@ -61,21 +63,38 @@ def register():
         #COMPROBACION DE CAMPOS OBLIGATORIOS
         if (usuario == "") or (contrasena == "") or (repite_contrasena == "") or (email == ""):
             return "Campo incompleto"
+        #COMPROBACION DE LONGITUD DE USUARIO
+        if len(usuario) < 6:
+            flash("Introduzca un usuario de minimo 6 caracteres","error")
+            return render_template("register.html")
+        #COMPROBACION DE LONGITUD DE PASSWORD
+        if len(contrasena) < 6:
+            flash("Introduzca una contraseña de minimo 6 caracteres","error")
+            return render_template("register.html")
+        #COMPROBACION DE FORMATO CORREO
+        expresion = "\w+(@)([a-z]+).([a-z]+)"
+        tupla = re.match(expresion,email)
+        if tupla.group(1) != "@" or tupla.group(2) not in format_email or tupla.group(3) not in format_end:
+            flash("Email not valid","error")
+            return render_template("register.html")
         #COMPROBACION DE CONTRASEÑA
         if (contrasena != repite_contrasena):
-            return "Contraseñas no coinciden"
+            flash("Password incorrect","error")
+            return render_template("register.html")
         conn = conectar_db()
         cursor = conn.cursor()
         #COMPROBACION DE USUARIO UNICO
         cursor.execute("SELECT * FROM Users WHERE usuario = ?",(usuario, ))
         rows = cursor.fetchone()
         if rows is not None:
-            return "Usuario existed !"
+            flash("Usuario existed !","error")
+            return render_template("register.html")
         #COMPROBACION DE EMAIL UNICO
         cursor.execute("SELECT * FROM Users WHERE email = ?",(usuario, ))
         rows = cursor.fetchone()
         if rows is not None:
-            return "Email existed !!!!"
+            flash("Email existed !!!!","error")
+            return render_template("register.html")
         #INSERTAR
         cursor.execute('''INSERT INTO Users ('usuario','password','email','name',
         'fecha','foto','nacionalidad','introduccion') VALUES (?,?,?,?,?,?,?,?)'''
@@ -84,22 +103,30 @@ def register():
         cursor.close()
         conn.close()
         flash("You are registered. Welcome !!!!","success")
-        return redirect(url_for("home"))
+        return redirect(url_for("login"))
     return render_template("register.html")
 
 @app.route("/", methods = ["GET","POST"])
 def login():
+    if "username" in session:
+        return redirect(url_for("home"))
     if request.method == "POST":
         conexion = conectar_db()
         cursor = conexion.cursor()
         cursor.execute("SELECT password FROM Users WHERE usuario = ? AND password=?",(request.form["username"],request.form["password"]))
         rows = cursor.fetchone()
         if rows is not None:
+            session["username"] = request.form['username']
             flash("You are logged. Welcome !!!!","success")
             return redirect(url_for("home"))
         else:
             flash("Error in login. Check credentials","error")
     return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.pop("username",None)
+    return redirect(url_for("login"))
 
 @app.route("/recuperar", methods = ["GET","POST"])
 def recuperar():
