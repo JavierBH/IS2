@@ -87,6 +87,22 @@
     background-color:red;
     padding: 20px;
   }
+
+  .logoutbtn{
+    background-color: red;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+  }
+
+  .logoutbtn:hover {
+    opacity: 1;
+  }
+
   /* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
   @media screen and (max-width: 700px) {
     .row {   

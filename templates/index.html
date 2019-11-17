@@ -14,16 +14,21 @@
 </head>
 <body>
   {{render_messages_success(messages)}}
+<div class="logout">
+  <form method="post" action="{{ url_for('logout') }}">
+    <button type="submit" class="logoutbtn" >Logout</button>
+  </form>
+</div>
 <div class="navbar">
-  <a href="#">Auida</a>
-  <a href="#">Disgustaciones</a>
+  <a href="#">Ayuda</a>
+  <a href="#">Degustaciones</a>
   <a href="#">Perfil</a>
 </div>
 
 <section class= "main_page">
     <div class="main">
         <div class="navbar">
-            <a href="#">Disgustaciones</a>
+            <a href="#">Degustaciones</a>
             <a href="#">Locales</a>
           </div>
       <div class="section1">
