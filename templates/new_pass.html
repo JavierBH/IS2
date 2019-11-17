@@ -13,7 +13,6 @@
     </head>
 
 <body>
-        <section class="center">
           <form method="post" action="{{ url_for('new_pass') }}">
                   {{render_messages_error(messages)}}
                   <div class="container">
@@ -24,12 +23,13 @@
                <input type="text" placeholder="Nombre de Usuario" name="username" required>
       
                <label for="psw"><b>Password</b></label>
-               <input type="password" placeholder="Contraseña" name="contrasena" required>
+               <input type="password" placeholder="Contraseña" name="password" required>
            
                <label for="psw-repeat"><b>Repeat Password</b></label>
-               <input type="password" placeholder="Repita la contraseña" name="repite_contrasena" required>
-               </div>
+               <input type="password" placeholder="Repita la contraseña" name="repite_password" required>
+             
             <hr>
-              <button type="submit" class="accept" >Aceptar</button>
+              <button type="submit" class="registerbtn" >Aceptar</button>
             </form>
+          </div>
         </html>

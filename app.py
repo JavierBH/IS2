@@ -163,13 +163,19 @@ def new_pass():
         cursor = conexion.cursor()
         cursor.execute("SELECT usuario FROM Users WHERE usuario = ?",(request.form["username"],))
         rows = cursor.fetchone()
+        contrasena = request.form.get('password')
+        repite_contrasena = request.form.get('repite_password')
         if rows is not None:
-            print(request.form["password"])
-            print(request.form["username"])
-            cursor.execute("UPDATE Users SET password=? WHERE usuario=?",(request.form["password"],request.form["username"]))
-            conexion.commit()
-            flash("Password change with success","success")
-            return redirect(url_for("/"))
+            if len(contrasena) < 6:
+                flash("Introduzca una contraseña de minimo 6 caracteres","error")
+                return render_template("new_pass.html")
+            if contrasena == repite_contrasena:
+              cursor.execute("UPDATE Users SET password=? WHERE usuario=?",(request.form["password"],request.form["username"]))
+              conexion.commit()
+              flash("Password change with success","success")
+              return redirect(url_for("login"))
+            else:
+                flash("Password Incorrect. Try again","error")
         else:
             flash("Username not valid. Try again","error")
     return render_template("new_pass.html")
