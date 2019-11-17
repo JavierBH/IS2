@@ -1,4 +1,6 @@
 {% from "_render_macros.html" import render_messages_error %}
+{% from "_render_macros.html" import render_messages_warning %}
+
 
 <!DOCTYPE html>
 <html>
@@ -20,6 +22,7 @@
   <section class="center">
     <form method="post" action="{{ url_for('login') }}">
         {{render_messages_error(messages)}}
+        {{render_messages_warning(messags)}}
     <h1>LOGIN</h1> 
       <hr>
 
@@ -31,7 +34,7 @@
         
       <div class="forget">
           <p>
-            <a href="{{ url_for('recuperar') }}" target="_blank">
+            <a href="{{ url_for('recuperar') }}">
             ¿Olvidó su contraseña?</a>
           </p>
         </div>
@@ -42,7 +45,7 @@
 
         <div class="create">
           <p>
-            <a href="{{ url_for('register') }}" target="_blank">
+            <a href="{{ url_for('register') }}">
             Crear cuenta</a>
           </p>
         </div>

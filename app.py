@@ -97,14 +97,25 @@ def register():
             return render_template("register.html")
         #INSERTAR
         cursor.execute('''INSERT INTO Users ('usuario','password','email','name',
-        'fecha','foto','nacionalidad','introduccion') VALUES (?,?,?,?,?,?,?,?)'''
+        'fecha','foto','nacionalidad','introduccion','verificado') VALUES (?,?,?,?,?,?,?,?,0)'''
         ,(usuario,contrasena,email,nombre,fecha,foto,nacionalidad,intro))
         conn.commit()
         cursor.close()
         conn.close()
         flash("You are registered. Welcome !!!!","success")
+        enviar_correo(email,"http://127.0.0.1:5000/ver/"+usuario,1)
         return redirect(url_for("login"))
     return render_template("register.html")
+
+@app.route("/ver/<string:username>")
+def verified(username, methods=['GET', 'POST']):
+    conn = conectar_db()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE Users SET verificado=1 WHERE usuario=?",(username,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return redirect(url_for("login"))
 
 @app.route("/", methods = ["GET","POST"])
 def login():
@@ -113,12 +124,15 @@ def login():
     if request.method == "POST":
         conexion = conectar_db()
         cursor = conexion.cursor()
-        cursor.execute("SELECT password FROM Users WHERE usuario = ? AND password=?",(request.form["username"],request.form["password"]))
+        cursor.execute("SELECT verificado FROM Users WHERE usuario = ? AND password=?",(request.form["username"],request.form["password"]))
         rows = cursor.fetchone()
         if rows is not None:
-            session["username"] = request.form['username']
-            flash("You are logged. Welcome !!!!","success")
-            return redirect(url_for("home"))
+            if rows[0] == 1:
+                session["username"] = request.form['username']
+                flash("You are logged. Welcome !!!!","success")
+                return redirect(url_for("home"))
+            else:
+                flash("You are not verified. Check your e-mail","warning")
         else:
             flash("Error in login. Check credentials","error")
     return render_template("login.html")
@@ -136,7 +150,7 @@ def recuperar():
         cursor.execute("SELECT usuario FROM Users WHERE email = ?",(request.form["correo"],))
         rows = cursor.fetchone()
         if rows is not None:
-            if enviar_correo(request.form["correo"]) == 0:
+            if enviar_correo(request.form["correo"],"http://127.0.0.1:5000/recuperar/password",0) == 0:
                 flash("E-mail sent. Look at your mail","success")
         else:
             flash("Email not valid. Try again","error")
@@ -160,24 +174,22 @@ def new_pass():
             flash("Username not valid. Try again","error")
     return render_template("new_pass.html")
 
-def enviar_correo(correo):
+def enviar_correo(correo,mensaje,tipo):
     try:
         destino = correo
-        #message = "Hello, world!"
-        message =  "http://127.0.0.1:5000/recuperar/password"
-        
         s = smtplib.SMTP("smtp.gmail.com",587)
         s.ehlo()
         s.starttls()
         s.ehlo()
         s.login(MY_ADDRESS,PASSWORD)
 
-        mime_message = MIMEText(message, "plain")
+        mime_message = MIMEText(mensaje, "plain")
         mime_message["From"] = MY_ADDRESS
         mime_message["To"] = destino
-        mime_message["Subject"] = "Correo de prueba"
-        #mime_message.attach(MIMEText(message, 'plain'))
-        
+        if tipo == 0:
+            mime_message["Subject"] = "Recuperación de contraseña"
+        else:
+            mime_message["Subject"] = "Verificación de cuenta"
         s.send_message(mime_message)
         del mime_message
         s.quit()
@@ -214,7 +226,8 @@ def conectar_db():
                                 fecha DATE,
                                 foto BLOB,
                                 nacionalidad TEXT,
-                                introduccion TEXT);'''
+                                introduccion TEXT,
+                                verificado INTEGER NOT NULL);'''
     cursor.execute(sqlite_create_table_query)
     conn.commit()
     cursor.close()
