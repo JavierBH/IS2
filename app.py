@@ -72,8 +72,9 @@ def register():
             flash("Introduzca una contraseña de minimo 6 caracteres","error")
             return render_template("register.html")
         #COMPROBACION DE FORMATO CORREO
-        expresion = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
-        if not(re.search(expresion, email)):
+        expresion = "[a-z0-9\.\_]+(@)([a-z]+).([a-z]+)"
+        tupla = re.match(expresion,email)
+        if tupla is None or tupla.group(1)!="@" or tupla.group(2) not in format_email or tupla.group(3) not in format_end:
             flash("Email not valid","error")
             return render_template("register.html")
         #COMPROBACION DE CONTRASEÑA
