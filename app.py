@@ -135,6 +135,8 @@ def login():
                 flash("You are not verified. Check your e-mail","warning")
         else:
             flash("Error in login. Check credentials","error")
+        conexion.close()
+        cursor.close()
     return render_template("login.html")
 
 @app.route("/logout",  methods = ["GET","POST"])
@@ -154,6 +156,8 @@ def recuperar():
                 flash("E-mail sent. Look at your mail","success")
         else:
             flash("Email not valid. Try again","error")
+        conexion.close()
+        cursor.close()
     return render_template("recuperar.html")
 
 @app.route("/recuperar/password", methods = ["GET","POST"])
@@ -178,6 +182,8 @@ def new_pass():
                 flash("Password Incorrect. Try again","error")
         else:
             flash("Username not valid. Try again","error")
+        conexion.close()
+        cursor.close()
     return render_template("new_pass.html")
 
 def enviar_correo(correo,mensaje,tipo):
@@ -218,6 +224,8 @@ def mostrar_perfil(usuario):
                                                     foto = row[4],
                                                     nacionalidad = row[5],
                                                     introduccion = row[6])
+    conexion.close()
+    cursor.close()
     return "No existe usuario"
 
 def conectar_db():
