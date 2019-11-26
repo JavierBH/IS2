@@ -228,10 +228,29 @@ def mostrar_perfil(usuario):
     cursor.close()
     return "No existe usuario"
 
+@app.route("/local/registrar", methods=['GET', 'POST'])
+def local():
+    if request.method == 'POST': 
+        local = request.form['local']
+        direccion = request.form['direccion']
+        reseña = request.form['reseña']
+        degustaciones = ""
+        conn = conectar_db()
+        cursor = conn.cursor()
+        cursor.execute('''INSERT INTO Locales ('Nombre','Direccion','Reseña','Degustaciones') VALUES (?,?,?,?)'''
+        ,(local, direccion, reseña, degustaciones))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        #return render_template("local.html")
+        return "local registrado"
+    return render_template("local.html")
+
 def conectar_db():
     conn = sqlite3.connect('datos.db')
     cursor = conn.cursor()
-    sqlite_create_table_query = '''CREATE TABLE IF NOT EXISTS Users (
+    #CREA TABLA USERS   
+    sqlite_create_users_table_query = '''CREATE TABLE IF NOT EXISTS Users (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 usuario TEXT NOT NULL UNIQUE,
                                 password TEXT NOT NULL,
@@ -241,8 +260,45 @@ def conectar_db():
                                 foto BLOB,
                                 nacionalidad TEXT,
                                 introduccion TEXT,
-                                verificado INTEGER NOT NULL);'''
-    cursor.execute(sqlite_create_table_query)
+                                verificado INTEGER NOT NULL,
+                                Amigos TEXT,
+                                Desgustaciones TEXT,
+                                Locales TEXT);'''
+    cursor.execute(sqlite_create_users_table_query)
+    #CREA TABLA DEGUSTACIONES
+    sqlite_create_degustaciones_table_query = '''CREATE TABLE IF NOT EXISTS Degustaciones (
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                Nombre TEXT NOT NULL,
+                                Foto BLOB,
+                                Descripcion TEXT,
+                                Tipo TEXT,
+                                Coordenadas TEXT,
+                                Tamaño DOUBLE,
+                                Calificacion FLOAT,
+                                Local TEXT);'''
+    cursor.execute(sqlite_create_degustaciones_table_query)
+    #CREA TABLA LOCALES
+    sqlite_create_locales_table_query = '''CREATE TABLE IF NOT EXISTS Locales (
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                Nombre TEXT NOT NULL,
+                                Direccion TEXT,
+                                Reseña TEXT,
+                                Degustaciones TEXT);'''
+    cursor.execute(sqlite_create_locales_table_query)
+    #CREA TABLA GALARDONES
+    sqlite_create_galardones_table_query = '''CREATE TABLE IF NOT EXISTS Galardones (
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                Nombre TEXT NOT NULL,
+                                Descripcion TEXT,
+                                Degustaciones TEXT);'''
+    cursor.execute(sqlite_create_galardones_table_query)
+    #CREA TABLA SOLICITUDES DE AMIGOS
+    sqlite_create_solicitudes_table_query = '''CREATE TABLE IF NOT EXISTS Solicitudes (
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                Id_Usuario TEXT NOT NULL,
+                                Id_Amigo TEXT NOT NULL,
+                                Validacion INT);'''
+    cursor.execute(sqlite_create_solicitudes_table_query)
     conn.commit()
     cursor.close()
     return conn
