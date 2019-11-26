@@ -247,5 +247,10 @@ def conectar_db():
     cursor.close()
     return conn
 
+@app.route('/local')
+def index():
+    return render_template('./local.html')
+
+
 if __name__== "__main__":
     app.run(debug=True)

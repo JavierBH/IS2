@@ -1,0 +1,40 @@
+{% from "_render_macros.html" import render_messages_error %}
+
+<!DOCTYPE html>
+<html>  
+    <head>
+        <meta charset="utf-8">
+        <title>Local</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/register.css') }}" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+        <form method="post" action="{{ url_for('register') }}">
+                {{render_messages_error(messages)}}
+            <div class="container">
+                <h1>Registrar local</h1>
+                <hr>
+
+                <label><b>Nombre local</b></label>
+                <input type="text" placeholder="Nombre local" name="local" required>
+
+                <label><b>Direccion</b></label>
+                <input type="text" placeholder="Direccion" name="direccion" required>
+            
+                <label><b>Reseña</b></label>
+                <input type="text" placeholder="Reseña" name="reseña" required>
+
+                <hr>
+                <button type="submit" class="registerbtn" value="Submit">Registrar</button>
+             
+              </div>
+
+        </form>
+    </body>
+
+</html>
