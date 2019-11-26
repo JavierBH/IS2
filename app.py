@@ -246,6 +246,17 @@ def local():
         return "local registrado"
     return render_template("local.html")
 
+#Devuelve elementos en array de una lista de bbdd
+def getLista(bbddText):
+    nComas = bbddText.count(',')
+    l = bbddText.split(',', nComas+1)
+    return l
+
+#Devuelve una string de lista con el elemento dado
+def addLista(id, lista):
+    strId = str(id)
+    return lista + "," + strId
+
 def conectar_db():
     conn = sqlite3.connect('datos.db')
     cursor = conn.cursor()
