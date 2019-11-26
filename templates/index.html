@@ -11,6 +11,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ 
+
 </head>
 <body>
   {{render_messages_success(messages)}}
@@ -25,25 +28,47 @@
   <a href="#">Perfil</a>
 </div>
 
+<form class="example" action="/action_page.php">
+  <input type="text" placeholder="Search.." name="search">
+  <button type="submit"><i class="fa fa-search"></i></button>
+</form>
+
 <section class= "main_page">
-    <div class="main">
-        <div class="navbar">
-            <a href="#">Degustaciones</a>
-            <a href="#">Locales</a>
-          </div>
+
+    <div class="navbar">
+        <button class="tablink" onclick="tab_main(event,'degustaciones')" id="defaultOpen">Degustaciones</button>
+        <button class="tablink" onclick="tab_main(event,'locales')">Locales</button>
+    </div>
+          
+    <div id="degustaciones" class="main">
       <div class="section1">
-          <div class="degus_img" >Image</div>
-          <div class="degus_img" >Image</div>
+          <div class="degus_img" >Degustacion</div>
+          <div class="degus_img" >Degustacion</div>
       </div>    
       <div class="section2">
-          <div class="degus_img" >Image</div>
-          <div class="degus_img" >Image</div>
+          <div class="degus_img" >Degustacion</div>
+          <div class="degus_img" >Degustacion</div>
       </div>
       <div class="section3">
-          <div class="degus_img" >Image</div>
-          <div class="degus_img" >Image</div>
+          <div class="degus_img" >Degustacion</div>
+          <div class="degus_img" >Degustacion</div>
       </div>
    </div>
+
+   <div id="locales" class="main">
+    <div class="section1">
+        <div class="degus_img" >Locales</div>
+        <div class="degus_img" >Locales</div>
+    </div>    
+    <div class="section2">
+        <div class="degus_img" >Locales</div>
+        <div class="degus_img" >Locales</div>
+    </div>
+    <div class="section3">
+        <div class="degus_img" >Locales</div>
+        <div class="degus_img" >Locales</div>
+    </div>
+ </div>
 
   <div class="row">
   <div class="side">
@@ -59,12 +84,26 @@
   </div>
   <div class="side">
     <div class="navbar">
-          <a href="#">Perfil</a>    
-          <a href="#">Estadísticas</a>
-          <a href="#">Solicitudes de amistad</a>       
+        <button class="tablink" onclick="tab_info_menu(event,'perfil')" id="defaultOpen">Perfil</button>
+        <button class="tablink" onclick="tab_info_menu(event,'estadisticas')">Estadisticas</button>
+        <button class="tablink" onclick="tab_info_menu(event,'solicitudes')">Solicitudes</button>    
     </div>
+  <div class="info_menu" id="perfil">
     <h2>Perfil</h2>
     <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod doloribus illo sit, cupiditate fugit quis consequatur esse veniam quidem ab, voluptatem incidunt libero nesciunt ipsum vitae amet accusamus numquam qui!</h3>
+  </div>
+
+  <div class="info_menu" id="estadisticas">
+      <h2>Estadisticas</h2>
+      <p>Aaron tio ponme bien las cosas de la BBDD</p>  
+    </div>
+  
+    <div class="info_menu" id="solicitudes">
+        <h2>Caca</h2>
+        <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod doloribus illo sit, cupiditate fugit quis consequatur esse veniam quidem ab, voluptatem incidunt libero nesciunt ipsum vitae amet accusamus numquam qui!</h3>
+      </div>
+        
+    
   </div>
 </section>
 
@@ -79,6 +118,7 @@
    </div>
   </div>
 </section>
+
 <section class="secondary-menus2">
   <div class="menus">
     <div class="menu3">
@@ -90,4 +130,6 @@
   </div>
 </section>
 
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
