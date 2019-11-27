@@ -135,8 +135,9 @@ def login():
                 flash("You are not verified. Check your e-mail","warning")
         else:
             flash("Error in login. Check credentials","error")
-        conexion.close()
+
         cursor.close()
+        conexion.close()
     return render_template("login.html")
 
 @app.route("/logout",  methods = ["GET","POST"])
@@ -156,8 +157,9 @@ def recuperar():
                 flash("E-mail sent. Look at your mail","success")
         else:
             flash("Email not valid. Try again","error")
-        conexion.close()
+        
         cursor.close()
+        conexion.close()
     return render_template("recuperar.html")
 
 @app.route("/recuperar/password", methods = ["GET","POST"])
@@ -182,8 +184,9 @@ def new_pass():
                 flash("Password Incorrect. Try again","error")
         else:
             flash("Username not valid. Try again","error")
-        conexion.close()
+        
         cursor.close()
+        conexion.close()
     return render_template("new_pass.html")
 
 def enviar_correo(correo,mensaje,tipo):
@@ -224,8 +227,9 @@ def mostrar_perfil(usuario):
                                                     foto = row[4],
                                                     nacionalidad = row[5],
                                                     introduccion = row[6])
-    conexion.close()
+    
     cursor.close()
+    conexion.close()
     return "No existe usuario"
 
 @app.route("/local/registrar", methods=['GET', 'POST'])
@@ -239,11 +243,20 @@ def local():
         cursor = conn.cursor()
         cursor.execute('''INSERT INTO Locales ('Nombre','Direccion','Reseña','Degustaciones') VALUES (?,?,?,?)'''
         ,(local, direccion, reseña, degustaciones))
+        Id = cursor.lastrowid
+        cursor.execute("SELECT Locales FROM Users WHERE usuario = ?", (session["username"],))
+        for row in cursor:
+            local_User = row[0]
+        if local_User is None:
+            cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(Id,session["username"]))
+        else:
+            addLocal = addLista(Id,local_User)
+            cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(addLocal,session["username"]))
         conn.commit()
         cursor.close()
         conn.close()
-        #return render_template("local.html")
-        return "local registrado"
+
+        return render_template("local.html")
     return render_template("local.html")
 
 #Devuelve elementos en array de una lista de bbdd
@@ -255,7 +268,8 @@ def getLista(bbddText):
 #Devuelve una string de lista con el elemento dado
 def addLista(id, lista):
     strId = str(id)
-    return lista + "," + strId
+    strLista = str(lista)
+    return strLista + "," + strId
 
 def conectar_db():
     conn = sqlite3.connect('datos.db')
@@ -272,9 +286,9 @@ def conectar_db():
                                 nacionalidad TEXT,
                                 introduccion TEXT,
                                 verificado INTEGER NOT NULL,
-                                Amigos TEXT,
-                                Desgustaciones TEXT,
-                                Locales TEXT);'''
+                                amigos TEXT,
+                                desgustaciones TEXT,
+                                locales TEXT);'''
     cursor.execute(sqlite_create_users_table_query)
     #CREA TABLA DEGUSTACIONES
     sqlite_create_degustaciones_table_query = '''CREATE TABLE IF NOT EXISTS Degustaciones (
