@@ -25,8 +25,19 @@
   </form>
 </div>
 
+
 <div class="navbar">
-  <a href="#">Ayuda</a>
+  <button id="helpBtn">Open Modal</button>
+  <!-- The Modal -->
+<div id="helpModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>ODIAME POR SER OTAKU, Adelante,estas en tu derecho,abla amis espaldas y az de mi vida un infierno,lo aguantare con una sonridsa en la cara,insulta al anime,a algun amigo tanbien otaku,y el infierno te parecera un hotel conparado conmigo</p>
+  </div>
+
+</div>
   <a href="#">Degustaciones</a>
   <a href="#">Perfil</a>
 </div>
@@ -94,7 +105,7 @@
   </div>
   <div class="side">
     <div class="navbar">
-        <button class="tablink" onclick="tab_info_menu(event,'perfil')" id="defaultOpen">Perfil</button>
+        <button class="tablink" id="defaultOpenSide" onclick="tab_info_menu(event,'perfil')" >Perfil</button>
         <button class="tablink" onclick="tab_info_menu(event,'estadisticas')">Estadisticas</button>
         <button class="tablink" onclick="tab_info_menu(event,'solicitudes')">Solicitudes</button>    
     </div>
