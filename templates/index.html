@@ -7,6 +7,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/main.css') }}" />
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/autocomplete.css') }}" />
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -22,15 +24,23 @@
     <button type="submit" class="logoutbtn" >Logout</button>
   </form>
 </div>
+
 <div class="navbar">
   <a href="#">Ayuda</a>
   <a href="#">Degustaciones</a>
   <a href="#">Perfil</a>
 </div>
 
-<form class="example" action="/action_page.php">
-  <input type="text" placeholder="Search.." name="search">
+<form class="example" autocomplete="off" action="/action_page.php">
+  <select>
+    <option value="locales">Locales</option>
+    <option value="degustaciones">Degustaciones</option>
+  </select>
+  <div class="autocomplete">
+  <input id="searchBar" type="text" autocomplete="off" placeholder="Search.." >
+  </div>
   <button type="submit"><i class="fa fa-search"></i></button>
+
 </form>
 
 <section class= "main_page">
@@ -132,4 +142,5 @@
 
 
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="{{ url_for('static', filename='js/search_bar_home.js') }}"></script>
 </body>
