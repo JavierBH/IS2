@@ -23,6 +23,7 @@ format_end = ["com","es"]
 
 @app.route("/home")
 def home():
+    print(session.get('username'))
     return render_template("index.html")
 
 def allowed_file(filename):
@@ -219,16 +220,14 @@ def add_degustacion():
         rows = cursor.fetchone()
         if rows is None:
             return render_template("add_local.html")
-        cursor.execute('''INSERT INTO Degustaciones ('usuario','password','email','nombre',
-        'fecha','foto','nacionalidad','introduccion','verificado') VALUES (?,?,?,?,?,?,?,?,0)'''
-        ,(nombre_deg,tipo,region,tamaño,calificacion_gusto,calificacion,local,descripcion,foto))
-        conn.commit()
+        cursor.execute('''INSERT INTO Degustaciones ('Nombre','Foto','Descripcion','Tipo',
+        'Region','Tamaño','Calificacion_Gusto','Calificacion','Local') VALUES (?,?,?,?,?,?,?,?,0)'''
+        ,(nombre_deg,foto,descripcion,tipo,region,tamaño,calificacion_gusto,calificacion,local))
+        conexion.commit()
         cursor.close()
         conexion.close()
-        flash("Degusatacion añadida con exito","success")
+        flash("Degustacion añadida con exito","success")
     return redirect(url_for("home"))
-
-
 
 
 def enviar_correo(correo,mensaje,tipo):
@@ -273,7 +272,7 @@ def mostrar_perfil(usuario):
     conexion.close()
     return "No existe usuario"
 
-@app.route("/local/registrar", methods=['GET', 'POST'])
+@app.route("/local", methods=['GET', 'POST'])
 def local():
     if request.method == 'POST': 
         local = request.form['local']
@@ -318,7 +317,7 @@ def conectar_db():
                                 introduccion TEXT,
                                 verificado INTEGER NOT NULL,
                                 Amigos TEXT,
-                                Desgustaciones TEXT,
+                                Degustaciones TEXT,
                                 Locales TEXT);'''
     cursor.execute(sqlite_create_users_table_query)
     #CREA TABLA DEGUSTACIONES
@@ -328,9 +327,10 @@ def conectar_db():
                                 Foto BLOB,
                                 Descripcion TEXT,
                                 Tipo TEXT,
-                                Coordenadas TEXT,
-                                Tamaño DOUBLE,
-                                Calificacion FLOAT,
+                                Region TEXT,
+                                Tamaño TEXT,
+                                Calificacion_Gusto TEXT,
+                                Calificacion INTEGER,
                                 Local TEXT);'''
     cursor.execute(sqlite_create_degustaciones_table_query)
     #CREA TABLA LOCALES
