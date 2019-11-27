@@ -39,8 +39,8 @@ def convertToBinaryData(filename):
 def register():
     if request.method == 'POST': 
         usuario = request.form.get('usuario')
-        contrasena = request.form.get('contrasena')
-        repite_contrasena = request.form.get('repite_contrasena')
+        contrasena = request.form.get('password')
+        repite_contrasena = request.form.get('repite_password')
         email = request.form.get('email')
         nombre = request.form.get('nombre')
         nacionalidad = request.form.get('nacionalidad')
@@ -96,7 +96,7 @@ def register():
             flash("Email existed !!!!","error")
             return render_template("register.html")
         #INSERTAR
-        cursor.execute('''INSERT INTO Users ('usuario','password','email','name',
+        cursor.execute('''INSERT INTO Users ('usuario','password','email','nombre',
         'fecha','foto','nacionalidad','introduccion','verificado') VALUES (?,?,?,?,?,?,?,?,0)'''
         ,(usuario,contrasena,email,nombre,fecha,foto,nacionalidad,intro))
         conn.commit()
@@ -124,19 +124,19 @@ def login():
     if request.method == "POST":
         conexion = conectar_db()
         cursor = conexion.cursor()
-        cursor.execute("SELECT verificado FROM Users WHERE usuario = ? AND password=?",(request.form["username"],request.form["password"]))
+        cursor.execute("SELECT verificado FROM Users WHERE usuario = ? AND password=?",(request.form["usuario"],request.form["password"]))
         rows = cursor.fetchone()
         if rows is not None:
             if rows[0] == 1:
-                session["username"] = request.form['username']
+                session["username"] = request.form['usuario']
                 flash("You are logged. Welcome !!!!","success")
                 return redirect(url_for("home"))
             else:
                 flash("You are not verified. Check your e-mail","warning")
         else:
             flash("Error in login. Check credentials","error")
-        conexion.close()
         cursor.close()
+        conexion.close()
     return render_template("login.html")
 
 @app.route("/logout",  methods = ["GET","POST"])
@@ -149,15 +149,15 @@ def recuperar():
     if request.method == "POST":
         conexion = conectar_db()
         cursor = conexion.cursor()
-        cursor.execute("SELECT usuario FROM Users WHERE email = ?",(request.form["correo"],))
+        cursor.execute("SELECT usuario FROM Users WHERE email = ?",(request.form["email"],))
         rows = cursor.fetchone()
         if rows is not None:
-            if enviar_correo(request.form["correo"],"http://127.0.0.1:5000/recuperar/password",0) == 0:
+            if enviar_correo(request.form["email"],"http://127.0.0.1:5000/recuperar/password",0) == 0:
                 flash("E-mail sent. Look at your mail","success")
         else:
             flash("Email not valid. Try again","error")
-        conexion.close()
         cursor.close()
+        conexion.close()
     return render_template("recuperar.html")
 
 @app.route("/recuperar/password", methods = ["GET","POST"])
@@ -165,7 +165,7 @@ def new_pass():
     if request.method == "POST":
         conexion = conectar_db()
         cursor = conexion.cursor()
-        cursor.execute("SELECT usuario FROM Users WHERE usuario = ?",(request.form["username"],))
+        cursor.execute("SELECT usuario FROM Users WHERE usuario = ?",(request.form["usuario"],))
         rows = cursor.fetchone()
         contrasena = request.form.get('password')
         repite_contrasena = request.form.get('repite_password')
@@ -174,7 +174,7 @@ def new_pass():
                 flash("Introduzca una contraseña de minimo 6 caracteres","error")
                 return render_template("new_pass.html")
             if contrasena == repite_contrasena:
-              cursor.execute("UPDATE Users SET password=? WHERE usuario=?",(request.form["password"],request.form["username"]))
+              cursor.execute("UPDATE Users SET password=? WHERE usuario=?",(request.form["password"],request.form["usuario"]))
               conexion.commit()
               flash("Password change with success","success")
               return redirect(url_for("login"))
@@ -182,9 +182,54 @@ def new_pass():
                 flash("Password Incorrect. Try again","error")
         else:
             flash("Username not valid. Try again","error")
-        conexion.close()
         cursor.close()
+        conexion.close()
     return render_template("new_pass.html")
+
+@app.route("/search")
+def search():
+    var_search = request.args.get("var_busqueda")
+    #var_filter = request.form["var_filter"]
+    conexion = conectar_db()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT usuario FROM Users WHERE usuario = ?",(var_search,))
+    rows = cursor.fetchone()
+    cursor.close()
+    conexion.close()
+    if rows is not None:
+        return "hola"
+    return render_template("add_degustacion.html")
+
+
+@app.route("/degustacion", methods=['GET','POST'])
+def add_degustacion():
+    if request.method() == 'POST':
+        nombre_deg = request.form.get('nombre_deg')
+        tipo = request.form.get('tipo')
+        region = request.form.get('region')
+        tamaño = request.form.get('tamaño')
+        calificacion_gusto = request.form.get('calificacion_gusto')
+        calificacion = request.form.get('calificacion')
+        local = request.form.get('local')
+        descripcion = request.form.get('descripcion')
+        foto = request.form.get('foto')
+        conexion = conectar_db()
+        cursor = conexion.cursor()
+        cursor.execute("SELECT local FROM Locales WHERE local = ?",(local,))
+        rows = cursor.fetchone()
+        if rows is None:
+            return render_template("add_local.html")
+        cursor.execute('''INSERT INTO Degustaciones ('usuario','password','email','nombre',
+        'fecha','foto','nacionalidad','introduccion','verificado') VALUES (?,?,?,?,?,?,?,?,0)'''
+        ,(nombre_deg,tipo,region,tamaño,calificacion_gusto,calificacion,local,descripcion,foto))
+        conn.commit()
+        cursor.close()
+        conexion.close()
+        flash("Degusatacion añadida con exito","success")
+    return redirect(url_for("home"))
+
+
+
 
 def enviar_correo(correo,mensaje,tipo):
     try:
@@ -215,17 +260,17 @@ def enviar_correo(correo,mensaje,tipo):
 def mostrar_perfil(usuario):
     conexion = conectar_db()
     cursor = conexion.cursor()
-    cursor.execute("SELECT usuario,email, name,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
+    cursor.execute("SELECT usuario,email, nombre,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
     for row in cursor:
         return render_template("perfil.html",usuario = row[0],
                                                     email = row[1],
-                                                    name = row[2],
+                                                    nombre = row[2],
                                                     fecha = row[3],
                                                     foto = row[4],
                                                     nacionalidad = row[5],
                                                     introduccion = row[6])
-    conexion.close()
     cursor.close()
+    conexion.close()
     return "No existe usuario"
 
 def conectar_db():
@@ -236,7 +281,7 @@ def conectar_db():
                                 usuario TEXT NOT NULL UNIQUE,
                                 password TEXT NOT NULL,
                                 email TEXT NOT NULL UNIQUE,
-                                name TEXT,
+                                nombre TEXT,
                                 fecha DATE,
                                 foto BLOB,
                                 nacionalidad TEXT,
