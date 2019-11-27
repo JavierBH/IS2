@@ -20,4 +20,5 @@ function tab_main(evt,pageName) {
     evt.currentTarget.className += " active";
 
   }
+  
   document.getElementById("defaultOpen").click();
