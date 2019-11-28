@@ -1,0 +1,67 @@
+{% from "_render_macros.html" import render_messages_error %}
+
+<!DOCTYPE html>
+<html>  
+    <head>
+        <meta charset="utf-8">
+        <title>Degustacion</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/register.css') }}" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+        <form method="post" action="{{ url_for('local') }}">
+                {{render_messages_error(messages)}}
+            <div class="container">
+                <h1>Añadir degustacion</h1>
+                <hr>
+
+                <label><b>Nombre degustacion</b></label>
+                <input type="text" placeholder="Nombre degustacion" name="degustacion" required>
+
+                <label><b>Tipo de comida/bebida</b></label>
+                <input type="text" placeholder="Tipo" name="tipo" required>
+            
+                <label ><b>Pais de Procedencia</b><br /></label>
+            <div >
+                <form autocomplete="off" action="/action_page.php">
+                    <div class="autocomplete" style="width:300px;">
+                      <input id="myInput" autocomplete="off" type="text" name="nacionalidad" placeholder="Pais">
+                    </div>
+                </form>
+            </div>
+
+            <label ><b>Tamaño</b><br /></label>
+            <div >
+                <form autocomplete="off" action="/action_page.php">
+                    <div class="autocompTam" style="width:300px;">
+                      <input id="myInput" autocomplete="off" type="text" name="tamaño" placeholder="Tamaño">
+                    </div>
+                </form>
+            </div>
+
+                <label ><b>Calificadores de gusto</b><br /></label>
+            <div >
+                <form autocomplete="off" action="/action_page.php">
+                    <div class="autocompCalif" style="width:300px;">
+                      <input id="myInput" autocomplete="off" type="text" name="gusto" placeholder="Gusto">
+                    </div>
+                </form>
+            </div>
+
+                <hr>
+                <button type="submit" class="registerbtn" value="Submit">Añadir</button>
+             
+              </div>
+
+        </form>
+    </body>
+    <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/autocompTam.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/autocompCalif.js') }}"></script>
+
+</html>

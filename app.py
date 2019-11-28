@@ -368,9 +368,13 @@ def conectar_db():
     cursor.close()
     return conn
 
-@app.route('/local')
+#@app.route('/local')
+#def index():
+#    return render_template('./local.html')
+
+@app.route('/degustacion')
 def index():
-    return render_template('./local.html')
+    return render_template('./degustacion.html')
 
 
 if __name__== "__main__":
