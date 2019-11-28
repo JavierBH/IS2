@@ -28,7 +28,7 @@ function tab_main(evt,pageName) {
 
   }
 
-  /*------------MODAL BOX DE AYUDA---------------- */
+/*------------MODAL BOX DE AYUDA---------------- */
 // Get the modal
 var modal = document.getElementById("helpModal");
 
@@ -53,4 +53,40 @@ window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
+}
+
+/*-----------------RECENT ACTIVITY MENU--------------------------*/ 
+
+function create_activity_box(){
+  //Se crea la div en la que estan las acciones
+  var node = document.createElement("DIV"); //Create Div activity_box node
+  node.setAttribute("id",this.id + "activity_box_id");
+  node.setAttribute("class","activity_box");
+  
+  //Se crea la imagen
+  var img = document.createElement("img");
+  img.setAttribute("class","img_activity_box");
+  img.setAttribute("src", "images/hydrangeas.jpg");
+
+  //Se crea el titulo del usuario
+  var h2 = document.createElement("H4");
+  var t = document.createTextNode("Usuario 1");     // Create a text node
+  h2.appendChild(t);
+
+  //Se crea el parrafo con el texto
+  var p = document.createElement("P");
+  var t = document.createTextNode("JAJAJAJAJ COSAS SI COSAS JAJAJA"); 
+  p.appendChild(t);
+  
+  var hr = document.createElement("HR");
+  //Se añaden los elementos al activity_box div
+  node.appendChild(img);
+  node.appendChild(h2);
+  node.appendChild(p);
+  document.getElementById("recents").appendChild(node);
+  document.getElementById("recents").appendChild(hr);
+}
+
+for ( var i = 0; i < 6; i++) {
+  create_activity_box()
 }

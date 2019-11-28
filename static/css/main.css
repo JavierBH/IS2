@@ -119,13 +119,26 @@
   /* Create two unequal columns that sits next to each other */
   /* Sidebar/left column */
   .side {
+    height: 500px;
     flex: 50%;
     background-color: #f1f1f1;
     padding: 20px;
     border-right-style: solid;
     border-left-style: solid;
+    overflow: scroll;
   }
   
+  /*------------------------- RECENT BOXES ------------------------- */
+  
+  .recentBox{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .side h2{
+    position: sticky;
+  }
+
   /* Main column */
   .main {   
     background-color: white;
