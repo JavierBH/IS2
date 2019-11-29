@@ -23,7 +23,6 @@ format_end = ["com","es"]
 
 @app.route("/home")
 def home():
-    print(session.get('username'))
     return render_template("index.html")
 
 def allowed_file(filename):
@@ -127,6 +126,7 @@ def login():
         cursor = conexion.cursor()
         cursor.execute("SELECT verificado FROM Users WHERE usuario = ? AND password=?",(request.form["usuario"],request.form["password"]))
         rows = cursor.fetchone()
+        print(rows)
         if rows is not None:
             if rows[0] == 1:
                 session["username"] = request.form['usuario']
@@ -204,8 +204,8 @@ def search():
 
 @app.route("/degustacion", methods=['GET','POST'])
 def add_degustacion():
-    if request.method() == 'POST':
-        nombre_deg = request.form.get('nombre_deg')
+    #if request.method() == 'POST':
+        """nombre_deg = request.form.get('nombre_deg')
         tipo = request.form.get('tipo')
         region = request.form.get('region')
         tamaño = request.form.get('tamaño')
@@ -213,21 +213,44 @@ def add_degustacion():
         calificacion = request.form.get('calificacion')
         local = request.form.get('local')
         descripcion = request.form.get('descripcion')
-        foto = request.form.get('foto')
+        foto = request.form.get('foto')"""
+        nombre_deg = "lechuga"
+        tipo = "comida"
+        region = "españa"
+        tamaño = "grande"
+        calificacion_gusto = "suave"
+        calificacion = 4
+        local = "bar pepe"
+        descripcion = "ñeeee"
+        foto = None
         conexion = conectar_db()
         cursor = conexion.cursor()
-        cursor.execute("SELECT local FROM Locales WHERE local = ?",(local,))
+        cursor.execute("SELECT Nombre FROM Locales WHERE Nombre = ?",(local,))
         rows = cursor.fetchone()
         if rows is None:
             return render_template("add_local.html")
         cursor.execute('''INSERT INTO Degustaciones ('Nombre','Foto','Descripcion','Tipo',
-        'Region','Tamaño','Calificacion_Gusto','Calificacion','Local') VALUES (?,?,?,?,?,?,?,?,0)'''
+        'Region','Tamaño','Calificacion_Gusto','Calificacion','Local') VALUES (?,?,?,?,?,?,?,?,?)'''
         ,(nombre_deg,foto,descripcion,tipo,region,tamaño,calificacion_gusto,calificacion,local))
+        conexion.commit()
+        cursor.execute("SELECT Degustaciones FROM Locales WHERE Nombre = ?",(local,))
+        rows = cursor.fetchone()
+        if rows[0] is None:
+            cursor.execute("UPDATE Locales SET Degustaciones=? WHERE Nombre=?",(nombre_deg+",",local))
+        else:
+            cursor.execute("UPDATE Locales SET Degustaciones=(SELECT Degustaciones FROM Locales WHERE Nombre=?) || ? WHERE Nombre=?",(local,nombre_deg+",",local))
+        conexion.commit()
+        cursor.execute("SELECT Degustaciones FROM Users WHERE usuario = ?",(session.get("username"),))
+        rows = cursor.fetchone()
+        if rows[0] is None:
+            cursor.execute("UPDATE Users SET Degustaciones=? WHERE usuario=?",(nombre_deg+",",session.get("username")))
+        else:
+            cursor.execute("UPDATE Users SET Degustaciones=(SELECT Degustaciones FROM Users WHERE usuario=?) || ? WHERE usuarii=?",(session.get("username"),nombre_deg+",",session.get("username")))
         conexion.commit()
         cursor.close()
         conexion.close()
         flash("Degustacion añadida con exito","success")
-    return redirect(url_for("home"))
+        return redirect(url_for("home"))
 
 
 def enviar_correo(correo,mensaje,tipo):
@@ -274,11 +297,15 @@ def mostrar_perfil(usuario):
 
 @app.route("/local", methods=['GET', 'POST'])
 def local():
-    if request.method == 'POST': 
-        local = request.form['local']
+    #if request.method == 'POST': 
+        """local = request.form['local']
         direccion = request.form['direccion']
         reseña = request.form['reseña']
-        degustaciones = ""
+        degustaciones = None"""
+        local = "bar pepe"
+        direccion = "pepe"
+        reseña = "wesdfcsdx"
+        degustaciones = None
         conn = conectar_db()
         cursor = conn.cursor()
         cursor.execute('''INSERT INTO Locales ('Nombre','Direccion','Reseña','Degustaciones') VALUES (?,?,?,?)'''
@@ -288,7 +315,7 @@ def local():
         conn.close()
         #return render_template("local.html")
         return "local registrado"
-    return render_template("local.html")
+    #return render_template("local.html")
 
 #Devuelve elementos en array de una lista de bbdd
 def getLista(bbddText):
