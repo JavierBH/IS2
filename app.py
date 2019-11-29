@@ -259,8 +259,8 @@ def local():
         return render_template("local.html")
     return render_template("local.html")
 
-@app.route("/desgutacion/registrar", methods=["GET", "POST"])
-def anadir_desgutaciones():
+@app.route("/degustacion/registrar", methods=["GET", "POST"])
+def anadir_degustaciones():
     if request.method == "POST": 
         nombre = request.form.get('nombre')
         foto = None
