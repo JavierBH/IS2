@@ -9,7 +9,6 @@ from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from os.path import join, dirname, realpath
 
-
 MY_ADDRESS = "proyectois2upm@gmail.com"
 PASSWORD = "softwareupm"
 UPLOAD_FOLDER = join(dirname(realpath(__file__)), '/home/xiaojing/Documentos/IS2/img')
@@ -326,46 +325,6 @@ def local():
         return "local registrado"
     #return render_template("local.html")
 
-@app.route("/degustacion/registrar", methods=["GET", "POST"])
-def anadir_degustaciones():
-    if request.method == "POST": 
-        nombre = request.form.get('nombre')
-        foto = None
-        descripcion = request.form.get('descripcion')
-        tipo = request.form.get('tipo')
-        coordenadas = request.form.get('coordenadas')
-        tamanio = request.form.get('tamanio')
-        calificacion = request.form.get('calificacion')
-        local = request.form.get('local')
-        conn = conectar_db()
-        cursor = conn.cursor()
-        cursor.execute('''INSERT INTO Degustaciones ('Nombre','Foto','Descripcion','Tipo','Coordenadas','Tamaño','Calificacion','Local') VALUES (?,?,?,?,?,?,?,?)'''
-        ,(nombre, foto, descripcion, tipo, coordenadas, tamanio, calificacion, local))
-        Id = cursor.lastrowid
-        #INSERTAR EN TABLA USER
-        cursor.execute("SELECT degustaciones FROM Users WHERE usuario = ?", (session["username"],))
-        for row in cursor:
-            local_User = row[0]
-        if local_User is None:
-            cursor.execute("UPDATE Users SET degustaciones=? WHERE usuario=?",(Id,session["username"]))
-        else:
-            addDegustacion1 = addLista(Id,local_User)
-            cursor.execute("UPDATE Users SET degustaciones=? WHERE usuario=?",(addDegustacion1,session["username"]))
-        #INSERTAR EN TABLA LOCAL
-        cursor.execute("SELECT Degustaciones FROM Locales WHERE usuario = ?", (session["username"],))
-        for row in cursor:
-            local_User = row[0]
-        if local_User is None:
-            cursor.execute("UPDATE Locales SET Degustaciones=? WHERE usuario=?",(Id,session["username"]))
-        else:
-            addDegustacion2 = addLista(Id,local_User)
-            cursor.execute("UPDATE Locales SET Degustaciones=? WHERE usuario=?",(addDegustacion2,session["username"]))
-        conn.commit()
-        cursor.close()
-        conn.close()
-        return render_template("anadir_degustacion.html")
-    return render_template("anadir_degustacion.html")
-
 #Devuelve elementos en array de una lista de bbdd
 def getLista(bbddText):
     nComas = bbddText.count(',')
@@ -436,13 +395,10 @@ def conectar_db():
     cursor.close()
     return conn
 
-#@app.route('/local')
-#def index():
-#    return render_template('./local.html')
-
 @app.route('/degustacion')
 def index():
     return render_template('./degustacion.html')
+
 
 
 if __name__== "__main__":
