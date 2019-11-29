@@ -1,0 +1,79 @@
+{% from "_render_macros.html" import render_messages_error %}
+
+<!DOCTYPE html>
+<html>  
+    <head>
+        <meta charset="utf-8">
+        <title>Degustacion</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/anadir_degustacion.css') }}" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+        <form method="post" action="{{ url_for('anadir_degustaciones') }}">
+                {{render_messages_error(messages)}}
+            <div class="container">
+                <h1>Añadir degustacion</h1>
+                <hr>
+
+                <label><b>Nombre degustacion</b></label>
+                <input type="text" placeholder="Nombre degustacion" name="degustacion" required>
+
+                <label><b>Tipo de comida/bebida</b></label>
+                <input type="text" placeholder="Tipo" name="tipo" required>
+            
+                <label ><b>Pais de Procedencia</b><br /></label>
+            <div >
+                <form autocomplete="off" action="/action_page.php">
+                    <div class="autocomplete" style="width:300px;">
+                      <input id="myInput" autocomplete="off" type="text" name="nacionalidad" placeholder="Pais">
+                    </div>
+                </form>
+            </div>
+
+            <label ><b>Tamaño</b><br /></label>
+            <div >
+                <select>
+                    <option name="tamanio">Pequeña</option>
+                    <option name="tamanio">Mediana</option>
+                    <option name="tamanio">Grande</option>
+                  </select>
+            </div>
+        
+            <label ><b>Calificacion</b> <br /></label>
+            <div>
+                        <span class="fa fa-star" id="star1" onclick="change_color(1)"></span>
+                        <span class="fa fa-star" id="star2" onclick="change_color(2)"></span>
+                        <span class="fa fa-star" id="star3" onclick="change_color(3)"></span>
+                        <span class="fa fa-star" id="star4" onclick="change_color(4)"></span>
+                        <span class="fa fa-star" id="star5" onclick="change_color(5)"></span>
+                    </div>
+                        <hr>
+                <button type="submit" class="registerbtn" value="Submit">Añadir</button>
+             
+              </div>
+
+        </form>
+    </body>
+    <script>
+        function change_color(number){
+        var i=1;
+        for(var j = 1; j<=5;j++){
+            var stars = document.getElementById("star" + j);
+            stars.style.color = "black";
+        }
+        for(; i<=number;i++){
+           var stars = document.getElementById("star" + i);
+           stars.style.color = "orange";
+        }
+            stars.setAttribute("name","calificacion");
+            stars.setAttribute("value",i);
+        }
+    </script>
+    <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
+</html>

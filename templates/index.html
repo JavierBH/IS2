@@ -7,6 +7,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/main.css') }}" />
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/autocomplete.css') }}" />
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -22,15 +24,34 @@
     <button type="submit" class="logoutbtn" >Logout</button>
   </form>
 </div>
+
+
 <div class="navbar">
-  <a href="#">Ayuda</a>
+  <button id="helpBtn">Aiuda</button>
+  <!-- The Modal -->
+<div id="helpModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>ODIAME POR SER OTAKU, Adelante,estas en tu derecho,abla amis espaldas y az de mi vida un infierno,lo aguantare con una sonridsa en la cara,insulta al anime,a algun amigo tanbien otaku,y el infierno te parecera un hotel conparado conmigo</p>
+  </div>
+
+</div>
   <a href="#">Degustaciones</a>
   <a href="#">Perfil</a>
 </div>
 
-<form class="example" method="get" action="{{ url_for('search') }}">
-  <input type="text" placeholder="Search.." name="var_busqueda">
+<form class="example" autocomplete="off" action="/action_page.php">
+  <select>
+    <option value="locales">Locales</option>
+    <option value="degustaciones">Degustaciones</option>
+  </select>
+  <div class="autocomplete">
+  <input id="searchBar" type="text" autocomplete="off" placeholder="Search.." >
+  </div>
   <button type="submit"><i class="fa fa-search"></i></button>
+
 </form>
 
 <section class= "main_page">
@@ -73,18 +94,16 @@
   <div class="row">
   <div class="side">
     <h2>Actividades recientes</h2>
-    <h5>Photo of me:</h5>
-    <div class="fakeimg" style="height:200px;">Image</div>
-    <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
-    <h3>More Text</h3>
-    <p>Lorem ipsum dolor sit ame.</p>
-    <div class="fakeimg" style="height:60px;">Image</div><br>
-    <div class="fakeimg" style="height:60px;">Image</div><br>
-    <div class="fakeimg" style="height:60px;">Image</div>
+    <hr>
+    <div class="recentBox" id="recents">
+
+    </div>
   </div>
+
+
   <div class="side">
     <div class="navbar">
-        <button class="tablink" onclick="tab_info_menu(event,'perfil')" id="defaultOpen">Perfil</button>
+        <button class="tablink" id="defaultOpenSide" onclick="tab_info_menu(event,'perfil')" >Perfil</button>
         <button class="tablink" onclick="tab_info_menu(event,'estadisticas')">Estadisticas</button>
         <button class="tablink" onclick="tab_info_menu(event,'solicitudes')">Solicitudes</button>    
     </div>
@@ -132,4 +151,5 @@
 
 
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="{{ url_for('static', filename='js/search_bar_home.js') }}"></script>
 </body>
