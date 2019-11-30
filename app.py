@@ -227,7 +227,7 @@ def add_degustacion():
         cursor.execute("SELECT Nombre FROM Locales WHERE Nombre = ?",(local,))
         rows = cursor.fetchone()
         if rows is None:
-            return render_template("add_local.html")
+            return render_template("add_degustacion.html")
         cursor.execute('''INSERT INTO Degustaciones ('Nombre','Foto','Descripcion','Tipo',
         'Region','Tamaño','Calificacion_Gusto','Calificacion','Local') VALUES (?,?,?,?,?,?,?,?,?)'''
         ,(nombre_deg,foto,descripcion,tipo,region,tamaño,calificacion_gusto,calificacion,local))
@@ -394,10 +394,6 @@ def conectar_db():
     conn.commit()
     cursor.close()
     return conn
-
-@app.route('/degustacion')
-def index():
-    return render_template('./degustacion.html')
 
 
 
