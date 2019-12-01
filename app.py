@@ -292,16 +292,17 @@ def mostrar_perfil(usuario):
     cursor = conexion.cursor()
     cursor.execute("SELECT usuario,email, nombre,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
     for row in cursor:
-        return render_template("perfil.html",usuario = row[0],
-                                                    email = row[1],
-                                                    nombre = row[2],
-                                                    fecha = row[3],
-                                                    foto = row[4],
-                                                    nacionalidad = row[5],
-                                                    introduccion = row[6])
+        usuario = row[0]
+        email = row[1]
+        nombre = row[2]
+        fecha = row[3]
+        foto = row[4]
+        nacionalidad = row[5]
+        introduccion = row[6]
+    conexion.commit()
     cursor.close()
     conexion.close()
-    return "No existe usuario"
+    return render_template("perfil.html",usuario, email, nombre, fecha, foto, nacionalidad, introduccion)
 
 @app.route("/local", methods=['GET', 'POST'])
 def local():
@@ -333,6 +334,52 @@ def local():
         #return render_template("local.html")
         return "local registrado"
     #return render_template("local.html")
+
+@app.route("/enviar_solicitud", methods=['GET','POST'])
+def enviar_solicitud():
+    if request.method == 'POST': 
+        id_amigo = request.form['idAmigo']
+        conn = conectar_db()
+        cursor = conn.cursor()
+        cursor = conn.cursor()
+        cursor.execute('''INSERT INTO Solicitudes ('Nombre_Usuario','Id_Amigo','Validacion') VALUES (?,?,?)'''
+            ,(session["username"], id_amigo, 0))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return render_template("enviar_solicitud.html")
+    return render_template("enviar_solicitud.html")
+
+@app.route("/morstrar_solicitud", methods=['GET','POST'])
+def mostrar_solicitud():
+    conexion = conectar_db()
+    cursor = conexion.cursor()
+    result = ""
+    cursor.execute("SELECT Id_Amigo FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
+    for row in cursor:
+        if result == "":
+            result = row[0]
+        else:
+            addLista(row[0], result)
+    conn.commit()
+    cursor.close()
+    conexion.close()
+    return render_template("mostrar_solicitud.html",result)
+
+
+@app.route("/aceptar_solicitud", methods=['GET','POST'])
+def aceptar_solicitud():
+    if request.method == 'POST': 
+        conn = conectar_db()
+        cursor = conn.cursor()
+        cursor = conn.cursor()
+        #PENDIENTE
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return render_template("enviar_solicitud.html")
+    return render_template("enviar_solicitud.html")
+
 
 #Devuelve elementos en array de una lista de bbdd
 def getLista(bbddText):
@@ -396,7 +443,7 @@ def conectar_db():
     #CREA TABLA SOLICITUDES DE AMIGOS
     sqlite_create_solicitudes_table_query = '''CREATE TABLE IF NOT EXISTS Solicitudes (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                Id_Usuario TEXT NOT NULL,
+                                Nombre_Usuario TEXT NOT NULL,
                                 Id_Amigo TEXT NOT NULL,
                                 Validacion INT);'''
     cursor.execute(sqlite_create_solicitudes_table_query)
