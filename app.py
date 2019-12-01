@@ -19,9 +19,18 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 format_email = ["gmail","yahoo"]
 format_end = ["com","es"]
 
-
-@app.route("/home")
+@app.route("/home", methods=['GET'])
 def home():
+    if request.method == 'GET':
+        conn = conectar_db()
+        cursor = conn.cursor()
+        selector = request.form.get('selector')
+        cursor.execute("SELECT Nombre FROM Locales ")
+        arr = cursor.fetchone()
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return render_template("index.html",info = arr)
     return render_template("index.html")
 
 def allowed_file(filename):
