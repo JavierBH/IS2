@@ -20,7 +20,6 @@ app.secret_key = 'random string'
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 format_email = ["gmail","yahoo"]
 format_end = ["com","es"]
-global conexion
 
 @app.route("/home", methods=['GET'])
 def home():
@@ -56,8 +55,6 @@ def calcular_edad(fecha_nacimiento):
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    global conexion
-    print(conexion)
     if request.method == 'POST': 
         usuario = request.form.get('usuario')
         contrasena = request.form.get('password')
@@ -102,7 +99,7 @@ def register():
         if (contrasena != repite_contrasena):
             flash("Password incorrect","error")
             return render_template("register.html")
-        print(conexion)
+        conexion = conectar_db()
         cursor = conexion.cursor()
         #COMPROBACION DE EDAD VALIDA 
         fecha_aux = fecha.split('-')
@@ -127,6 +124,7 @@ def register():
         ,(usuario,contrasena,email,nombre,fecha,foto,nacionalidad,intro))
         conexion.commit()
         cursor.close()
+        conexion.close()
         flash("You are registered. Welcome !!!!","success")
         enviar_correo(email,"http://127.0.0.1:5000/ver/"+usuario,1)
         return redirect(url_for("login"))
@@ -134,20 +132,20 @@ def register():
 
 @app.route("/ver/<string:username>")
 def verified(username, methods=['GET', 'POST']):
-    global conexion
+    conexion = conectar_db()
     cursor = conexion.cursor()
     cursor.execute("UPDATE Users SET verificado=1 WHERE usuario=?",(username,))
     conexion.commit()
     cursor.close()
+    conexion.close()
     return redirect(url_for("login"))
 
 @app.route("/", methods = ["GET","POST"])
 def login():
-    global conexion
-    conexion = conectar_db()
     if "username" in session:
         return redirect(url_for("home"))
     if request.method == "POST":
+        conexion = conectar_db()
         cursor = conexion.cursor()
         cursor.execute("SELECT verificado FROM Users WHERE usuario = ? AND password=?",(request.form["usuario"],request.form["password"]))
         rows = cursor.fetchone()
@@ -162,6 +160,7 @@ def login():
         else:
             flash("Error in login. Check credentials","error")
         cursor.close()
+        conexion.close()
     return render_template("login.html")
 
 @app.route("/logout",  methods = ["GET","POST"])
@@ -171,8 +170,8 @@ def logout():
 
 @app.route("/recuperar", methods = ["GET","POST"])
 def recuperar():
-    global conexion
     if request.method == "POST":
+        conexion = conectar_db()
         cursor = conexion.cursor()
         cursor.execute("SELECT usuario FROM Users WHERE email = ?",(request.form["email"],))
         rows = cursor.fetchone()
@@ -182,12 +181,13 @@ def recuperar():
         else:
             flash("Email not valid. Try again","error")
         cursor.close()
+        conexion.close()
     return render_template("recuperar.html")
 
 @app.route("/recuperar/password", methods = ["GET","POST"])
 def new_pass():
-    global conexion
     if request.method == "POST":
+        conexion = conectar_db()
         cursor = conexion.cursor()
         cursor.execute("SELECT usuario FROM Users WHERE usuario = ?",(request.form["usuario"],))
         rows = cursor.fetchone()
@@ -207,18 +207,20 @@ def new_pass():
         else:
             flash("Username not valid. Try again","error")
         cursor.close()
+        conexion.close()
     return render_template("new_pass.html")
 
 @app.route("/search", methods=['GET'])
 def search():
-    global conexion
     if request.method == 'GET':
         var_search = request.args.get("var_busqueda")
         var_filter = request.args.get("selector")
+        conexion = conectar_db()
         cursor = conexion.cursor()
         cursor.execute("SELECT Nombre FROM Degustaciones WHERE Nombre = ?",(var_search,))
         rows = cursor.fetchone()
         cursor.close()
+        conexion.close()
         if rows is None:
             return render_template("add_degustacion.html")
     return "hola"
@@ -227,7 +229,6 @@ def search():
 
 @app.route("/degustacion", methods=['GET','POST'])
 def add_degustacion():
-    global conexion
     if request.method == 'POST':
         nombre_deg = request.form.get('degustacion')
         tipo = request.form.get('tipo')
@@ -238,6 +239,7 @@ def add_degustacion():
         local = request.form.get('local')
         descripcion = request.form.get('descripcion')
         foto = request.form.get('foto')
+        conexion = conectar_db()
         cursor = conexion.cursor()
         cursor.execute("SELECT Nombre FROM Locales WHERE Nombre = ?",(local,))
         rows = cursor.fetchone()
@@ -264,6 +266,7 @@ def add_degustacion():
             cursor.execute("UPDATE Users SET Degustaciones=(SELECT Degustaciones FROM Users WHERE usuario=?) || ? WHERE usuario=?",(session.get("username"),str(id)+",",session.get("username")))
         conexion.commit()
         cursor.close()
+        conexion.close()
         flash("Degustacion añadida con exito","success")
         return redirect(url_for("home"))
     return render_template("add_degustacion.html")
@@ -296,7 +299,7 @@ def enviar_correo(correo,mensaje,tipo):
 
 @app.route("/perfil/<string:usuario>")
 def mostrar_perfil(usuario):
-    global conexion
+    conexion = conectar_db()
     cursor = conexion.cursor()
    # cursor.execute("SELECT usuario,email, nombre,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
     for row in cursor:
@@ -314,12 +317,12 @@ def mostrar_perfil(usuario):
 
 @app.route("/local", methods=['GET', 'POST'])
 def local():
-    global conexion
     if request.method == 'POST': 
         local = request.form['local']
         direccion = request.form['direccion']
         reseña = request.form['reseña']
         degustaciones = None
+        conexion = conectar_db()
         cursor = conexion.cursor()
         cursor.execute('''INSERT INTO Locales ('Nombre','Direccion','Reseña','Degustaciones') VALUES (?,?,?,?)'''
         ,(local, direccion, reseña, degustaciones))
@@ -334,6 +337,7 @@ def local():
             cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(addLocal,session["username"]))
         conexion.commit()
         cursor.close()
+        conexion.close()
         flash("Local añadido con exito","success")
         return redirect(url_for("add_degustacion"))
     return render_template("local.html")
@@ -343,7 +347,6 @@ def enviar_solicitud():
     if request.method == 'POST': 
         id_amigo = request.form['idAmigo']
         conn = conectar_db()
-        cursor = conn.cursor()
         cursor = conn.cursor()
         cursor.execute('''INSERT INTO Solicitudes ('Nombre_Usuario','Id_Amigo','Validacion') VALUES (?,?,?)'''
             ,(session["username"], id_amigo, 0))
@@ -374,7 +377,6 @@ def mostrar_solicitud():
 def aceptar_solicitud():
     if request.method == 'POST': 
         conn = conectar_db()
-        cursor = conn.cursor()
         cursor = conn.cursor()
         #PENDIENTE
         conn.commit()
