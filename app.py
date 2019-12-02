@@ -57,6 +57,7 @@ def calcular_edad(fecha_nacimiento):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     global conexion
+    print(conexion)
     if request.method == 'POST': 
         usuario = request.form.get('usuario')
         contrasena = request.form.get('password')
@@ -101,6 +102,7 @@ def register():
         if (contrasena != repite_contrasena):
             flash("Password incorrect","error")
             return render_template("register.html")
+        print(conexion)
         cursor = conexion.cursor()
         #COMPROBACION DE EDAD VALIDA 
         fecha_aux = fecha.split('-')
@@ -207,25 +209,27 @@ def new_pass():
         cursor.close()
     return render_template("new_pass.html")
 
-@app.route("/search")
+@app.route("/search", methods=['GET'])
 def search():
     global conexion
-    var_search = request.args.get("var_busqueda")
-    #var_filter = request.form["var_filter"]
-    cursor = conexion.cursor()
-    cursor.execute("SELECT usuario FROM Users WHERE usuario = ?",(var_search,))
-    rows = cursor.fetchone()
-    cursor.close()
-    if rows is not None:
-        return "hola"
-    return render_template("add_degustacion.html")
+    if request.method == 'GET':
+        var_search = request.args.get("var_busqueda")
+        var_filter = request.args.get("selector")
+        cursor = conexion.cursor()
+        cursor.execute("SELECT Nombre FROM Degustaciones WHERE Nombre = ?",(var_search,))
+        rows = cursor.fetchone()
+        cursor.close()
+        if rows is None:
+            return render_template("add_degustacion.html")
+    return "hola"
+    
 
 
 @app.route("/degustacion", methods=['GET','POST'])
 def add_degustacion():
     global conexion
     if request.method == 'POST':
-        nombre_deg = request.form.get('nombre_deg')
+        nombre_deg = request.form.get('degustacion')
         tipo = request.form.get('tipo')
         region = request.form.get('region')
         tamaño = request.form.get('tamaño')
@@ -238,34 +242,31 @@ def add_degustacion():
         cursor.execute("SELECT Nombre FROM Locales WHERE Nombre = ?",(local,))
         rows = cursor.fetchone()
         if rows is None:
-<<<<<<< HEAD
             flash("El local no existe, porfavor añadelo primero","error")
             return render_template("add_local.html")
-=======
-            return render_template("add_degustacion.html")
->>>>>>> ec8913e6431fd71c3992fcd1f3ea0036bead8a62
         cursor.execute('''INSERT INTO Degustaciones ('Nombre','Foto','Descripcion','Tipo',
         'Region','Tamaño','Calificacion_Gusto','Calificacion','Local') VALUES (?,?,?,?,?,?,?,?,?)'''
         ,(nombre_deg,foto,descripcion,tipo,region,tamaño,calificacion_gusto,calificacion,local))
+        id = cursor.lastrowid
         conexion.commit()
         cursor.execute("SELECT Degustaciones FROM Locales WHERE Nombre = ?",(local,))
         rows = cursor.fetchone()
         if rows[0] is None:
-            cursor.execute("UPDATE Locales SET Degustaciones=? WHERE Nombre=?",(nombre_deg+",",local))
+            cursor.execute("UPDATE Locales SET Degustaciones=? WHERE Nombre=?",(str(id)+",",local))
         else:
-            cursor.execute("UPDATE Locales SET Degustaciones=(SELECT Degustaciones FROM Locales WHERE Nombre=?) || ? WHERE Nombre=?",(local,nombre_deg+",",local))
+            cursor.execute("UPDATE Locales SET Degustaciones=(SELECT Degustaciones FROM Locales WHERE Nombre=?) || ? WHERE Nombre=?",(local,str(id)+",",local))
         conexion.commit()
         cursor.execute("SELECT Degustaciones FROM Users WHERE usuario = ?",(session.get("username"),))
         rows = cursor.fetchone()
         if rows[0] is None:
-            cursor.execute("UPDATE Users SET Degustaciones=? WHERE usuario=?",(nombre_deg+",",session.get("username")))
+            cursor.execute("UPDATE Users SET Degustaciones=? WHERE usuario=?",(str(id)+",",session.get("username")))
         else:
-            cursor.execute("UPDATE Users SET Degustaciones=(SELECT Degustaciones FROM Users WHERE usuario=?) || ? WHERE usuarii=?",(session.get("username"),nombre_deg+",",session.get("username")))
+            cursor.execute("UPDATE Users SET Degustaciones=(SELECT Degustaciones FROM Users WHERE usuario=?) || ? WHERE usuario=?",(session.get("username"),str(id)+",",session.get("username")))
         conexion.commit()
         cursor.close()
         flash("Degustacion añadida con exito","success")
         return redirect(url_for("home"))
-    return render_template("anadir_degustacion.html")
+    return render_template("add_degustacion.html")
 
 
 def enviar_correo(correo,mensaje,tipo):
@@ -293,15 +294,9 @@ def enviar_correo(correo,mensaje,tipo):
 
     #return render_template("recuperar.html")
 
-<<<<<<< HEAD
 @app.route("/perfil/<string:usuario>")
 def mostrar_perfil(usuario):
     global conexion
-=======
-@app.route("/perfil")
-def mostrar_perfil():
-    ''' conexion = conectar_db()
->>>>>>> ec8913e6431fd71c3992fcd1f3ea0036bead8a62
     cursor = conexion.cursor()
    # cursor.execute("SELECT usuario,email, nombre,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
     for row in cursor:
@@ -314,12 +309,8 @@ def mostrar_perfil():
         introduccion = row[6]
     conexion.commit()
     cursor.close()
-<<<<<<< HEAD
-    return "No existe usuario"
-=======
-    conexion.close()'''
+    conexion.close()
     return render_template("perfil.html")
->>>>>>> ec8913e6431fd71c3992fcd1f3ea0036bead8a62
 
 @app.route("/local", methods=['GET', 'POST'])
 def local():

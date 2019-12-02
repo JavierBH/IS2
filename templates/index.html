@@ -43,8 +43,7 @@
   <a href="#">Perfil</a>
 </div>
 
-
-<form class="example" autocomplete="off" action="/action_page.php">
+<form class="example" autocomplete="off" method="get" action="{{ url_for('search') }}">
   <select>
     <option value="Locales" name="selector">Locales</option>
     <option value="degustaciones" name="selector">Degustaciones</option>
@@ -59,7 +58,9 @@
       autocomplete(document.getElementById("searchBar"),arr);
   </script>
   </div>
+  <form method="get" action="{{ url_for('search') }}">
   <button type="submit"><i class="fa fa-search"></i></button>
+  </form>
 </form>
 
 </form>
