@@ -38,27 +38,6 @@
   <a href="#">Perfil</a>
 </div>
 
-
-<form class="example" autocomplete="off" action="/action_page.php">
-  <select>
-    <option value="Locales" name="selector">Locales</option>
-    <option value="degustaciones" name="selector">Degustaciones</option>
-  </select>
-
-  <form action="post" action="{{ url_for('home') }}">
-  <div class="autocomplete">
-    
-  <input id="searchBar" type="text" autocomplete="off" placeholder="Search.." >
-  <script>
-      arr = '{{ info | tojson | safe }}'
-      autocomplete(document.getElementById("searchBar"),arr);
-  </script>
-  </div>
-  <button type="submit"><i class="fa fa-search"></i></button>
-</form>
-
-</form>
-
 <section class= "main_page">
 
     <div class="navbar">
@@ -68,73 +47,16 @@
     </div>
           
     <div id="informacion" class="main">
-    
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis corrupti laboriosam, accusantium eum quo odit in. Eligendi quaerat saepe sunt reiciendis doloremque cupiditate, debitis eos soluta non a explicabo nulla!
    </div>
 
    <div id="cambiar_datos" class="main">
-    
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quia nihil molestiae numquam eos explicabo iure nostrum eum obcaecati dolor facilis saepe expedita harum eligendi, dicta architecto rerum. Quisquam, veritatis.
  </div>
 
  <div id="errores" class="main">
   lkjhgfrd
 </div>
-
-  <div class="row">
-  <div class="side">
-    <h2>Actividades recientes</h2>
-    <hr>
-    <div class="recentBox" id="recents">
-
-    </div>
-  </div>
-
-
-  <div class="side">
-    <div class="navbar">
-        <button class="tablink" id="defaultOpenSide" onclick="tab_info_menu(event,'perfil')" >Perfil</button>
-        <button class="tablink" onclick="tab_info_menu(event,'estadisticas')">Estadisticas</button>
-        <button class="tablink" onclick="tab_info_menu(event,'solicitudes')">Solicitudes</button>    
-    </div>
-  <div class="info_menu" id="perfil">
-    <h2>Perfil</h2>
-    <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod doloribus illo sit, cupiditate fugit quis consequatur esse veniam quidem ab, voluptatem incidunt libero nesciunt ipsum vitae amet accusamus numquam qui!</h3>
-  </div>
-
-  <div class="info_menu" id="estadisticas">
-      <h2>Estadisticas</h2>
-      <p>Aaron tio ponme bien las cosas de la BBDD</p>  
-    </div>
-  
-    <div class="info_menu" id="solicitudes">
-        <h2>Caca</h2>
-        <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod doloribus illo sit, cupiditate fugit quis consequatur esse veniam quidem ab, voluptatem incidunt libero nesciunt ipsum vitae amet accusamus numquam qui!</h3>
-      </div>
-        
-    
-  </div>
-</section>
-
-
-<section class="secondary-menus1">
-  <div class="menus">
-   <div class="menu1">
-     <h2>Submenu1</h2>
-   </div>
-   <div class="menu1">
-      <h2>Submenu2</h2>
-   </div>
-  </div>
-</section>
-
-<section class="secondary-menus2">
-  <div class="menus">
-    <div class="menu3">
-        <h2>Submenu3</h2>
-    </div>
-    <div class="menu4">
-        <h2>Submenu4</h2>
-    </div>
-  </div>
 </section>
 
 

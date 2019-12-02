@@ -11,5 +11,4 @@ function tab_main(evt,pageName) {
     }
     document.getElementById(pageName).style.display = "block";
     evt.currentTarget.className += " active";
-
   }

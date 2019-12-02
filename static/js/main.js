@@ -3,9 +3,9 @@
 
 document.getElementById("defaultOpen").click();
 document.getElementById("defaultOpenSide").click();
+
 /*----------------------MENUS DE LOCALES Y DEGUSTACIONES --------- */
 function tab_main(evt,pageName) {
-
     var i, tabcontent;
     tabcontent = document.getElementsByClassName("main");
     for (i = 0; i < tabcontent.length; i++) {

@@ -301,11 +301,11 @@ def enviar_correo(correo,mensaje,tipo):
 
     #return render_template("recuperar.html")
 
-@app.route("/perfil/<string:usuario>")
-def mostrar_perfil(usuario):
-    conexion = conectar_db()
+@app.route("/perfil")
+def mostrar_perfil():
+    ''' conexion = conectar_db()
     cursor = conexion.cursor()
-    cursor.execute("SELECT usuario,email, nombre,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
+   # cursor.execute("SELECT usuario,email, nombre,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
     for row in cursor:
         usuario = row[0]
         email = row[1]
@@ -316,8 +316,8 @@ def mostrar_perfil(usuario):
         introduccion = row[6]
     conexion.commit()
     cursor.close()
-    conexion.close()
-    return render_template("perfil.html",usuario, email, nombre, fecha, foto, nacionalidad, introduccion)
+    conexion.close()'''
+    return render_template("perfil.html")
 
 @app.route("/local", methods=['GET', 'POST'])
 def local():
