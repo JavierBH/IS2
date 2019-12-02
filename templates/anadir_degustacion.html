@@ -15,17 +15,19 @@
     </head>
 
     <body>
-        <form method="post" action="{{ url_for('anadir_degustaciones') }}">
+        <form method="post" action="{{ url_for('add_degustacion') }}">
                 {{render_messages_error(messages)}}
             <div class="container">
                 <h1>Añadir degustacion</h1>
                 <hr>
-
                 <label><b>Nombre degustacion</b></label>
                 <input type="text" placeholder="Nombre degustacion" name="degustacion" required>
 
                 <label><b>Tipo de comida/bebida</b></label>
                 <input type="text" placeholder="Tipo" name="tipo" required>
+
+                <label><b>Local</b></label>
+                <input type="text" placeholder="Local" name="tipo" required>
             
                 <label ><b>Pais de Procedencia</b><br /></label>
             <div >
