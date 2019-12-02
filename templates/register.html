@@ -14,7 +14,7 @@
     </head>
 
     <body>
-        <form method="post" action="{{ url_for('register') }}">
+        <form method="POST" action="{{ url_for('register') }}">
                 {{render_messages_error(messages)}}
             <div class="container">
                 <h1>Registro</h1>
@@ -31,10 +31,22 @@
             
                 <label for="psw-repeat"><b>Repeat Password</b></label>
                 <input type="password" placeholder="Repita la contraseña" name="repite_password" required>
-                
+               
+                <label ><b>Fecha de nacimiento</b></label>
+                <input type="date" placeholder="Introduzca su fecha de nacimiento" name="fecha" required>
+
                 <label ><b>Nombre y apellidos</b></label>
                 <input type="text" placeholder="Nombre Apellido1 Apellido2" name="nombre" autocomplete="off">
                 
+                <label ><b>Género</b></label>
+                <select>
+                    <option value="Locales" name="genero">Si</option>
+                    <option value="degustaciones" name="genero">Puede</option>
+                    <option value="degustaciones" name="genero">27</option>
+                    <option value="degustaciones" name="genero">Amargo</option>
+                </select>
+                
+
                 <label ><b>Nacionalidad</b><br /></label>
             <div >
                 <form autocomplete="off" action="/action_page.php">
@@ -43,9 +55,7 @@
                     </div>
                 </form>
             </div>     
-                <label ><b>Fecha</b></label>
-                <input type="date" placeholder="Introduzca su fecha de nacimiento" name="fecha" >
-
+                
                 <label ><b>Foto de perfil</b></label>
                 <input type="file" name="foto">
 

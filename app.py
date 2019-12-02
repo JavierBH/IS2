@@ -8,6 +8,8 @@ import os, re
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from os.path import join, dirname, realpath
+from datetime import date
+from dateutil.relativedelta import relativedelta
 
 MY_ADDRESS = "proyectois2upm@gmail.com"
 PASSWORD = "softwareupm"
@@ -42,6 +44,14 @@ def convertToBinaryData(filename):
     with open(filename, 'rb') as file:
         blobData = file.read()
     return blobData
+
+#Funcion que calcula la edad de una persona
+def calcular_edad(fecha_nacimiento):
+    edad = date.today().year - fecha_nacimiento.year
+    cumpleanios = fecha_nacimiento + relativedelta(years=edad)
+    if cumpleanios > date.today():
+        edad = edad - 1
+    return edad
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -91,6 +101,11 @@ def register():
             return render_template("register.html")
         conn = conectar_db()
         cursor = conn.cursor()
+        #COMPROBACION DE EDAD VALIDA 
+        fecha_aux = fecha.split('-')
+        if(calcular_edad(date(int(fecha_aux[0]),int(fecha_aux[1]),int(fecha_aux[2]))) < 18):
+            flash("Eres muy pequeño chavalin para estar en un sito como este","error")
+            return render_template("register.html")
         #COMPROBACION DE USUARIO UNICO
         cursor.execute("SELECT * FROM Users WHERE usuario = ?",(usuario, ))
         rows = cursor.fetchone()
