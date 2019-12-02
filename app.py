@@ -8,6 +8,8 @@ import os, re
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from os.path import join, dirname, realpath
+from datetime import date
+from dateutil.relativedelta import relativedelta
 
 MY_ADDRESS = "proyectois2upm@gmail.com"
 PASSWORD = "softwareupm"
@@ -20,9 +22,18 @@ format_email = ["gmail","yahoo"]
 format_end = ["com","es"]
 global conexion
 
-
-@app.route("/home")
+@app.route("/home", methods=['GET'])
 def home():
+    if request.method == 'GET':
+        conn = conectar_db()
+        cursor = conn.cursor()
+        selector = request.form.get('selector')
+        cursor.execute("SELECT Nombre FROM Locales ")
+        arr = cursor.fetchone()
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return render_template("index.html",info = arr)
     return render_template("index.html")
 
 def allowed_file(filename):
@@ -34,6 +45,14 @@ def convertToBinaryData(filename):
     with open(filename, 'rb') as file:
         blobData = file.read()
     return blobData
+
+#Funcion que calcula la edad de una persona
+def calcular_edad(fecha_nacimiento):
+    edad = date.today().year - fecha_nacimiento.year
+    cumpleanios = fecha_nacimiento + relativedelta(years=edad)
+    if cumpleanios > date.today():
+        edad = edad - 1
+    return edad
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -83,6 +102,11 @@ def register():
             flash("Password incorrect","error")
             return render_template("register.html")
         cursor = conexion.cursor()
+        #COMPROBACION DE EDAD VALIDA 
+        fecha_aux = fecha.split('-')
+        if(calcular_edad(date(int(fecha_aux[0]),int(fecha_aux[1]),int(fecha_aux[2]))) < 18):
+            flash("Eres muy pequeño chavalin para estar en un sito como este","error")
+            return render_template("register.html")
         #COMPROBACION DE USUARIO UNICO
         cursor.execute("SELECT * FROM Users WHERE usuario = ?",(usuario, ))
         rows = cursor.fetchone()
@@ -214,8 +238,12 @@ def add_degustacion():
         cursor.execute("SELECT Nombre FROM Locales WHERE Nombre = ?",(local,))
         rows = cursor.fetchone()
         if rows is None:
+<<<<<<< HEAD
             flash("El local no existe, porfavor añadelo primero","error")
             return render_template("add_local.html")
+=======
+            return render_template("add_degustacion.html")
+>>>>>>> ec8913e6431fd71c3992fcd1f3ea0036bead8a62
         cursor.execute('''INSERT INTO Degustaciones ('Nombre','Foto','Descripcion','Tipo',
         'Region','Tamaño','Calificacion_Gusto','Calificacion','Local') VALUES (?,?,?,?,?,?,?,?,?)'''
         ,(nombre_deg,foto,descripcion,tipo,region,tamaño,calificacion_gusto,calificacion,local))
@@ -265,21 +293,33 @@ def enviar_correo(correo,mensaje,tipo):
 
     #return render_template("recuperar.html")
 
+<<<<<<< HEAD
 @app.route("/perfil/<string:usuario>")
 def mostrar_perfil(usuario):
     global conexion
+=======
+@app.route("/perfil")
+def mostrar_perfil():
+    ''' conexion = conectar_db()
+>>>>>>> ec8913e6431fd71c3992fcd1f3ea0036bead8a62
     cursor = conexion.cursor()
-    cursor.execute("SELECT usuario,email, nombre,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
+   # cursor.execute("SELECT usuario,email, nombre,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
     for row in cursor:
-        return render_template("perfil.html",usuario = row[0],
-                                                    email = row[1],
-                                                    nombre = row[2],
-                                                    fecha = row[3],
-                                                    foto = row[4],
-                                                    nacionalidad = row[5],
-                                                    introduccion = row[6])
+        usuario = row[0]
+        email = row[1]
+        nombre = row[2]
+        fecha = row[3]
+        foto = row[4]
+        nacionalidad = row[5]
+        introduccion = row[6]
+    conexion.commit()
     cursor.close()
+<<<<<<< HEAD
     return "No existe usuario"
+=======
+    conexion.close()'''
+    return render_template("perfil.html")
+>>>>>>> ec8913e6431fd71c3992fcd1f3ea0036bead8a62
 
 @app.route("/local", methods=['GET', 'POST'])
 def local():
@@ -306,6 +346,52 @@ def local():
         flash("Local añadido con exito","success")
         return redirect(url_for("add_degustacion"))
     return render_template("local.html")
+
+@app.route("/enviar_solicitud", methods=['GET','POST'])
+def enviar_solicitud():
+    if request.method == 'POST': 
+        id_amigo = request.form['idAmigo']
+        conn = conectar_db()
+        cursor = conn.cursor()
+        cursor = conn.cursor()
+        cursor.execute('''INSERT INTO Solicitudes ('Nombre_Usuario','Id_Amigo','Validacion') VALUES (?,?,?)'''
+            ,(session["username"], id_amigo, 0))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return render_template("enviar_solicitud.html")
+    return render_template("enviar_solicitud.html")
+
+@app.route("/morstrar_solicitud", methods=['GET','POST'])
+def mostrar_solicitud():
+    conexion = conectar_db()
+    cursor = conexion.cursor()
+    result = ""
+    cursor.execute("SELECT Id_Amigo FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
+    for row in cursor:
+        if result == "":
+            result = row[0]
+        else:
+            addLista(row[0], result)
+    conn.commit()
+    cursor.close()
+    conexion.close()
+    return render_template("mostrar_solicitud.html",result)
+
+
+@app.route("/aceptar_solicitud", methods=['GET','POST'])
+def aceptar_solicitud():
+    if request.method == 'POST': 
+        conn = conectar_db()
+        cursor = conn.cursor()
+        cursor = conn.cursor()
+        #PENDIENTE
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return render_template("enviar_solicitud.html")
+    return render_template("enviar_solicitud.html")
+
 
 #Devuelve elementos en array de una lista de bbdd
 def getLista(bbddText):
@@ -369,17 +455,13 @@ def conectar_db():
     #CREA TABLA SOLICITUDES DE AMIGOS
     sqlite_create_solicitudes_table_query = '''CREATE TABLE IF NOT EXISTS Solicitudes (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                Id_Usuario TEXT NOT NULL,
+                                Nombre_Usuario TEXT NOT NULL,
                                 Id_Amigo TEXT NOT NULL,
                                 Validacion INT);'''
     cursor.execute(sqlite_create_solicitudes_table_query)
     conn.commit()
     cursor.close()
     return conn
-
-@app.route('/degustacion')
-def index():
-    return render_template('./degustacion.html')
 
 
 if __name__== "__main__":

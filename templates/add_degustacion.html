@@ -23,6 +23,9 @@
                 <label><b>Nombre degustacion</b></label>
                 <input type="text" placeholder="Nombre degustacion" name="degustacion" required>
 
+                <label ><b>Foto degustacion</b></label>
+                <input type="file" name="foto">
+
                 <label><b>Tipo de comida/bebida</b></label>
                 <input type="text" placeholder="Tipo" name="tipo" required>
 
@@ -46,6 +49,17 @@
                     <option name="tamanio">Grande</option>
                   </select>
             </div>
+
+            <label ><b>Calificadores de gusto</b><br /></label>
+            <div >
+                <select>
+                    <option name="gusto">Dulce</option>
+                    <option name="gusto">Salado</option>
+                    <option name="gusto">Amargo</option>
+                    <option name="gusto">Acido</option>
+                  </select>
+            </div>
+
         
             <label ><b>Calificacion</b> <br /></label>
             <div>
@@ -55,6 +69,13 @@
                         <span class="fa fa-star" id="star4" onclick="change_color(4)"></span>
                         <span class="fa fa-star" id="star5" onclick="change_color(5)"></span>
                     </div>
+
+                    <label><b>Local</b></label>
+                <input type="text" placeholder="nombre local" name="tipo" required>
+
+                <label ><b>Descripcion </b></label>
+                <input type="text" placeholder="descripcion" name="descripcion" autocomplete="off">
+
                         <hr>
                 <button type="submit" class="registerbtn" value="Submit">Añadir</button>
              

@@ -1,11 +1,64 @@
 
-<html>
-        
-        <p>{{ usuario }}</p>
-        <p>{{ email }}</p>
-        <p>{{ name }}</p>
-        <p>{{ fecha }}</p>
-        <img>{{ foto }}</img>
-        <p>{{ nacionalidad }}</p>
-        <p>{{ introduccion }}</p>
-      </html>
+{% from "_render_macros.html" import render_messages_success %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>DesTapIS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/main.css') }}" />
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/autocomplete.css') }}" />
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="{{ url_for('static', filename='js/perfil.js') }}"></script>
+
+
+</head>
+<body>
+  {{render_messages_success(messages)}}
+
+<div class="navbar">
+  <button id="helpBtn">Aiuda</button>
+  <!-- The Modal -->
+<div id="helpModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>ODIAME POR SER OTAKU, Adelante,estas en tu derecho,abla amis espaldas y az de mi vida un infierno,lo aguantare con una sonridsa en la cara,insulta al anime,a algun amigo tanbien otaku,y el infierno te parecera un hotel conparado conmigo</p>
+  </div>
+
+</div>
+  <a href="#">Degustaciones</a>
+  <a href="#">Perfil</a>
+</div>
+
+<section class= "main_page">
+
+    <div class="navbar">
+        <button class="tablink" onclick="tab_main(event,'informacion')" id="defaultOpen">Degustaciones</button>
+        <button class="tablink" onclick="tab_main(event,'cambiar_datos')">Locales</button>
+        <button class="tablink" onclick="tab_main(event,'errores')">Locales</button>
+    </div>
+          
+    <div id="informacion" class="main">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis corrupti laboriosam, accusantium eum quo odit in. Eligendi quaerat saepe sunt reiciendis doloremque cupiditate, debitis eos soluta non a explicabo nulla!
+   </div>
+
+   <div id="cambiar_datos" class="main">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quia nihil molestiae numquam eos explicabo iure nostrum eum obcaecati dolor facilis saepe expedita harum eligendi, dicta architecto rerum. Quisquam, veritatis.
+ </div>
+
+ <div id="errores" class="main">
+  lkjhgfrd
+</div>
+</section>
+
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>

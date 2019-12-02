@@ -14,7 +14,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
- 
+<script src="{{ url_for('static', filename='js/search_bar_home.js') }}"></script>
+
 
 </head>
 <body>
@@ -42,15 +43,24 @@
   <a href="#">Perfil</a>
 </div>
 
+
 <form class="example" autocomplete="off" action="/action_page.php">
   <select>
-    <option value="locales">Locales</option>
-    <option value="degustaciones">Degustaciones</option>
+    <option value="Locales" name="selector">Locales</option>
+    <option value="degustaciones" name="selector">Degustaciones</option>
   </select>
+
+  <form action="post" action="{{ url_for('home') }}">
   <div class="autocomplete">
+    
   <input id="searchBar" type="text" autocomplete="off" placeholder="Search.." >
+  <script>
+      arr = '{{ info | tojson | safe }}'
+      autocomplete(document.getElementById("searchBar"),arr);
+  </script>
   </div>
   <button type="submit"><i class="fa fa-search"></i></button>
+</form>
 
 </form>
 
@@ -96,7 +106,6 @@
     <h2>Actividades recientes</h2>
     <hr>
     <div class="recentBox" id="recents">
-
     </div>
   </div>
 
@@ -105,7 +114,7 @@
     <div class="navbar">
         <button class="tablink" id="defaultOpenSide" onclick="tab_info_menu(event,'perfil')" >Perfil</button>
         <button class="tablink" onclick="tab_info_menu(event,'estadisticas')">Estadisticas</button>
-        <button class="tablink" onclick="tab_info_menu(event,'solicitudes')">Solicitudes</button>    
+        <button class="tablink" onclick="tab_inigyufo_menu(event,'solicitudes')">Solicitudes</button>    
     </div>
   <div class="info_menu" id="perfil">
     <h2>Perfil</h2>
@@ -151,5 +160,4 @@
 
 
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-<script src="{{ url_for('static', filename='js/search_bar_home.js') }}"></script>
 </body>
