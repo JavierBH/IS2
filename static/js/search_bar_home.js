@@ -1,9 +1,7 @@
-function autocomplete(inp, arr) {
+function autocomplete(inp, arr, select) {
     /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/
     var currentFocus, array;
-    array = split_arr(arr);
-    console.log(array[1]);
     /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function(e) {
         var a, b, i, val = this.value;
@@ -18,6 +16,31 @@ function autocomplete(inp, arr) {
         /*append the DIV element as a child of the autocomplete container:*/
         this.parentNode.appendChild(a);
         /*for each item in the array...*/
+
+        /*Si no hay nada de informacion en la BBDD se le pregunta al usuario si quiere crear el local o la degustacion*/
+        console.log(select);
+        if(arr==null){
+        var text = document.createTextNode("Caca");
+        if(select= "Locales"){
+          var butt = document. createElement("button");
+          button.addEventListener ("click", function() {
+            window.location="{{ url_for('local') }}";
+          });
+          a.appendChild(butt);
+        } if(select= "degustaciones"){
+          var butt = document. createElement("button");
+          button.addEventListener ("click", function() {
+            window.location="{{ url_for('add_degustacion') }}";
+          });
+          a.appendChild(butt);
+        } 
+        a.appendChild(text);
+        
+      }
+
+      array = split_arr(arr);
+      console.log(array[1]);
+
         for (i = 0; i < array.length; i++) {
           /*check if the item starts with the same letters as the text field value:*/
           console.log(array[0]);
@@ -38,9 +61,12 @@ function autocomplete(inp, arr) {
                 closeAllLists();
             });
             a.appendChild(b);
+          } if(val.length>=1 && (array[i].substr(0, val.length) != val)){
+            console.log("jaja si");
           }
         }
     });
+    
     /*execute a function presses a key on the keyboard:*/
     inp.addEventListener("keydown", function(e) {
         var x = document.getElementById(this.id + "autocomplete-list");
