@@ -24,15 +24,16 @@ format_end = ["com","es"]
 @app.route("/home", methods=['GET'])
 def home():
     if request.method == 'GET':
+        selector = request.args.get('selector')
+        print(selector)
         conn = conectar_db()
         cursor = conn.cursor()
-        selector = request.form.get('selector')
         cursor.execute("SELECT Nombre FROM Locales ")
         arr = cursor.fetchone()
         conn.commit()
         cursor.close()
         conn.close()
-        return render_template("index.html",info = arr)
+        return render_template("index.html",info = arr,select= selector)
     return render_template("index.html")
 
 def allowed_file(filename):
@@ -297,8 +298,8 @@ def enviar_correo(correo,mensaje,tipo):
 
     #return render_template("recuperar.html")
 
-@app.route("/perfil/<string:usuario>")
-def mostrar_perfil(usuario):
+@app.route("/perfil")
+def mostrar_perfil():
     conexion = conectar_db()
     cursor = conexion.cursor()
    # cursor.execute("SELECT usuario,email, nombre,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
@@ -340,7 +341,7 @@ def local():
         conexion.close()
         flash("Local añadido con exito","success")
         return redirect(url_for("add_degustacion"))
-    return render_template("local.html")
+    return render_template("add_local.html")
 
 @app.route("/enviar_solicitud", methods=['GET','POST'])
 def enviar_solicitud():
