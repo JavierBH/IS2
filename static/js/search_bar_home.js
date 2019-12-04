@@ -22,7 +22,7 @@ function autocomplete(inp, arr, select) {
         if(arr==null){
         var text = document.createTextNode("Caca");
         if(select= "Locales"){
-          var butt = document. createElement("button");
+          var butt = document.createElement("button");
           button.addEventListener ("click", function() {
             window.location="{{ url_for('local') }}";
           });

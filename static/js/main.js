@@ -90,3 +90,49 @@ function create_activity_box(){
 for ( var i = 0; i < 6; i++) {
   create_activity_box()
 }
+
+/*------------------- SOLICITUDES -------------------*/
+
+function create_request_box(){
+  //Se crea la div en la que estan las acciones
+  var node = document.createElement("DIV"); //Create Div activity_box node
+  node.setAttribute("id",this.id + "request_box_id");
+  node.setAttribute("class","request_box");
+  
+  //Se crea la imagen
+  var img = document.createElement("img");
+  img.setAttribute("class","img_request_box");
+  img.setAttribute("src", "images/hydrangeas.jpg");
+
+  //Se crea el titulo del usuario
+  var h2 = document.createElement("H4");
+  var t = document.createTextNode("Usuario 1");     // Create a text node
+  h2.appendChild(t);
+
+  //Se crea el botone de aceptar
+  var butt_aceptar = document.createElement("button");
+  butt_aceptar.setAttribute("id",this.id +"butt_aceptar_id");
+  butt_aceptar.setAttribute("class","butt_aceptar");
+  butt_aceptar.setAttribute("value","aceptar");
+  butt_aceptar.innerHTML = "Aceptar";
+
+  //Se crea el boton de eliminar
+  var butt_eliminar = document.createElement("button");
+  butt_eliminar.setAttribute("id",this.id +"butt_eliminar");
+  butt_eliminar.setAttribute("class","butt_eliminar");
+  butt_eliminar.setAttribute("value","eliminar");
+  butt_eliminar.innerHTML = "Eliminar";
+
+  var hr = document.createElement("HR");
+  //Se añaden los elementos al activity_box div
+  node.appendChild(img);
+  node.appendChild(h2);
+  node.appendChild(butt_aceptar);
+  node.appendChild(butt_eliminar);
+  document.getElementById("solicitudes").appendChild(node);
+  document.getElementById("solicitudes").appendChild(hr);
+}
+
+for ( var i = 0; i < 6; i++) {
+  create_request_box()
+}
