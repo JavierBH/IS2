@@ -107,13 +107,13 @@ def register():
             flash("Eres muy pequeño chavalin para estar en un sito como este","error")
             return render_template("register.html")
         #COMPROBACION DE USUARIO UNICO
-        cursor.execute("SELECT * FROM Users WHERE usuario = ?",(usuario, ))
+        cursor.execute("SELECT * FROM Users WHERE usuario = ?",(usuario,))
         rows = cursor.fetchone()
         if rows is not None:
             flash("Usuario existed !","error")
             return render_template("register.html")
         #COMPROBACION DE EMAIL UNICO
-        cursor.execute("SELECT * FROM Users WHERE email = ?",(usuario, ))
+        cursor.execute("SELECT * FROM Users WHERE email = ?",(usuario,))
         rows = cursor.fetchone()
         if rows is not None:
             flash("Email existed !!!!","error")
