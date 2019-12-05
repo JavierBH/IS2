@@ -28,7 +28,7 @@
 
 
 <div class="navbar">
-  <button id="helpBtn">Aiuda</button>
+  <button id="helpBtn">Ayuda</button>
   <!-- The Modal -->
 <div id="helpModal" class="modal">
 
@@ -39,8 +39,8 @@
   </div>
 
 </div>
-  <a href="#">Degustaciones</a>
-  <a href="#">Perfil</a>
+  <a href="{{ url_for('home') }}">Degustaciones</a>
+  <a href="{{ url_for('mostrar_perfil') }}">Configuracion</a>
 </div>
 
 <form class="example" autocomplete="off" method="get" action="{{ url_for('search') }}">
@@ -49,18 +49,15 @@
     <option value="degustaciones">Degustaciones</option>
   </select>
 
-  <form action="post" action="{{ url_for('home') }}">
   <div class="autocomplete">
     
   <input id="searchBar" type="text" autocomplete="off" placeholder="Search.." name="var_search">
   
   </div>
-  <form method="get" action="{{ url_for('search') }}">
   <button type="submit"><i class="fa fa-search"></i></button>
-  </form>
-</form>
 
 </form>
+
 
 <section class= "main_page">
 
@@ -112,22 +109,49 @@
     <div class="navbar">
         <button class="tablink" id="defaultOpenSide" onclick="tab_info_menu(event,'perfil')" >Perfil</button>
         <button class="tablink" onclick="tab_info_menu(event,'estadisticas')">Estadisticas</button>
-        <button class="tablink" onclick="tab_inigyufo_menu(event,'solicitudes')">Solicitudes</button>    
+        <button class="tablink" onclick="tab_info_menu(event,'solicitudes')">Solicitudes</button>    
     </div>
   <div class="info_menu" id="perfil">
     <h2>Perfil</h2>
-    <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod doloribus illo sit, cupiditate fugit quis consequatur esse veniam quidem ab, voluptatem incidunt libero nesciunt ipsum vitae amet accusamus numquam qui!</h3>
+    <div class="img-perfil-box">
+
+    <img class="perfil_img" src="https://i.imgflip.com/3dcebr.jpg" alt="">  
+  <div class="data-box">
+    <label for="email"><b>Nombre de usuario</b></label>
+    caca
+    <hr>
+    <label for="email"><b>Email</b></label>
+      caca@caca.caca
+    <hr>
+    <label for="date"><b>Date</b></label>
+      11/11/1111
+    <hr>
+    <label for="email"><b>Name</b></label>
+      Violento PellizcaPitos
+    <hr>
   </div>
+  </div>
+
+  <button class="ver_mas_perfil_butt" id="ver_mas_perfil_butt_id"> Ver Mas</button>
+  <div id="ver_mas_perfil_Modal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p>ODIAME POR SER OTAKU, Adelante,estas en tu derecho,abla amis espaldas y az de mi vida un infierno,lo aguantare con una sonridsa en la cara,insulta al anime,a algun amigo tanbien otaku,y el infierno te parecera un hotel conparado conmigo</p>
+    </div>
+  
+  </div>
+</div>
 
   <div class="info_menu" id="estadisticas">
       <h2>Estadisticas</h2>
       <p>Aaron tio ponme bien las cosas de la BBDD</p>  
     </div>
   
-    <div class="info_menu" id="solicitudes">
-        <h2>Caca</h2>
-        <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod doloribus illo sit, cupiditate fugit quis consequatur esse veniam quidem ab, voluptatem incidunt libero nesciunt ipsum vitae amet accusamus numquam qui!</h3>
-      </div>
+  <div class="info_menu" id="solicitudes">
+        
+  </div>
         
     
   </div>

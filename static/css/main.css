@@ -269,7 +269,44 @@
   color: #ffffff; 
 }
 
+/*-------------------------Perfil Elements-------------------------*/
+.img-perfil-box{
+  display: flex;
+}
 
+.perfil_img{
+  width: 50%;
+  flex-wrap: wrap;
+}
+
+/*---------------- Request Box ------------------*/
+
+.request_box button {
+  color:white;
+  padding: 16px 20px;
+  margin: 10px 10px 0px 10px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.9;
+  flex-grow: 1;
+  width: 46%;
+}
+
+.butt_aceptar{
+  background-color: green;
+}
+
+
+.butt_eliminar{
+  background-color: red;
+}
+
+/*-------------- VER MAS BOTON --------------*/
+.ver_mas_perfil_butt{
+  width: 100%;
+  padding: 10px;
+  margin: 10px;
+}
   /* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
   @media screen and (max-width: 700px) {
     .row {   

@@ -88,13 +88,16 @@
         for(var j = 1; j<=5;j++){
             var stars = document.getElementById("star" + j);
             stars.style.color = "black";
+            stars.removeAttribute("value");
+            stars.removeAttribute("name");
         }
         for(; i<=number;i++){
+            console.log(i);
            var stars = document.getElementById("star" + i);
            stars.style.color = "orange";
         }
             stars.setAttribute("name","calificacion");
-            stars.setAttribute("value",i);
+            stars.setAttribute("value",i-1);
         }
     </script>
     <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>

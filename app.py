@@ -300,8 +300,8 @@ def enviar_correo(correo,mensaje,tipo):
 
     #return render_template("recuperar.html")
 
-@app.route("/perfil/<string:usuario>")
-def mostrar_perfil(usuario):
+@app.route("/perfil")
+def mostrar_perfil():
     conexion = conectar_db()
     cursor = conexion.cursor()
    # cursor.execute("SELECT usuario,email, nombre,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
@@ -343,34 +343,33 @@ def local():
         conexion.close()
         flash("Local añadido con exito","success")
         return redirect(url_for("add_degustacion"))
-    return render_template("local.html")
+    return render_template("add_local.html")
 
 @app.route("/enviar_solicitud", methods=['GET','POST'])
 def enviar_solicitud():
-    if request.method == 'POST': 
-        id_amigo = request.form['idAmigo']
+    #if request.method == 'POST': 
+        #nombre_amigo = request.form['nombreAmigo']
+        nombre_amigo = "amigoooS"
         conn = conectar_db()
         cursor = conn.cursor()
-        cursor.execute('''INSERT INTO Solicitudes ('Nombre_Usuario','Id_Amigo','Validacion') VALUES (?,?,?)'''
-            ,(session["username"], id_amigo, 0))
+        cursor.execute('''INSERT INTO Solicitudes ('Nombre_Usuario','Nombre_Amigo','Validacion') VALUES (?,?,?)'''
+            ,(session["username"], nombre_amigo, 0))
         conn.commit()
         cursor.close()
         conn.close()
-        return render_template("enviar_solicitud.html")
-    return render_template("enviar_solicitud.html")
+        return "enviado"
+        #return render_template("enviar_solicitud.html")
+    #return render_template("enviar_solicitud.html")
 
 @app.route("/morstrar_solicitud", methods=['GET','POST'])
 def mostrar_solicitud():
     conexion = conectar_db()
     cursor = conexion.cursor()
-    result = ""
-    cursor.execute("SELECT Id_Amigo FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
+    result = list()
+    cursor.execute("SELECT Nombre_Amigo, id FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
     for row in cursor:
-        if result == "":
-            result = row[0]
-        else:
-            addLista(row[0], result)
-    conn.commit()
+        lista.append(row[0])
+        lista.append(row[1])
     cursor.close()
     conexion.close()
     return render_template("mostrar_solicitud.html",result)
@@ -379,14 +378,39 @@ def mostrar_solicitud():
 @app.route("/aceptar_solicitud", methods=['GET','POST'])
 def aceptar_solicitud():
     if request.method == 'POST': 
+        id_solicitud = request.form['idAmigo']
         conn = conectar_db()
         cursor = conn.cursor()
-        #PENDIENTE
+        cursor = conn.cursor()
+        cursor.execute("UPDATE Solicitudes SET Validacion=? WHERE id=?",(1,id_solicitud))
+        conn.commit()
+        cursor.execute("SELECT Amigos FROM Users WHERE usuario = ?", (session["username"],))
+        for row in cursor:
+            solicitud_User = row[0]
+        if solicitud_User is None:
+            cursor.execute("UPDATE Users SET Amigos=? WHERE usuario=?",(str(id_solicitud),session["username"]))
+        else:
+            addAmigo = addLista(id_solicitud,solicitud_User)
+            cursor.execute("UPDATE Users SET Amigos=? WHERE usuario=?",(addAmigo,session["username"]))
+            conn.commit()
+        cursor.close()
+        conn.close()
+        return render_template("aceptar_solicitud.html")
+    return render_template("aceptar_solicitud.html")
+
+@app.route("/eliminar_solicitud", methods=['GET','POST'])
+def eliminar_solicitud():
+    if request.method == 'POST':
+        id_solicitud = request.form['idAmigo']
+        conn = conectar_db()
+        cursor = conn.cursor()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM Solicitudes WHERE id=?",(id_solicitud))
         conn.commit()
         cursor.close()
         conn.close()
-        return render_template("enviar_solicitud.html")
-    return render_template("enviar_solicitud.html")
+        return render_template("eliminar_solicitud.html")
+    return render_template("eliminar_solicitud.html")
 
 
 #Devuelve elementos en array de una lista de bbdd
