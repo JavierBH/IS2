@@ -44,19 +44,16 @@
 </div>
 
 <form class="example" autocomplete="off" method="get" action="{{ url_for('search') }}">
-  <select>
-    <option value="Locales" name="selector">Locales</option>
-    <option value="degustaciones" name="selector">Degustaciones</option>
+  <select name="selector">
+    <option value="Locales" >Locales</option>
+    <option value="degustaciones">Degustaciones</option>
   </select>
 
   <form action="post" action="{{ url_for('home') }}">
   <div class="autocomplete">
     
-  <input id="searchBar" type="text" autocomplete="off" placeholder="Search.." >
-  <script>
-      arr = '{{ info | tojson | safe }}'
-      autocomplete(document.getElementById("searchBar"),arr);
-  </script>
+  <input id="searchBar" type="text" autocomplete="off" placeholder="Search.." name="var_search">
+  
   </div>
   <form method="get" action="{{ url_for('search') }}">
   <button type="submit"><i class="fa fa-search"></i></button>
