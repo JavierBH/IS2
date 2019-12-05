@@ -9,6 +9,7 @@ from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from os.path import join, dirname, realpath
 from datetime import date
+import datetime
 from dateutil.relativedelta import relativedelta
 
 MY_ADDRESS = "proyectois2upm@gmail.com"
@@ -23,17 +24,13 @@ format_end = ["com","es"]
 
 @app.route("/home", methods=['GET'])
 def home():
-    if request.method == 'GET':
-        conn = conectar_db()
-        cursor = conn.cursor()
-        selector = request.form.get('selector')
-        cursor.execute("SELECT Nombre FROM Locales ")
-        arr = cursor.fetchone()
-        conn.commit()
-        cursor.close()
-        conn.close()
-        return render_template("index.html",info = arr)
-    return render_template("index.html")
+    conexion = conectar_db()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT nombre,email,fecha,foto,nacionalidad,introduccion FROM Users WHERE usuario=?",(session['username'],))
+    rows = cursor.fetchone()
+    cursor.close()
+    conexion.close()
+    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=rows[3],nacionalidad=rows[4],introduccion=rows[5])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -213,11 +210,16 @@ def new_pass():
 @app.route("/search", methods=['GET'])
 def search():
     if request.method == 'GET':
-        var_search = request.args.get("var_busqueda")
+        var_search = request.args.get("var_search")
         var_filter = request.args.get("selector")
         conexion = conectar_db()
         cursor = conexion.cursor()
-        cursor.execute("SELECT Nombre FROM Degustaciones WHERE Nombre = ?",(var_search,))
+        if var_filter == "Degustaciones":
+            cursor.execute("SELECT Nombre FROM Degustaciones WHERE Nombre = ?",(var_search,))
+        elif var_filter == "Locales":
+            cursor.execute("SELECT Nombre,Direccion,Reseña FROM Locales WHERE Nombre = ?",(var_search,))
+        else:
+            cursor.execute("SELECT usuario,foto FROM Users WHERE nombre = ?",(var_search,))
         rows = cursor.fetchone()
         cursor.close()
         conexion.close()
@@ -232,13 +234,14 @@ def add_degustacion():
     if request.method == 'POST':
         nombre_deg = request.form.get('degustacion')
         tipo = request.form.get('tipo')
-        region = request.form.get('region')
+        region = request.form.get('nacionalidad')
         tamaño = request.form.get('tamaño')
-        calificacion_gusto = request.form.get('calificacion_gusto')
+        calificacion_gusto = request.form.get('gusto')
         calificacion = request.form.get('calificacion')
         local = request.form.get('local')
         descripcion = request.form.get('descripcion')
         foto = request.form.get('foto')
+        print(calificacion)
         conexion = conectar_db()
         cursor = conexion.cursor()
         cursor.execute("SELECT Nombre FROM Locales WHERE Nombre = ?",(local,))
@@ -261,9 +264,9 @@ def add_degustacion():
         cursor.execute("SELECT Degustaciones FROM Users WHERE usuario = ?",(session.get("username"),))
         rows = cursor.fetchone()
         if rows[0] is None:
-            cursor.execute("UPDATE Users SET Degustaciones=? WHERE usuario=?",(str(id)+",",session.get("username")))
+            cursor.execute("UPDATE Users SET Degustaciones=? WHERE usuario=?",(str(id)+" -> "+str(datetime.datetime.now())+", ",session.get("username")))
         else:
-            cursor.execute("UPDATE Users SET Degustaciones=(SELECT Degustaciones FROM Users WHERE usuario=?) || ? WHERE usuario=?",(session.get("username"),str(id)+",",session.get("username")))
+            cursor.execute("UPDATE Users SET Degustaciones=(SELECT Degustaciones FROM Users WHERE usuario=?) || ? WHERE usuario=?",(session.get("username"),str(id)+" -> "+str(datetime.datetime.now())+", ",session.get("username")))
         conexion.commit()
         cursor.close()
         conexion.close()
@@ -331,9 +334,9 @@ def local():
         for row in cursor:
             local_User = row[0]
         if local_User is None:
-            cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(Id,session["username"]))
+            cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(Id+" -> "+str(datetime.datetime.now())+", ",session["username"]))
         else:
-            addLocal = addLista(Id,local_User)
+            addLocal = addLista(Id+" -> "+str(datetime.datetime.now())+", ",local_User)
             cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(addLocal,session["username"]))
         conexion.commit()
         cursor.close()
