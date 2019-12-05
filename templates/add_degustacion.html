@@ -90,11 +90,12 @@
             stars.style.color = "black";
         }
         for(; i<=number;i++){
+            console.log(i);
            var stars = document.getElementById("star" + i);
            stars.style.color = "orange";
         }
             stars.setAttribute("name","calificacion");
-            stars.setAttribute("value",i);
+            stars.setAttribute("value",i-1);
         }
     </script>
     <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>

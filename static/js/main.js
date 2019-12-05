@@ -29,11 +29,16 @@ function tab_main(evt,pageName) {
   }
 
 /*------------MODAL BOX DE AYUDA---------------- */
-// Get the modal
-var modal = document.getElementById("helpModal");
+modal_box("helpModal","helpBtn");
+/*----------------- MODAL BOX DE VER PERFIL -----------------------*/
+modal_box("ver_mas_perfil_Modal","ver_mas_perfil_butt_id");
+/*----------------- DISPLAY DE LA MODAL BOX -----------------------*/
+function modal_box(modal_name, btn_name){
+  // Get the modal
+var modal = document.getElementById(modal_name);
 
 // Get the button that opens the modal
-var btn = document.getElementById("helpBtn");
+var btn = document.getElementById(btn_name);
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
@@ -54,7 +59,7 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
-
+}
 /*-----------------RECENT ACTIVITY MENU--------------------------*/ 
 
 function create_activity_box(){
@@ -93,10 +98,10 @@ for ( var i = 0; i < 6; i++) {
 
 /*------------------- SOLICITUDES -------------------*/
 
-function create_request_box(){
+function create_request_box(index){
   //Se crea la div en la que estan las acciones
   var node = document.createElement("DIV"); //Create Div activity_box node
-  node.setAttribute("id",this.id + "request_box_id");
+  node.setAttribute("id","request_box_id" + index);
   node.setAttribute("class","request_box");
   
   //Se crea la imagen
@@ -115,13 +120,18 @@ function create_request_box(){
   butt_aceptar.setAttribute("class","butt_aceptar");
   butt_aceptar.setAttribute("value","aceptar");
   butt_aceptar.innerHTML = "Aceptar";
-
+  butt_aceptar.addEventListener("click", function () {
+    closeButton(index);
+});
   //Se crea el boton de eliminar
   var butt_eliminar = document.createElement("button");
   butt_eliminar.setAttribute("id",this.id +"butt_eliminar");
   butt_eliminar.setAttribute("class","butt_eliminar");
   butt_eliminar.setAttribute("value","eliminar");
   butt_eliminar.innerHTML = "Eliminar";
+  butt_eliminar.addEventListener("click", function () {
+    closeButton(index);
+});
 
   var hr = document.createElement("HR");
   //Se añaden los elementos al activity_box div
@@ -129,10 +139,26 @@ function create_request_box(){
   node.appendChild(h2);
   node.appendChild(butt_aceptar);
   node.appendChild(butt_eliminar);
+  node.appendChild(hr);
   document.getElementById("solicitudes").appendChild(node);
-  document.getElementById("solicitudes").appendChild(hr);
+
+  /*Función que elimna la solictud al clicar en cualquiera de los dos botones*/ 
+  function closeButton(index) {
+    /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    var name = "request_box_id" + index;
+    var x = document.getElementById(name);
+    console.log(index);
+    while (x.firstChild) {
+      x.removeChild(x.firstChild);
+    }
+    x.parentNode.removeChild(x);
+  }
+
 }
 
 for ( var i = 0; i < 6; i++) {
-  create_request_box()
+  create_request_box(i)
 }
+
+/*------------- INDICADOR DEL NUMERO DE PETICIONES -------------------*/
