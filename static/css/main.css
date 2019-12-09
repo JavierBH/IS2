@@ -160,8 +160,12 @@
     text-align: center;
     font-family: arial;
     flex: 50%;
+    align-items: center;
   }
 
+  .card img{
+    width: 50%;
+  }
   .card button {
     border: none;
     outline: 0;
