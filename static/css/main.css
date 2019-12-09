@@ -38,10 +38,30 @@
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
+.div_img_text{
+  margin-top: 40px;
+  margin-left: 20px;
+  width: 100%;
+}
+
+.div_img{
+  display: flex;
+}
+
+.div_img_text{
+  flex-wrap: wrap;
+}
+
+.modal-style img{
+  width: 30%;
+  height: 30%;
+  flex-wrap: wrap;
+}
+
 /* Modal Content/Box */
-.modal-content {
+.modal-style {
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 3% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
@@ -306,6 +326,7 @@
 .perfil_img{
   width: 50%;
   flex-wrap: wrap;
+  margin: 0px 30px 0 20px;
 }
 
 /*---------------- Request Box ------------------*/
