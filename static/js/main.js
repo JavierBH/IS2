@@ -53,11 +53,19 @@ for(var i = 0; i<6;i++){
   }
 
 /*------------MODAL BOX DE AYUDA---------------- */
-modal_box("helpModal","helpBtn");
+modal_box("helpModal","helpBtn",0);
 /*----------------- MODAL BOX DE VER PERFIL -----------------------*/
-modal_box("ver_mas_perfil_Modal","ver_mas_perfil_butt_id");
+modal_box("ver_mas_perfil_Modal","ver_mas_perfil_butt_id",1);
 /*----------------- DISPLAY DE LA MODAL BOX -----------------------*/
-function modal_box(modal_name, btn_name){
+
+/* La funcion modal_box, se encarga de abrir y cerrar los pop-up de la pagina
+Recibe 3 argumentos: 
+El primero es el  ID del div del pop up.
+El segundo es el ID del boton que abre el pop up.
+El 3 es el indice de del pop up (orden de aparicion), para poder cerrar el pop up
+ */
+
+function modal_box(modal_name, btn_name,close_button_index){
   // Get the modal
 var modal = document.getElementById(modal_name);
 
@@ -65,8 +73,8 @@ var modal = document.getElementById(modal_name);
 var btn = document.getElementById(btn_name);
 
 // Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
+var span = document.getElementsByClassName("close")[close_button_index];
+console.log(span);
 // When the user clicks the button, open the modal 
 btn.onclick = function() {
   modal.style.display = "block";
@@ -147,6 +155,17 @@ function create_request_box(index){
   butt_aceptar.addEventListener("click", function () {
     closeButton(index);
 });
+
+//Se crea el boton de ver
+  var butt_ver = document.createElement("button");
+  butt_ver.setAttribute("id",this.id +"butt_aceptar_id");
+  butt_ver.setAttribute("class","butt_ver");
+  butt_ver.setAttribute("value","ver");
+  butt_ver.innerHTML = "Ver";
+  butt_ver.addEventListener("click", function () {
+    closeButton(index);
+});
+
   //Se crea el boton de eliminar
   var butt_eliminar = document.createElement("button");
   butt_eliminar.setAttribute("id",this.id +"butt_eliminar");
@@ -162,6 +181,7 @@ function create_request_box(index){
   node.appendChild(img);
   node.appendChild(h2);
   node.appendChild(butt_aceptar);
+  node.appendChild(butt_ver);
   node.appendChild(butt_eliminar);
   node.appendChild(hr);
   document.getElementById("solicitudes").appendChild(node);

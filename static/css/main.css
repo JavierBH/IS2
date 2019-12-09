@@ -318,11 +318,15 @@
   cursor: pointer;
   opacity: 0.9;
   flex-grow: 1;
-  width: 46%;
+  width: 30%;
 }
 
 .butt_aceptar{
   background-color: green;
+}
+
+.butt_ver{
+  background-color: orange;
 }
 
 
