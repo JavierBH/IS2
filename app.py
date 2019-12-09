@@ -215,17 +215,26 @@ def search():
         conexion = conectar_db()
         cursor = conexion.cursor()
         if var_filter == "Degustaciones":
-            cursor.execute("SELECT Nombre FROM Degustaciones WHERE Nombre = ?",(var_search,))
+            cursor.execute("SELECT Nombre FROM Degustaciones WHERE Nombre = ?",(var_filter,))
+            rows = cursor.fetchone()
+            if rows is None:
+                return render_template("add_degustacion.html")
         elif var_filter == "Locales":
             cursor.execute("SELECT Nombre,Direccion,Reseña FROM Locales WHERE Nombre = ?",(var_search,))
+            rows = cursor.fetchone()
+            if rows is None:
+                flash("El local no existe", "error")
+                return render_template("add_local.html")
         else:
             cursor.execute("SELECT usuario,foto FROM Users WHERE nombre = ?",(var_search,))
-        rows = cursor.fetchone()
+            rows = cursor.fetchone()
+            if rows is None:
+                flash("El usuario no existe","error")
+                return redirect(url_for("home"))
+        
         cursor.close()
         conexion.close()
-        if rows is None:
-            return render_template("add_degustacion.html")
-    return "hola"
+        
     
 
 
@@ -247,7 +256,7 @@ def add_degustacion():
         cursor.execute("SELECT Nombre FROM Locales WHERE Nombre = ?",(local,))
         rows = cursor.fetchone()
         if rows is None:
-            flash("El local no existe, porfavor añadelo primero","error")
+            flash("El local no existe, por favor añadelo primero","error")
             return render_template("add_local.html")
         cursor.execute('''INSERT INTO Degustaciones ('Nombre','Foto','Descripcion','Tipo',
         'Region','Tamaño','Calificacion_Gusto','Calificacion','Local') VALUES (?,?,?,?,?,?,?,?,?)'''
