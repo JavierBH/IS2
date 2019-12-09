@@ -127,7 +127,36 @@
     border-left-style: solid;
     overflow: scroll;
   }
-  
+  /*----------------- DEGUSTACIONES MENU BOX -------------------------*/
+  .degustaciones_flex_div{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+  }
+  .card {
+    margin: auto;
+    text-align: center;
+    font-family: arial;
+    flex: 50%;
+  }
+
+  .card button {
+    border: none;
+    outline: 0;
+    padding: 12px;
+    color: white;
+    background-color:gold;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+  }
+
+  .card button:hover {
+    opacity: 0.7;
+  }
   /*------------------------- RECENT BOXES ------------------------- */
   
   .recentBox{

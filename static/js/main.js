@@ -15,8 +15,32 @@ function tab_main(evt,pageName) {
     evt.currentTarget.className += " active";
 
   }
+  /*---------------- PESTAÑA DE DEGUSTACIONES PREFERIDAS ------------------- */
+//La funcion recibe como parametros la url de la imagen y el nombre de la degustacion
+  
+function degustaciones_window(img,name){
+  //Se crea un div donde se colocan los elementos de la degustacion
+  var card = document.createElement("DIV");
+  card.setAttribute("class","card");
 
-/*-------------MENUS DE USUARIO, ESTADISTICAS Y SOLICITUDES---------------- */
+  //Se crea el boton que lleva a la info de la degistacion
+  var butt_degus = document.createElement("button");
+  //Se crea la imagen
+  var img = document.createElement("img");
+  img.setAttribute("src", img);
+  //Se crea el elemento de texto
+  var text = document.createTextNode(name);
+  card.appendChild(img);
+  card.appendChild(text);
+  card.appendChild(butt_degus);
+  document.getElementById("degustaciones_flex_div_id").appendChild(card);
+}
+
+/* Se crean 6 de prueba*/
+for(var i = 0; i<6;i++){
+  degustaciones_window("https://www.imgworlds.com/wp-content/uploads/2015/12/18-CONTACTUS-HEADER.jpg","Degus" + i);
+}
+  /*-------------MENUS DE USUARIO, ESTADISTICAS Y SOLICITUDES---------------- */
   function tab_info_menu(evt,pageName) {
     var i, tabcontent;
     tabcontent = document.getElementsByClassName("info_menu");
@@ -162,3 +186,4 @@ for ( var i = 0; i < 6; i++) {
 }
 
 /*------------- INDICADOR DEL NUMERO DE PETICIONES -------------------*/
+//TODO
