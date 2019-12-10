@@ -351,9 +351,9 @@ def local():
         for row in cursor:
             local_User = row[0]
         if local_User is None:
-            cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(Id+" -> "+str(datetime.datetime.now())+", ",session["username"]))
+            cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(str(Id)+" -> "+str(datetime.datetime.now())+", ",session["username"]))
         else:
-            addLocal = addLista(Id+" -> "+str(datetime.datetime.now())+", ",local_User)
+            addLocal = addLista(str(Id)+" -> "+str(datetime.datetime.now())+", ",local_User)
             cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(addLocal,session["username"]))
         conexion.commit()
         cursor.close()
