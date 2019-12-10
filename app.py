@@ -215,11 +215,14 @@ def search():
         conexion = conectar_db()
         cursor = conexion.cursor()
         if var_filter == "Degustaciones":
-            cursor.execute("SELECT Nombre FROM Degustaciones WHERE Nombre = ?",(var_filter,))
-            rows = cursor.fetchone()
+            cursor.execute("SELECT Local FROM Degustaciones WHERE Nombre = ?",(var_search,))
+            rows = cursor.fetchall()
             if rows is None:
                 return render_template("add_degustacion.html")
-        elif var_filter == "Locales":
+            else:
+                return render_template("index.html",locales=rows)
+
+        """elif var_filter == "Locales":
             cursor.execute("SELECT Nombre,Direccion,Reseña FROM Locales WHERE Nombre = ?",(var_search,))
             rows = cursor.fetchone()
             if rows is None:
@@ -230,7 +233,7 @@ def search():
             rows = cursor.fetchone()
             if rows is None:
                 flash("El usuario no existe","error")
-                return redirect(url_for("home"))
+                return redirect(url_for("home"))"""
         
         cursor.close()
         conexion.close()
