@@ -256,7 +256,19 @@ def add_degustacion():
         calificacion = request.form.get('calificacion')
         local = request.form.get('local')
         descripcion = request.form.get('descripcion')
-        foto = request.form.get('foto')
+        
+
+        #PARTE DE FOTO
+        if 'file' not in request.files:
+            file = None
+            return "file = None"
+        file = request.files['file']
+        foto = None
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            foto = os.path.abspath(__file__)
+
         print(calificacion)
         conexion = conectar_db()
         cursor = conexion.cursor()
@@ -466,7 +478,7 @@ def conectar_db():
     sqlite_create_degustaciones_table_query = '''CREATE TABLE IF NOT EXISTS Degustaciones (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 Nombre TEXT NOT NULL,
-                                Foto BLOB,
+                                Foto TEXT,
                                 Descripcion TEXT,
                                 Tipo TEXT,
                                 Region TEXT,
