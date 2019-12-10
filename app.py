@@ -61,9 +61,9 @@ def register():
         nacionalidad = request.form.get('nacionalidad')
         intro = request.form.get('introduccion')
         fecha = request.form['fecha']
-        foto = None
+        filename = None
         
-        """#EXTRAE FOTO
+       #EXTRAE FOTO
         if 'file' not in request.files:
             file = None
             return "file = None"
@@ -74,7 +74,7 @@ def register():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             #Hay que poner el directorio completo!
             filename = "/home/xiaojing/Documentos/IS2/img/" + filename
-            foto = convertToBinaryData(filename)"""
+            foto = convertToBinaryData(filename)
         #COMPROBACION DE CAMPOS OBLIGATORIOS
         if (usuario == "") or (contrasena == "") or (repite_contrasena == "") or (email == ""):
             return "Campo incompleto"

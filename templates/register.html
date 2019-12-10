@@ -14,7 +14,7 @@
     </head>
 
     <body>
-        <form method="POST" action="{{ url_for('register') }}">
+        <form method="POST" action="{{ url_for('register') }}" enctype="multipart/form-data">
                 {{render_messages_error(messages)}}
             <div class="container">
                 <h1>Registro</h1>
@@ -57,7 +57,7 @@
             </div>     
                 
                 <label ><b>Foto de perfil</b></label>
-                <input type="file" name="foto">
+                <input type="file" name="file">
 
                 <label ><b>Introducción </b></label>
                 <form>
