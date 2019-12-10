@@ -54,6 +54,7 @@ def calcular_edad(fecha_nacimiento):
 def register():
     if request.method == 'POST': 
         usuario = request.form.get('usuario')
+        genero = request.form.get('genero')
         contrasena = request.form.get('password')
         repite_contrasena = request.form.get('repite_password')
         email = request.form.get('email')
@@ -114,9 +115,9 @@ def register():
             flash("Email existed !!!!","error")
             return render_template("register.html")
         #INSERTAR
-        cursor.execute('''INSERT INTO Users ('usuario','password','email','nombre',
-        'fecha','foto','nacionalidad','introduccion','verificado') VALUES (?,?,?,?,?,?,?,?,0)'''
-        ,(usuario,contrasena,email,nombre,fecha,filename,nacionalidad,intro))
+        cursor.execute('''INSERT INTO Users ('usuario','genero','password','email','nombre',
+        'fecha','foto','nacionalidad','introduccion','verificado') VALUES (?,?,?,?,?,?,?,?,?,0)'''
+        ,(usuario,genero,contrasena,email,nombre,fecha,filename,nacionalidad,intro))
         conexion.commit()
         cursor.close()
         conexion.close()
@@ -447,6 +448,7 @@ def conectar_db():
     sqlite_create_users_table_query = '''CREATE TABLE IF NOT EXISTS Users (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 usuario TEXT NOT NULL UNIQUE,
+                                genero TEXT,
                                 password TEXT NOT NULL,
                                 email TEXT NOT NULL UNIQUE,
                                 nombre TEXT,
