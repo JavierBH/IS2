@@ -210,6 +210,7 @@ def new_pass():
 @app.route("/search", methods=['GET'])
 def search():
     if request.method == 'GET':
+        locales = list()
         var_search = request.args.get("var_search")
         var_filter = request.args.get("selector")
         conexion = conectar_db()
@@ -220,15 +221,19 @@ def search():
             if rows is None:
                 return render_template("add_degustacion.html")
             else:
-                return render_template("index.html",locales=rows)
+                for x in rows:
+                    locales.append(x[0])
+                return render_template("index.html",locales=locales)
 
-        """elif var_filter == "Locales":
+        elif var_filter == "Locales":
             cursor.execute("SELECT Nombre,Direccion,Reseña FROM Locales WHERE Nombre = ?",(var_search,))
             rows = cursor.fetchone()
             if rows is None:
                 flash("El local no existe", "error")
                 return render_template("add_local.html")
-        else:
+            else:
+                return render_template("ver_local.html",name=rows[0],dir=rows[1],res=rows[2])
+        """else:
             cursor.execute("SELECT usuario,foto FROM Users WHERE nombre = ?",(var_search,))
             rows = cursor.fetchone()
             if rows is None:
