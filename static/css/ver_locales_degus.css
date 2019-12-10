@@ -1,0 +1,39 @@
+
+  body{
+    padding: 40px;
+  }
+  
+  .content{
+    float:left;
+    margin: auto;
+    text-align: center;
+    font-family: arial;
+    flex: 20%;
+    align-items: center;
+    border-width: 2px;
+    border-color: brown;
+    border-style: solid;
+    width: 33%;
+  }
+  
+  .content img{
+    width: 50%;
+  }
+    .content button{
+        background-color: orange; 
+    }
+    button {
+      background-color: green;
+      color: white;
+      padding: 16px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      opacity: 0.9;
+      width: 100%;
+    }
+    
+    button:hover {
+      opacity: 1;
+    }
+  

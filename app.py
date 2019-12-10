@@ -222,7 +222,7 @@ def search():
             else:
                 for x in rows:
                     locales.append(x[0])
-                return render_template("index.html",locales=locales)
+                return render_template("ver_locales_degus.html",locales=locales)
 
         elif var_filter == "Locales":
             cursor.execute("SELECT Nombre,Direccion,Reseña FROM Locales WHERE Nombre = ?",(var_search,))
