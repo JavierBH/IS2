@@ -320,15 +320,16 @@ def enviar_correo(correo,mensaje,tipo):
 def mostrar_perfil():
     conexion = conectar_db()
     cursor = conexion.cursor()
-   # cursor.execute("SELECT usuario,email, nombre,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
+   # cursor.execute("SELECT usuario,foto ,email, nombre,fecha,foto,nacionalidad,introduccion FROM Users WHERE usuario = ?", (usuario,))
     for row in cursor:
         usuario = row[0]
-        email = row[1]
-        nombre = row[2]
-        fecha = row[3]
-        foto = row[4]
-        nacionalidad = row[5]
-        introduccion = row[6]
+        foto = row[1]
+        email = row[2]
+        nombre = row[3]
+        fecha = row[4]
+        foto = row[5]
+        nacionalidad = row[6]
+        introduccion = row[7]
     conexion.commit()
     cursor.close()
     conexion.close()
