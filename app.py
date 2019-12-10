@@ -54,6 +54,7 @@ def calcular_edad(fecha_nacimiento):
 def register():
     if request.method == 'POST': 
         usuario = request.form.get('usuario')
+        genero = request.form.get('genero')
         contrasena = request.form.get('password')
         repite_contrasena = request.form.get('repite_password')
         email = request.form.get('email')
@@ -63,7 +64,7 @@ def register():
         fecha = request.form['fecha']
         filename = None
 
-       #EXTRAE FOTO
+        #EXTRAE FOTO
         if 'file' not in request.files:
             file = None
             return "file = None"
@@ -72,9 +73,7 @@ def register():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            #Hay que poner el directorio completo!
-            filename = "/home/xiaojing/Documentos/IS2/img/" + filename
-            foto = convertToBinaryData(filename)
+            filename = os.path.abspath(__file__)
         #COMPROBACION DE CAMPOS OBLIGATORIOS
         if (usuario == "") or (contrasena == "") or (repite_contrasena == "") or (email == ""):
             return "Campo incompleto"
@@ -116,9 +115,9 @@ def register():
             flash("Email existed !!!!","error")
             return render_template("register.html")
         #INSERTAR
-        cursor.execute('''INSERT INTO Users ('usuario','password','email','nombre',
-        'fecha','foto','nacionalidad','introduccion','verificado') VALUES (?,?,?,?,?,?,?,?,0)'''
-        ,(usuario,contrasena,email,nombre,fecha,foto,nacionalidad,intro))
+        cursor.execute('''INSERT INTO Users ('usuario','genero','password','email','nombre',
+        'fecha','foto','nacionalidad','introduccion','verificado') VALUES (?,?,?,?,?,?,?,?,?,0)'''
+        ,(usuario,genero,contrasena,email,nombre,fecha,filename,nacionalidad,intro))
         conexion.commit()
         cursor.close()
         conexion.close()
@@ -257,7 +256,19 @@ def add_degustacion():
         calificacion = request.form.get('calificacion')
         local = request.form.get('local')
         descripcion = request.form.get('descripcion')
-        foto = request.form.get('foto')
+        
+
+        #PARTE DE FOTO
+        if 'file' not in request.files:
+            file = None
+            return "file = None"
+        file = request.files['file']
+        foto = None
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            foto = os.path.abspath(__file__)
+
         print(calificacion)
         conexion = conectar_db()
         cursor = conexion.cursor()
@@ -321,15 +332,16 @@ def enviar_correo(correo,mensaje,tipo):
 def mostrar_perfil():
     conexion = conectar_db()
     cursor = conexion.cursor()
-   # cursor.execute("SELECT usuario,email, nombre,fecha,foto,nacionalidad, introduccion FROM Users WHERE usuario = ?", (usuario,))
+   # cursor.execute("SELECT usuario,foto ,email, nombre,fecha,foto,nacionalidad,introduccion FROM Users WHERE usuario = ?", (usuario,))
     for row in cursor:
         usuario = row[0]
-        email = row[1]
-        nombre = row[2]
-        fecha = row[3]
-        foto = row[4]
-        nacionalidad = row[5]
-        introduccion = row[6]
+        foto = row[1]
+        email = row[2]
+        nombre = row[3]
+        fecha = row[4]
+        foto = row[5]
+        nacionalidad = row[6]
+        introduccion = row[7]
     conexion.commit()
     cursor.close()
     conexion.close()
@@ -353,7 +365,7 @@ def local():
         if local_User is None:
             cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(str(Id)+" -> "+str(datetime.datetime.now())+", ",session["username"]))
         else:
-            addLocal = addLista(Id+" -> "+str(datetime.datetime.now())+", ",local_User)
+            addLocal = addLista(str(Id)+" -> "+str(datetime.datetime.now())+", ",local_User)
             cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(addLocal,session["username"]))
         conexion.commit()
         cursor.close()
@@ -449,6 +461,7 @@ def conectar_db():
     sqlite_create_users_table_query = '''CREATE TABLE IF NOT EXISTS Users (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 usuario TEXT NOT NULL UNIQUE,
+                                genero TEXT,
                                 password TEXT NOT NULL,
                                 email TEXT NOT NULL UNIQUE,
                                 nombre TEXT,
@@ -465,7 +478,7 @@ def conectar_db():
     sqlite_create_degustaciones_table_query = '''CREATE TABLE IF NOT EXISTS Degustaciones (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 Nombre TEXT NOT NULL,
-                                Foto BLOB,
+                                Foto TEXT,
                                 Descripcion TEXT,
                                 Tipo TEXT,
                                 Region TEXT,
