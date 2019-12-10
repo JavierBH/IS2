@@ -73,7 +73,6 @@ def register():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             filename = os.path.abspath(__file__)
-            foto = convertToBinaryData(filename)
         #COMPROBACION DE CAMPOS OBLIGATORIOS
         if (usuario == "") or (contrasena == "") or (repite_contrasena == "") or (email == ""):
             return "Campo incompleto"
@@ -117,7 +116,7 @@ def register():
         #INSERTAR
         cursor.execute('''INSERT INTO Users ('usuario','password','email','nombre',
         'fecha','foto','nacionalidad','introduccion','verificado') VALUES (?,?,?,?,?,?,?,?,0)'''
-        ,(usuario,contrasena,email,nombre,fecha,foto,nacionalidad,intro))
+        ,(usuario,contrasena,email,nombre,fecha,filename,nacionalidad,intro))
         conexion.commit()
         cursor.close()
         conexion.close()
