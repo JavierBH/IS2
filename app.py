@@ -232,7 +232,7 @@ def search():
                 flash("El local no existe", "error")
                 return render_template("add_local.html")
             else:
-                return render_template("ver_local.html",name=rows[0],dir=rows[1],res=rows[2])
+                return render_template("ver_local.html",name=rows[0],dir=rows[1],resena=rows[2])
         """else:
             cursor.execute("SELECT usuario,foto FROM Users WHERE nombre = ?",(var_search,))
             rows = cursor.fetchone()
@@ -351,7 +351,7 @@ def local():
         for row in cursor:
             local_User = row[0]
         if local_User is None:
-            cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(Id+" -> "+str(datetime.datetime.now())+", ",session["username"]))
+            cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(str(Id)+" -> "+str(datetime.datetime.now())+", ",session["username"]))
         else:
             addLocal = addLista(Id+" -> "+str(datetime.datetime.now())+", ",local_User)
             cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(addLocal,session["username"]))
