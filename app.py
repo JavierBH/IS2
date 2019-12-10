@@ -62,7 +62,7 @@ def register():
         intro = request.form.get('introduccion')
         fecha = request.form['fecha']
         filename = None
-        
+
        #EXTRAE FOTO
         if 'file' not in request.files:
             file = None
@@ -448,7 +448,7 @@ def conectar_db():
                                 email TEXT NOT NULL UNIQUE,
                                 nombre TEXT,
                                 fecha DATE,
-                                foto BLOB,
+                                foto TEXT,
                                 nacionalidad TEXT,
                                 introduccion TEXT,
                                 verificado INTEGER NOT NULL,
