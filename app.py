@@ -30,7 +30,7 @@ def home():
     rows = cursor.fetchone()
     cursor.close()
     conexion.close()
-    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=rows[3],nacionalidad=rows[4],introduccion=rows[5])
+    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=rows[3],nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -231,6 +231,8 @@ def search():
                 flash("El local no existe", "error")
                 return render_template("add_local.html")
             else:
+                return render_template("ver_local.html",name=rows[0],dir=rows[1],resena=rows[2])
+            """else:
                 cursor.execute("SELECT id FROM Locales WHERE Nombre=?",(var_search,))
                 raws = cursor.fetchone()
                 cursor.execute("SELECT Nombre,Foto FROM Degustaciones WHERE Local=?",(raws[0],))
@@ -240,9 +242,8 @@ def search():
                 for x in raws:
                     names.append(x[0])
                     fotos.append(x[1])
-                return "hola"
-                #return render_template("ver_local.html",name=rows[0],dir=rows[1],res=rows[2])
-        """else:
+                return render_template("ver_local.html",name=rows[0],dir=rows[1],resena=rows[2])"""
+        else:
             cursor.execute("SELECT usuario,foto FROM Users WHERE nombre = ?",(var_search,))
             rows = cursor.fetchone()
             print(var_search)
@@ -252,7 +253,7 @@ def search():
             else:
                 return render_template("ver_perfil.html", user_name=rows[0],genero=rows[1],email=rows[2],nombre=rows[3],fecha=rows[4],nacionalidad=rows[5],introduccion=rows[6])
         cursor.close()  
-        conexion.close()"""
+        conexion.close()
         
     
 
