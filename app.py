@@ -63,6 +63,8 @@ def register():
         intro = request.form.get('introduccion')
         fecha = request.form['fecha']
         filename = None
+        print(genero)
+        print(intro)
 
         #EXTRAE FOTO
         if 'file' not in request.files:
@@ -217,7 +219,8 @@ def search():
         if var_filter == "Degustaciones":
             cursor.execute("SELECT Local FROM Degustaciones WHERE Nombre = ?",(var_search,))
             rows = cursor.fetchall()
-            if rows is None:
+            print(rows)
+            if not rows:
                 return render_template("add_degustacion.html")
             else:
                 for x in rows:
