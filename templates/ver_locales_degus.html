@@ -13,17 +13,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+<script src="{{ url_for('static', filename='js/ver_locales_degus.js') }}"></script>
 </head>
 <body>
     <h1>LOCALES QUE TIENEN ESTA DEGUSTACIÓN</h1>
     <hr>
     <div id="local_box_id">
+        <script>
+            var locales =' "{{ locales | tojson | safe }}" ' ;
+            create_boxes(locales);
+        </script>
 
     </div>
     <hr>
     <form action="{{ url_for('home') }}">
     <button class="home_butt">Home</button>
 </form>
-    <script src="{{ url_for('static', filename='js/ver_locales_degus.js') }}"></script>
+    
 </body>
