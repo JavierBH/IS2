@@ -163,9 +163,6 @@ function create_request_box(index){
   butt_ver.setAttribute("class","butt_ver");
   butt_ver.setAttribute("value","ver");
   butt_ver.innerHTML = "Ver";
-  butt_ver.addEventListener("click", function () {
-    closeButton(index);
-});
 
   //Se crea el boton de eliminar
   var butt_eliminar = document.createElement("button");

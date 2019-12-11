@@ -20,12 +20,6 @@
 </head>
 <body>
   {{render_messages_success(messages)}}
-<div class="logout">
-  <form method="post" action="{{ url_for('logout') }}">
-    <button type="submit" class="logoutbtn" >Logout</button>
-  </form>
-</div>
-
 
 <div class="navbar">
   <button id="helpBtn">Ayuda</button>
@@ -59,8 +53,10 @@
   </div>
 
 </div>
-  <a href="{{ url_for('home') }}">Degustaciones</a>
   <a href="{{ url_for('mostrar_perfil') }}">Configuracion</a>
+  <form method="post" action="{{ url_for('logout') }}">
+      <button type="submit" class="logoutbtn" >Logout</button>
+  </form>
 </div>
 
 <form class="example" autocomplete="off" method="get" action="{{ url_for('search') }}">
@@ -176,18 +172,20 @@
       </div>  
   </div>
 </div>
-
+</div>
   <div class="info_menu" id="estadisticas">
       <h2>Estadisticas</h2>
       <p>Aaron tio ponme bien las cosas de la BBDD</p>  
     </div>
   
   <div class="info_menu" id="solicitudes">
-        
+    <form class="example" autocomplete="off" method="get" action="{{ url_for('search') }}">
+      
+    </form>
   </div>
         
     
-  </div>
+
 </section>
 
 

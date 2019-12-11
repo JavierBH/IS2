@@ -34,7 +34,7 @@
                     }
                 </script>
 
-        <form method="post" action="{{ url_for('add_degustacion') }}">
+        <form method="post" action="{{ url_for('add_degustacion') }}" enctype="multipart/form-data">
                 {{render_messages_error(messages)}}
             <div class="container">
                 <h1>Añadir degustacion</h1>
@@ -43,7 +43,7 @@
                 <input type="text" placeholder="Nombre degustacion" name="degustacion" required>
 
                 <label ><b>Foto degustacion</b></label>
-                <input type="file" name="foto">
+                <input type="file" name="file">
 
                 <label><b>Tipo de comida/bebida</b></label>
                 <input type="text" placeholder="Tipo" name="tipo" required>
