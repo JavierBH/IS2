@@ -53,7 +53,7 @@
   </div>
 
 </div>
-  <a href="{{ url_for('mostrar_perfil') }}">Configuracion</a>
+  <a href="{{ url_for('modificar_perfil') }}">Configuracion</a>
   <form method="post" action="{{ url_for('logout') }}">
       <button type="submit" class="logoutbtn" >Logout</button>
   </form>
@@ -122,7 +122,7 @@
   <div class="info_menu" id="perfil">
     <h2>Perfil</h2>
     <div class="img-perfil-box">
-    <img class="perfil_img" src="https://i.imgflip.com/3dcebr.jpg" alt="">  
+    <img class="perfil_img" src={{foto}} />  
     <div class="data-box">
     <label for="email"><b>Nombre de usuario: </b></label>
     {{usuario}}

@@ -5,6 +5,7 @@ from email.mime.multipart import MIMEMultipart
 import smtplib
 import mimetypes
 import os, re
+from os import path
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from os.path import join, dirname, realpath
@@ -13,8 +14,10 @@ import datetime
 from dateutil.relativedelta import relativedelta
 
 MY_ADDRESS = "proyectois2upm@gmail.com"
+script_dir = path.dirname(path.abspath(__file__))
 PASSWORD = "softwareupm"
-UPLOAD_FOLDER = join(dirname(realpath(__file__)), 'C:/Users/javic/Desktop')
+UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir+"/static/")
+print(UPLOAD_FOLDER)
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
 app.secret_key = 'random string'
@@ -30,7 +33,8 @@ def home():
     rows = cursor.fetchone()
     cursor.close()
     conexion.close()
-    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=rows[3],nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'])
+    image_file = url_for('static', filename=rows[3])
+    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -75,7 +79,6 @@ def register():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            filename = os.path.abspath(__file__)
         #COMPROBACION DE CAMPOS OBLIGATORIOS
         if (usuario == "") or (contrasena == "") or (repite_contrasena == "") or (email == ""):
             return "Campo incompleto"
@@ -225,6 +228,7 @@ def search():
             else:
                 for x in rows:
                     locales.append(x[0])
+                print(locales)
                 return render_template("ver_locales_degus.html",locales=locales)
 
         elif var_filter == "Locales":
@@ -258,6 +262,10 @@ def search():
         cursor.close()  
         conexion.close()
         
+
+"""@app.route("/search/", methods=['GET'])
+def mostrar_deg():"""
+
     
 
 
@@ -344,23 +352,64 @@ def enviar_correo(correo,mensaje,tipo):
 
     #return render_template("recuperar.html")
 
-@app.route("/perfil")
-def mostrar_perfil():
-    conexion = conectar_db()
-    cursor = conexion.cursor()
-   # cursor.execute("SELECT usuario,foto ,email, nombre,fecha,foto,nacionalidad,introduccion FROM Users WHERE usuario = ?", (usuario,))
-    for row in cursor:
-        usuario = row[0]
-        foto = row[1]
-        email = row[2]
-        nombre = row[3]
-        fecha = row[4]
-        foto = row[5]
-        nacionalidad = row[6]
-        introduccion = row[7]
-    conexion.commit()
-    cursor.close()
-    conexion.close()
+@app.route("/perfil", methods=['GET', 'POST'])
+def modificar_perfil():
+    if request.method == 'POST': 
+        usuario = request.form.get('usuario')
+        genero = request.form.get('genero')
+        contrasena = request.form.get('new_password')
+        repite_contrasena = request.form.get('rp_new_password')
+        email = request.form.get('email')
+        nombre = request.form.get('nombre')
+        nacionalidad = request.form.get('nacionalidad')
+        intro = request.form.get('introduccion')
+        fecha = request.form['fecha']
+        foto = None
+        #COMPROBACION DE LONGITUD DE USUARIO
+        if len(usuario) < 6:
+            flash("Introduzca un usuario de minimo 6 caracteres","error")
+            return render_template("register.html")
+        #COMPROBACION DE LONGITUD DE PASSWORD
+        if len(contrasena) < 6:
+            flash("Introduzca una contraseña de minimo 6 caracteres","error")
+            return render_template("register.html")
+        #COMPROBACION DE CONTRASEÑA
+        if (contrasena != repite_contrasena):
+            flash("Password incorrect","error")
+            return render_template("register.html")
+        #COMPROBACION DE FORMATO CORREO
+        expresion = "[a-z0-9\.\_]+(@)([a-z]+).([a-z]+)"
+        tupla = re.match(expresion,email)
+        if tupla is None or tupla.group(1)!="@" or tupla.group(2) not in format_email or tupla.group(3) not in format_end:
+            flash("Email not valid","error")
+            return render_template("register.html")
+        conexion = conectar_db()
+        cursor = conexion.cursor()
+        #COMPROBACION DE EDAD VALIDA 
+        fecha_aux = fecha.split('-')
+        if(calcular_edad(date(int(fecha_aux[0]),int(fecha_aux[1]),int(fecha_aux[2]))) < 18):
+            flash("Eres muy pequeño chavalin para estar en un sito como este","error")
+            return render_template("register.html")
+        #COMPROBACION DE USUARIO UNICO
+        cursor.execute("SELECT id FROM Users WHERE usuario = ?",(usuario,))
+        rows = cursor.fetchone()
+        if rows is not None:
+            flash("Usuario existed !","error")
+            return render_template("register.html")
+        #COMPROBACION DE EMAIL UNICO
+        cursor.execute("SELECT id FROM Users WHERE email = ?",(usuario,))
+        rows = cursor.fetchone()
+        if rows is not None:
+            flash("Email existed !!!!","error")
+            return render_template("register.html")
+        #INSERTAR
+        cursor.execute('''UPDATE Users SET ('usuario','genero','password','email','nombre',
+        'fecha','foto','nacionalidad','introduccion','verificado') VALUES (?,?,?,?,?,?,?,?,?,0)'''
+        ,(usuario,genero,contrasena,email,nombre,fecha,filename,nacionalidad,intro))
+        conexion.commit()
+        cursor.close()
+        conexion.close()
+        flash("Cambios modificados con exito","success")  
     return render_template("perfil.html")
 
 @app.route("/local", methods=['GET', 'POST'])
