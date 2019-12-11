@@ -232,7 +232,17 @@ def search():
                 flash("El local no existe", "error")
                 return render_template("add_local.html")
             else:
-                return render_template("ver_local.html",name=rows[0],dir=rows[1],res=rows[2])
+                cursor.execute("SELECT id FROM Locales WHERE Nombre=?",(var_search,))
+                raws = cursor.fetchone()
+                cursor.execute("SELECT Nombre,Foto FROM Degustaciones WHERE Local=?",(raws[0],))
+                raws = cursor.fetchall()
+                names = list()
+                fotos = list()
+                for x in raws:
+                    names.append(x[0])
+                    fotos.append(x[1])
+                return "hola"
+                #return render_template("ver_local.html",name=rows[0],dir=rows[1],res=rows[2])
         """else:
             cursor.execute("SELECT usuario,foto FROM Users WHERE nombre = ?",(var_search,))
             rows = cursor.fetchone()
