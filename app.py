@@ -14,7 +14,7 @@ from dateutil.relativedelta import relativedelta
 
 MY_ADDRESS = "proyectois2upm@gmail.com"
 PASSWORD = "softwareupm"
-UPLOAD_FOLDER = join(dirname(realpath(__file__)), '/home/xiaojing/Documentos/IS2/img')
+UPLOAD_FOLDER = join(dirname(realpath(__file__)), 'C:/Users/javic/Desktop')
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
 app.secret_key = 'random string'
@@ -231,16 +231,18 @@ def search():
                 flash("El local no existe", "error")
                 return render_template("add_local.html")
             else:
+                print(rows)
                 return render_template("ver_local.html",name=rows[0],dir=rows[1],resena=rows[2])
-        '''  else:
-            cursor.execute("SELECT usuario FROM Users WHERE nombre = ?",(var_search,))
+        else:
+            cursor.execute("SELECT usuario,genero,email,nombre,fecha,nacionalidad,introduccion FROM Users WHERE usuario = ?",(var_search,))
             rows = cursor.fetchone()
+            print(var_search)
             if rows is None:
                 flash("El usuario no existe","error")
                 return redirect(url_for("home"))
             else:
-                return render_template("ver_perfil.html", name=rows[0]) '''
-        cursor.close()
+                return render_template("ver_perfil.html", user_name=rows[0],genero=rows[1],email=rows[2],nombre=rows[3],fecha=rows[4],nacionalidad=rows[5],introduccion=rows[6])
+        cursor.close()  
         conexion.close()
         
     
