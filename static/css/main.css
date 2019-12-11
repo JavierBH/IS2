@@ -24,6 +24,9 @@
   opacity: 1;
   color: black;
 }
+.navbar form{
+  flex-grow: 1
+}
 /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
@@ -147,6 +150,7 @@
     border-left-style: solid;
     overflow: scroll;
   }
+  
   /*----------------- DEGUSTACIONES MENU BOX -------------------------*/
   .degustaciones_flex_div{
     padding: 0;
@@ -221,7 +225,7 @@
     padding: 20px;
   }
 
-  .logoutbtn{
+  .navbar form button{
     background-color: red;
     color: white;
     padding: 16px 20px;

@@ -232,13 +232,14 @@ def search():
                 return render_template("add_local.html")
             else:
                 return render_template("ver_local.html",name=rows[0],dir=rows[1],resena=rows[2])
-        """else:
-            cursor.execute("SELECT usuario,foto FROM Users WHERE nombre = ?",(var_search,))
+        '''  else:
+            cursor.execute("SELECT usuario FROM Users WHERE nombre = ?",(var_search,))
             rows = cursor.fetchone()
             if rows is None:
                 flash("El usuario no existe","error")
-                return redirect(url_for("home"))"""
-        
+                return redirect(url_for("home"))
+            else:
+                return render_template("ver_perfil.html", name=rows[0]) '''
         cursor.close()
         conexion.close()
         

@@ -7,7 +7,7 @@
 <title>DesTapIS</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/main.css') }}" />
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/perfil.css') }}" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
 </head>
@@ -15,7 +15,7 @@
   {{render_messages_success(messages)}}
 
 <div class="navbar">
-  <button id="helpBtn">Aiuda</button>
+  <button id="helpBtn">Ayuda</button>
   <!-- The Modal -->
 <div id="helpModal" class="modal">
 
@@ -47,19 +47,19 @@
   </div>
 
 </div>
-  <a href="#">Degustacioness</a>
   <a href="{{ url_for('home') }}">Home</a>
 </div>
 
+<div class="navbar">
+  <button class="tablink" onclick="tab_main(event,'cambiar_datos')"  id="defaultOpen">Modificar Datos</button>
+  <button class="tablink" onclick="tab_main(event,'errores')">Reportar errores</button>
+</div>
+    
 <section class= "main_page">
 
-    <div class="navbar">
-        <button class="tablink" onclick="tab_main(event,'cambiar_datos')"  id="defaultOpen">Modificar Datos</button>
-        <button class="tablink" onclick="tab_main(event,'errores')">Reportar errores</button>
-    </div>
-          
+    
    <div id="cambiar_datos" class="main">
-    <label for="email"><b>Nombre de usuario</b></label>
+    <label><b>Nombre de usuario</b></label>
     <input type="text" placeholder="Nombre de usuario" name="usuario" required>
     <hr>
     <label for="email"><b>Email</b></label>
@@ -105,7 +105,7 @@
     <hr>
   <label ><b>Descripcion del Error </b></label>
   <form>
-      <textarea type="text" name="introduccion" autocomplete="off" placeholder="Write something.." style="height:200px"></textarea>
+      <textarea class="error_box" type="text" name="introduccion" autocomplete="off" placeholder="Write something.." style="height:200px"></textarea>
   </form>
   <hr>
   <button type="submit" class="registerbtn" value="Submit">Done</button>
