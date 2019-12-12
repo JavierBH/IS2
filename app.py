@@ -222,7 +222,6 @@ def search():
         if var_filter == "Degustaciones":
             cursor.execute("SELECT Local FROM Degustaciones WHERE Nombre = ?",(var_search,))
             rows = cursor.fetchall()
-            print(rows)
             if not rows:
                 return render_template("add_degustacion.html")
             else:
@@ -238,7 +237,13 @@ def search():
                 flash("El local no existe", "error")
                 return render_template("add_local.html")
             else:
-                return render_template("ver_local.html",name=rows[0],dir=rows[1],resena=rows[2])
+                degust = list()
+                cursor.execute("SELECT Nombre FROM Degustaciones WHERE Local = ?",(var_search,))
+                raws = cursor.fetchall()
+                for x in raws:
+                    degust.append(x[0])
+                print(degust)
+                return render_template("ver_local.html",name=rows[0],dir=rows[1],resena=rows[2],degustaciones=degust)
             """else:
                 cursor.execute("SELECT id FROM Locales WHERE Nombre=?",(var_search,))
                 raws = cursor.fetchone()
@@ -355,6 +360,8 @@ def enviar_correo(correo,mensaje,tipo):
 @app.route("/perfil", methods=['GET', 'POST'])
 def modificar_perfil():
     if request.method == 'POST': 
+        conexion = conectar_db()
+        cursor = conexion.cursor()
         usuario = request.form.get('usuario')
         genero = request.form.get('genero')
         contrasena = request.form.get('new_password')
@@ -365,51 +372,93 @@ def modificar_perfil():
         intro = request.form.get('introduccion')
         fecha = request.form['fecha']
         foto = None
-        #COMPROBACION DE LONGITUD DE USUARIO
-        if len(usuario) < 6:
-            flash("Introduzca un usuario de minimo 6 caracteres","error")
-            return render_template("register.html")
+
+    #-------USUARIO-------
+        #COMPROBAMOS SI USUARIO ES VALIDO Y UPDATE
+        if usuario is not None:
+            if len(usuario) < 6:
+                flash("Introduzca un usuario de minimo 6 caracteres","error")
+                cursor.close()
+                conexion.close()
+                return render_template("perfil.html")
+            else:
+                cursor.execute("SELECT id FROM Users WHERE usuario = ?",(usuario,))
+                rows = cursor.fetchone()
+                if rows is not None:
+                    flash("Usuario existed !","error")
+                    cursor.close()
+                    conexion.close()
+                    return render_template("perfil.html")
+            cursor.execute("UPDATE Users SET usuario=? WHERE usuario=?",(usuario,session["username"]))
+            conexion.commit()
+            session["username"]=usuario
+    #------PASSWORD---------
+        if contrasena or repite_contrasena is not None:
         #COMPROBACION DE LONGITUD DE PASSWORD
-        if len(contrasena) < 6:
-            flash("Introduzca una contraseña de minimo 6 caracteres","error")
-            return render_template("register.html")
+            if len(contrasena) < 6:
+                flash("Introduzca una contraseña de minimo 6 caracteres","error")
+                cursor.close()
+                conexion.close()
+                return render_template("perfil.html")
         #COMPROBACION DE CONTRASEÑA
-        if (contrasena != repite_contrasena):
-            flash("Password incorrect","error")
-            return render_template("register.html")
+            if (contrasena != repite_contrasena):
+                flash("Password incorrect","error")
+                cursor.close()
+                conexion.close()
+                return render_template("perfil.html")
+            cursor.execute("UPDATE Users SET password=? WHERE usuario=?",(contrasena,session["username"]))
+            conexion.commit()
+    #-------EMAIL------------
+        if email is not None:
         #COMPROBACION DE FORMATO CORREO
-        expresion = "[a-z0-9\.\_]+(@)([a-z]+).([a-z]+)"
-        tupla = re.match(expresion,email)
-        if tupla is None or tupla.group(1)!="@" or tupla.group(2) not in format_email or tupla.group(3) not in format_end:
-            flash("Email not valid","error")
-            return render_template("register.html")
-        conexion = conectar_db()
-        cursor = conexion.cursor()
-        #COMPROBACION DE EDAD VALIDA 
-        fecha_aux = fecha.split('-')
-        if(calcular_edad(date(int(fecha_aux[0]),int(fecha_aux[1]),int(fecha_aux[2]))) < 18):
-            flash("Eres muy pequeño chavalin para estar en un sito como este","error")
-            return render_template("register.html")
-        #COMPROBACION DE USUARIO UNICO
-        cursor.execute("SELECT id FROM Users WHERE usuario = ?",(usuario,))
-        rows = cursor.fetchone()
-        if rows is not None:
-            flash("Usuario existed !","error")
-            return render_template("register.html")
+            expresion = "[a-z0-9\.\_]+(@)([a-z]+).([a-z]+)"
+            tupla = re.match(expresion,email)
+            if tupla is None or tupla.group(1)!="@" or tupla.group(2) not in format_email or tupla.group(3) not in format_end:
+                flash("Email not valid","error")
+                cursor.close()
+                conexion.close()
+                return render_template("perfil.html")
         #COMPROBACION DE EMAIL UNICO
-        cursor.execute("SELECT id FROM Users WHERE email = ?",(usuario,))
-        rows = cursor.fetchone()
-        if rows is not None:
-            flash("Email existed !!!!","error")
-            return render_template("register.html")
-        #INSERTAR
-        cursor.execute('''UPDATE Users SET ('usuario','genero','password','email','nombre',
-        'fecha','foto','nacionalidad','introduccion','verificado') VALUES (?,?,?,?,?,?,?,?,?,0)'''
-        ,(usuario,genero,contrasena,email,nombre,fecha,filename,nacionalidad,intro))
-        conexion.commit()
+            cursor.execute("SELECT id FROM Users WHERE email = ?",(usuario,))
+            rows = cursor.fetchone()
+            if rows is not None:
+                flash("Email existed !!!!","error")
+                cursor.close()
+                conexion.close()
+                return render_template("perfil.html")
+            cursor.execute("UPDATE Users SET email=? WHERE usuario=?",(email,session["username"]))
+            conexion.commit()
+    #------FECHA-------------
+        if fecha is not None:
+        #COMPROBACION DE EDAD VALIDA 
+            fecha_aux = fecha.split('-')
+            if(calcular_edad(date(int(fecha_aux[0]),int(fecha_aux[1]),int(fecha_aux[2]))) < 18):
+                flash("Eres muy pequeño chavalin para estar en un sito como este","error")
+                cursor.close()
+                conexion.close()
+                return render_template("perfil.html")
+            cursor.execute("UPDATE Users SET fecha=? WHERE usuario=?",(fecha,session["username"]))
+            conexion.commit()
+    #--------NAME----------
+        if nombre is not None:
+            cursor.execute("UPDATE Users SET nombre=? WHERE usuario=?",(nombre,session["username"]))
+            conexion.commit()
+    #--------GENERO--------
+        if genero is not None:
+            cursor.execute("UPDATE Users SET genero=? WHERE usuario=?",(genero,session["username"]))
+            conexion.commit()
+    #--------INTRODUCCION---
+        if intro is not None:
+            cursor.execute("UPDATE Users SET introduccion=? WHERE usuario=?",(intro,session["username"]))
+            conexion.commit()
+    #--------NACIONALIDAD
+        if nacionalidad is not None:
+            cursor.execute("UPDATE Users SET nacionalidad=? WHERE usuario=?",(nacionalidad,session["username"]))
+            conexion.commit()
+        flash("Cambios modificados con exito","success")
         cursor.close()
         conexion.close()
-        flash("Cambios modificados con exito","success")  
+        return redirect(url_for("home"))  
     return render_template("perfil.html")
 
 @app.route("/local", methods=['GET', 'POST'])
