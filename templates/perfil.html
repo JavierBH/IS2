@@ -1,5 +1,7 @@
 
 {% from "_render_macros.html" import render_messages_success %}
+{% from "_render_macros.html" import render_messages_error %}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +14,6 @@
 
 </head>
 <body>
-  {{render_messages_success(messages)}}
 
 <div class="navbar">
   <button id="helpBtn">Ayuda</button>
@@ -57,20 +58,21 @@
     
 <section class= "main_page">
   <form method="post" action="{{ url_for('modificar_perfil') }}" enctype="multipart/form-data">
+    {{render_messages_error(messages)}}
    <div id="cambiar_datos" class="main">
     <label><b>Nombre de usuario</b></label>
-    <input type="text" placeholder="Nombre de usuario" name="usuario" required>
+    <input type="text" placeholder="Nombre de usuario" name="usuario">
     <hr>
     <label for="email"><b>Email</b></label>
-    <input type="text" placeholder="Email" name="email" required>
+    <input type="text" placeholder="Email" name="email">
     <hr>
     <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Contraseña Antigua" name="password" required>
-    <input type="password" placeholder="Contraseña" name="new_password" required>
-    <input type="password" placeholder="Repita la contraseña" name="rp_new_password" required>
+    <input type="password" placeholder="Contraseña Antigua" name="password">
+    <input type="password" placeholder="Contraseña" name="new_password">
+    <input type="password" placeholder="Repita la contraseña" name="rp_new_password">
     <hr>
     <label ><b>Fecha de nacimiento</b></label>
-    <input type="date" placeholder="Introduzca su fecha de nacimiento" name="fecha" required>
+    <input type="date" placeholder="Introduzca su fecha de nacimiento" name="fecha">
     <hr>
     <label ><b>Nombre y apellidos</b></label>
     <input type="text" placeholder="Nombre Apellido1 Apellido2" name="nombre" autocomplete="off">

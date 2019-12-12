@@ -67,8 +67,6 @@ def register():
         intro = request.form.get('introduccion')
         fecha = request.form['fecha']
         filename = None
-        print(genero)
-        print(intro)
 
         #EXTRAE FOTO
         if 'file' not in request.files:
@@ -214,7 +212,6 @@ def new_pass():
 @app.route("/search", methods=['GET'])
 def search():
     if request.method == 'GET':
-        locales = list()
         var_search = request.args.get("var_search")
         var_filter = request.args.get("selector")
         conexion = conectar_db()
@@ -225,10 +222,14 @@ def search():
             if not rows:
                 return render_template("add_degustacion.html")
             else:
+                locales = list()
+                fotos = list()
                 for x in rows:
                     locales.append(x[0])
-                print(locales)
-                return render_template("ver_locales_degus.html",locales=locales)
+                    cursor.execute("SELECT Foto FROM Locales WHERE Nombre = ?",(x[0],))
+                    raws = cursor.fetchone()
+                    fotos.append(raws[0])
+                return render_template("ver_locales_degus.html",locales=locales,fotos=fotos)
 
         elif var_filter == "Locales":
             cursor.execute("SELECT Nombre,Direccion,Reseña FROM Locales WHERE Nombre = ?",(var_search,))
@@ -238,12 +239,14 @@ def search():
                 return render_template("add_local.html")
             else:
                 degust = list()
-                cursor.execute("SELECT Nombre FROM Degustaciones WHERE Local = ?",(var_search,))
+                fotos = list()
+                cursor.execute("SELECT Nombre,Foto FROM Degustaciones WHERE Local = ?",(var_search,))
                 raws = cursor.fetchall()
                 for x in raws:
                     degust.append(x[0])
+                    fotos.append(x[1])
                 print(degust)
-                return render_template("ver_local.html",name=rows[0],dir=rows[1],resena=rows[2],degustaciones=degust)
+                return render_template("ver_local.html",name=rows[0],dir=rows[1],resena=rows[2],degustaciones=degust,fotos=fotos)
             """else:
                 cursor.execute("SELECT id FROM Locales WHERE Nombre=?",(var_search,))
                 raws = cursor.fetchone()
@@ -285,7 +288,7 @@ def add_degustacion():
         calificacion = request.form.get('calificacion')
         local = request.form.get('local')
         descripcion = request.form.get('descripcion')
-        
+        filename = None
 
         #PARTE DE FOTO
         if 'file' not in request.files:
@@ -296,9 +299,7 @@ def add_degustacion():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            foto = os.path.abspath(__file__)
 
-        print(calificacion)
         conexion = conectar_db()
         cursor = conexion.cursor()
         cursor.execute("SELECT Nombre FROM Locales WHERE Nombre = ?",(local,))
@@ -308,7 +309,7 @@ def add_degustacion():
             return render_template("add_local.html")
         cursor.execute('''INSERT INTO Degustaciones ('Nombre','Foto','Descripcion','Tipo',
         'Region','Tamaño','Calificacion_Gusto','Calificacion','Local') VALUES (?,?,?,?,?,?,?,?,?)'''
-        ,(nombre_deg,foto,descripcion,tipo,region,tamaño,calificacion_gusto,calificacion,local))
+        ,(nombre_deg,filename,descripcion,tipo,region,tamaño,calificacion_gusto,calificacion,local))
         id = cursor.lastrowid
         conexion.commit()
         cursor.execute("SELECT Degustaciones FROM Locales WHERE Nombre = ?",(local,))
@@ -375,7 +376,8 @@ def modificar_perfil():
 
     #-------USUARIO-------
         #COMPROBAMOS SI USUARIO ES VALIDO Y UPDATE
-        if usuario is not None:
+        if len(usuario) !=0:
+            print("elelele")
             if len(usuario) < 6:
                 flash("Introduzca un usuario de minimo 6 caracteres","error")
                 cursor.close()
@@ -393,7 +395,7 @@ def modificar_perfil():
             conexion.commit()
             session["username"]=usuario
     #------PASSWORD---------
-        if contrasena or repite_contrasena is not None:
+        if len(contrasena) or len(repite_contrasena) !=0:
         #COMPROBACION DE LONGITUD DE PASSWORD
             if len(contrasena) < 6:
                 flash("Introduzca una contraseña de minimo 6 caracteres","error")
@@ -409,7 +411,7 @@ def modificar_perfil():
             cursor.execute("UPDATE Users SET password=? WHERE usuario=?",(contrasena,session["username"]))
             conexion.commit()
     #-------EMAIL------------
-        if email is not None:
+        if len(email) != 0 :
         #COMPROBACION DE FORMATO CORREO
             expresion = "[a-z0-9\.\_]+(@)([a-z]+).([a-z]+)"
             tupla = re.match(expresion,email)
@@ -429,7 +431,7 @@ def modificar_perfil():
             cursor.execute("UPDATE Users SET email=? WHERE usuario=?",(email,session["username"]))
             conexion.commit()
     #------FECHA-------------
-        if fecha is not None:
+        if len(fecha) != 0:
         #COMPROBACION DE EDAD VALIDA 
             fecha_aux = fecha.split('-')
             if(calcular_edad(date(int(fecha_aux[0]),int(fecha_aux[1]),int(fecha_aux[2]))) < 18):
@@ -440,15 +442,15 @@ def modificar_perfil():
             cursor.execute("UPDATE Users SET fecha=? WHERE usuario=?",(fecha,session["username"]))
             conexion.commit()
     #--------NAME----------
-        if nombre is not None:
+        if len(nombre) != 0:
             cursor.execute("UPDATE Users SET nombre=? WHERE usuario=?",(nombre,session["username"]))
             conexion.commit()
     #--------GENERO--------
-        if genero is not None:
+        if len(genero) != 0:
             cursor.execute("UPDATE Users SET genero=? WHERE usuario=?",(genero,session["username"]))
             conexion.commit()
     #--------INTRODUCCION---
-        if intro is not None:
+        if len(intro) != 0:
             cursor.execute("UPDATE Users SET introduccion=? WHERE usuario=?",(intro,session["username"]))
             conexion.commit()
     #--------NACIONALIDAD
