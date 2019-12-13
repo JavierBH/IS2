@@ -29,12 +29,14 @@ format_end = ["com","es"]
 def home():
     conexion = conectar_db()
     cursor = conexion.cursor()
-    cursor.execute("SELECT nombre,email,fecha,foto,nacionalidad,introduccion FROM Users WHERE usuario=?",(session['username'],))
+    cursor.execute("SELECT nombre,email,fecha,foto,nacionalidad,introduccion,genero FROM Users WHERE usuario=?",(session['username'],))
     rows = cursor.fetchone()
     cursor.close()
     conexion.close()
-    image_file = url_for('static', filename=rows[3])
-    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'])
+    image_file=None
+    if rows[3] is not None:
+        image_file = url_for('static', filename=rows[3])
+    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -247,9 +249,9 @@ def search():
                 print(degust)
                 return render_template("ver_local.html",name=rows[0],dir=rows[1],resena=rows[2],degustaciones=degust,fotos=fotos)
         else:
-            cursor.execute("SELECT usuario,genero,email,nombre,fecha,nacionalidad,introduccion,foto FROM Users WHERE nombre = ?",(var_search,))
+            cursor.execute("SELECT usuario,genero,email,nombre,fecha,nacionalidad,introduccion,foto FROM Users WHERE usuario=?",(var_search,))
             rows = cursor.fetchone()
-            print(var_search)
+            print(rows)
             if rows is None:
                 flash("El usuario no existe","error")
                 return redirect(url_for("home"))
@@ -493,9 +495,8 @@ def enviar_solicitud():
         conn.commit()
         cursor.close()
         conn.close()
-        return "enviado"
-        return render_template("enviar_solicitud.html")
-    return render_template("enviar_solicitud.html")
+        flash("Solicitud enviada", "success")
+    return redirect(url_for("home"))
 
 @app.route("/mostrar_solicitud", methods=['GET','POST'])
 def mostrar_solicitud():
@@ -602,7 +603,7 @@ def conectar_db():
                                 Nombre TEXT NOT NULL,
                                 Direccion TEXT,
                                 Reseña TEXT,
-                                Foto TEXT
+                                Foto TEXT,
                                 Degustaciones TEXT);'''
     cursor.execute(sqlite_create_locales_table_query)
     #CREA TABLA GALARDONES
@@ -616,7 +617,7 @@ def conectar_db():
     sqlite_create_solicitudes_table_query = '''CREATE TABLE IF NOT EXISTS Solicitudes (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 Nombre_Usuario TEXT NOT NULL,
-                                Id_Amigo TEXT NOT NULL,
+                                Nombre_Amigo TEXT NOT NULL,
                                 Validacion INT);'''
     cursor.execute(sqlite_create_solicitudes_table_query)
     conn.commit()
