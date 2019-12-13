@@ -147,10 +147,15 @@ function create_request_box(index){
   var t = document.createTextNode("Usuario 1");     // Create a text node
   h2.appendChild(t);
 
+  var f_aceptar = document.createElement("form");
+  f_aceptar.setAttribute('method',"post");
+  f_aceptar.setAttribute('action',"submit.php");
+
   //Se crea el botone de aceptar
   var butt_aceptar = document.createElement("button");
   butt_aceptar.setAttribute("id",this.id +"butt_aceptar_id");
   butt_aceptar.setAttribute("class","butt_aceptar");
+  
   butt_aceptar.setAttribute("value","aceptar");
   butt_aceptar.innerHTML = "Aceptar";
   butt_aceptar.addEventListener("click", function () {
