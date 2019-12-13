@@ -70,8 +70,7 @@ def register():
 
         #EXTRAE FOTO
         if 'file' not in request.files:
-            file = None
-            return "file = None"
+            filename = "usuario.png"
         file = request.files['file']
         foto = None
         if file and allowed_file(file.filename):
