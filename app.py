@@ -500,23 +500,19 @@ def enviar_solicitud():
         nombre_amigo = request.form['nombreAmigo']
         conn = conectar_db()
         cursor = conn.cursor()
+        cursor.execute("SELECT Amigos FROM Users WHERE usuario = ?", (session["username"],))
+        amigos = None
+        for row in cursor:
+            am = row[0]
+            amigos = str(am)
+        cursor.execute("SELECT id FROM Users WHERE usuario = ?", (nombre_amigo,))
+        for row in cursor:
+            Id = row[0]
+        if amigos is not None :
+            if  (str(Id) in amigos):
+                return "Ya son amigos"
         cursor.execute('''INSERT INTO Solicitudes ('Nombre_Usuario','Nombre_Amigo','Validacion') VALUES (?,?,?)'''
             ,(session["username"], nombre_amigo, 0))
-        Id = cursor.lastrowid
-        cursor.execute("SELECT * FROM Solicitudes WHERE id = ?", Id)
-        for row1 in cursor:
-            solicitado = row[0]
-        cursor.execute("SELECT Amigos FROM Users WHERE usuario = ?", session["username"])
-        for row in cursor:
-            amigos = row[0]
-        amgs = getLista(amigos)
-        sonAmigos = None
-        for ag in amgs:
-            if  ag == nombre_amigo:
-                sonAmigos = "son amigos"
-        if (solicitado or sonAmigos) is not None:
-            cursor.execute("DELETE FROM Solicitudes WHERE id=?",(Id))
-            return "Solicitud ya enviado o Ya son amigos"
         conn.commit()
         cursor.close()
         conn.close()
