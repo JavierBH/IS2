@@ -467,10 +467,20 @@ def local():
         direccion = request.form['direccion']
         reseña = request.form['reseña']
         degustaciones = None
+        filename = None
+
+        #EXTRAE FOTO
+        if 'file' not in request.files:
+            filename = "usuario.png"
+        file = request.files['file']
+        foto = None
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         conexion = conectar_db()
         cursor = conexion.cursor()
-        cursor.execute('''INSERT INTO Locales ('Nombre','Direccion','Reseña','Degustaciones') VALUES (?,?,?,?)'''
-        ,(local, direccion, reseña, degustaciones))
+        cursor.execute('''INSERT INTO Locales ('Nombre','Direccion','Reseña','Degustaciones','Foto) VALUES (?,?,?,?)'''
+        ,(local, direccion, reseña, degustaciones,filename))
         Id = cursor.lastrowid
         cursor.execute("SELECT Locales FROM Users WHERE usuario = ?", (session["username"],))
         for row in cursor:
