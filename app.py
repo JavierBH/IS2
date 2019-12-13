@@ -492,9 +492,8 @@ def local():
 
 @app.route("/enviar_solicitud", methods=['GET','POST'])
 def enviar_solicitud():
-    #if request.method == 'POST': 
-        #nombre_amigo = request.form['nombreAmigo']
-        nombre_amigo = "amigoooS"
+    if request.method == 'POST': 
+        nombre_amigo = request.form['nombreAmigo']
         conn = conectar_db()
         cursor = conn.cursor()
         cursor.execute('''INSERT INTO Solicitudes ('Nombre_Usuario','Nombre_Amigo','Validacion') VALUES (?,?,?)'''
@@ -503,8 +502,8 @@ def enviar_solicitud():
         cursor.close()
         conn.close()
         return "enviado"
-        #return render_template("enviar_solicitud.html")
-    #return render_template("enviar_solicitud.html")
+        return render_template("enviar_solicitud.html")
+    return render_template("enviar_solicitud.html")
 
 @app.route("/morstrar_solicitud", methods=['GET','POST'])
 def mostrar_solicitud():
@@ -517,7 +516,7 @@ def mostrar_solicitud():
         lista.append(row[1])
     cursor.close()
     conexion.close()
-    return render_template("mostrar_solicitud.html",result)
+    return render_template("mostrar_solicitud.html",r = result)
 
 
 @app.route("/aceptar_solicitud", methods=['GET','POST'])
