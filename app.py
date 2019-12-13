@@ -221,7 +221,7 @@ def search():
             cursor.execute("SELECT Local FROM Degustaciones WHERE Nombre = ?",(var_search,))
             rows = cursor.fetchall()
             if not rows:
-                return render_template("add_degustacion.html")
+                return render_template("add_degustacion.html",name=var_search)
             else:
                 locales = list()
                 fotos = list()
@@ -237,7 +237,7 @@ def search():
             rows = cursor.fetchone()
             if rows is None:
                 flash("El local no existe", "error")
-                return render_template("add_local.html")
+                return render_template("add_local.html",name=var_search)
             else:
                 degust = list()
                 fotos = list()
@@ -260,7 +260,17 @@ def search():
         cursor.close()  
         conexion.close()
     
-
+@app.route("/ver_degus",methods=['GET','POST'])
+def ver_degus():
+    if request.method == 'GET':
+        local = request.args.get("local_var")
+        degust = request.args.get("degust_var")
+        option_var = request.args.get("option_var")
+        conexion = conectar_db()
+        cursor = conexion.cursor()
+        cursor.execute("SELECT Nombre,Foto,Descripcion,Tipo,Region,Tamaño,Calificacion_Gusto,Calificacion FROM Degustaciones WHERE Local = ?",(local,))
+        rows = cursor.fetchone()
+        return render_template("ver_degustacion.html",name=rows[0],foto=rows[1],descr=rows[2],tipo=rows[3],region=rows[4],tamaño=rows[5],calif_gusto=rows[6],calif=rows[7],option=option_var)
 
 @app.route("/degustacion", methods=['GET','POST'])
 def add_degustacion():
