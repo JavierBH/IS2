@@ -514,7 +514,7 @@ def enviar_solicitud():
         for ag in amgs:
             if  ag == nombre_amigo:
                 sonAmigos = "son amigos"
-        if (solicitado or sonAmigos) not is None:
+        if (solicitado or sonAmigos) is not None:
             cursor.execute("DELETE FROM Solicitudes WHERE id=?",(Id))
             return "Solicitud ya enviado o Ya son amigos"
         conn.commit()
