@@ -246,33 +246,17 @@ def search():
                     fotos.append(x[1])
                 print(degust)
                 return render_template("ver_local.html",name=rows[0],dir=rows[1],resena=rows[2],degustaciones=degust,fotos=fotos)
-            """else:
-                cursor.execute("SELECT id FROM Locales WHERE Nombre=?",(var_search,))
-                raws = cursor.fetchone()
-                cursor.execute("SELECT Nombre,Foto FROM Degustaciones WHERE Local=?",(raws[0],))
-                raws = cursor.fetchall()
-                names = list()
-                fotos = list()
-                for x in raws:
-                    names.append(x[0])
-                    fotos.append(x[1])
-                return render_template("ver_local.html",name=rows[0],dir=rows[1],resena=rows[2])"""
         else:
-            cursor.execute("SELECT usuario,foto FROM Users WHERE nombre = ?",(var_search,))
+            cursor.execute("SELECT usuario,genero,email,nombre,fecha,nacionalidad,introduccion,foto FROM Users WHERE nombre = ?",(var_search,))
             rows = cursor.fetchone()
             print(var_search)
             if rows is None:
                 flash("El usuario no existe","error")
                 return redirect(url_for("home"))
             else:
-                return render_template("ver_perfil.html", user_name=rows[0],genero=rows[1],email=rows[2],nombre=rows[3],fecha=rows[4],nacionalidad=rows[5],introduccion=rows[6])
+                return render_template("ver_perfil.html", user_name=rows[0],genero=rows[1],email=rows[2],nombre=rows[3],fecha=rows[4],nacionalidad=rows[5],introduccion=rows[6],foto=rows[7])
         cursor.close()  
         conexion.close()
-        
-
-"""@app.route("/search/", methods=['GET'])
-def mostrar_deg():"""
-
     
 
 
@@ -364,6 +348,7 @@ def modificar_perfil():
         cursor = conexion.cursor()
         usuario = request.form.get('usuario')
         genero = request.form.get('genero')
+        contrasena_old = request.form.get('password')
         contrasena = request.form.get('new_password')
         repite_contrasena = request.form.get('rp_new_password')
         email = request.form.get('email')
@@ -394,7 +379,15 @@ def modificar_perfil():
             conexion.commit()
             session["username"]=usuario
     #------PASSWORD---------
-        if len(contrasena) or len(repite_contrasena) !=0:
+        if len(contrasena_old ) != 0 or len(contrasena) != 0 or len(repite_contrasena) !=0:
+        #COMPROBACION DE ANTIGUA PASSWORD
+            cursor.execute("SELECT password FROM Users WHERE usuario=?",(session["username"],))
+            rows = cursor.fetchone()
+            if rows[0] != contrasena_old:
+                flash("Contraseña incorrecta","error")
+                cursor.close()
+                conexion.close()
+                return render_template("perfil.html")
         #COMPROBACION DE LONGITUD DE PASSWORD
             if len(contrasena) < 6:
                 flash("Introduzca una contraseña de minimo 6 caracteres","error")
@@ -587,7 +580,8 @@ def conectar_db():
                                 Amigos TEXT,
                                 Degustaciones TEXT,
                                 Locales TEXT,
-                                Solicitudes TEXT);'''
+                                Deg_Gusta TEXT,
+                                Loc_Gusta TEXT);'''
     cursor.execute(sqlite_create_users_table_query)
     #CREA TABLA DEGUSTACIONES
     sqlite_create_degustaciones_table_query = '''CREATE TABLE IF NOT EXISTS Degustaciones (
@@ -608,6 +602,7 @@ def conectar_db():
                                 Nombre TEXT NOT NULL,
                                 Direccion TEXT,
                                 Reseña TEXT,
+                                Foto TEXT
                                 Degustaciones TEXT);'''
     cursor.execute(sqlite_create_locales_table_query)
     #CREA TABLA GALARDONES
