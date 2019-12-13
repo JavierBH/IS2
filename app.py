@@ -33,7 +33,9 @@ def home():
     rows = cursor.fetchone()
     cursor.close()
     conexion.close()
-    image_file = url_for('static', filename=rows[3])
+    image_file=None
+    if rows[3] is not None:
+        image_file = url_for('static', filename=rows[3])
     return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'])
 
 def allowed_file(filename):
@@ -247,9 +249,9 @@ def search():
                 print(degust)
                 return render_template("ver_local.html",name=rows[0],dir=rows[1],resena=rows[2],degustaciones=degust,fotos=fotos)
         else:
-            cursor.execute("SELECT usuario,genero,email,nombre,fecha,nacionalidad,introduccion,foto FROM Users WHERE nombre = ?",(var_search,))
+            cursor.execute("SELECT usuario,genero,email,nombre,fecha,nacionalidad,introduccion,foto FROM Users WHERE usuario=?",(var_search,))
             rows = cursor.fetchone()
-            print(var_search)
+            print(rows)
             if rows is None:
                 flash("El usuario no existe","error")
                 return redirect(url_for("home"))
