@@ -40,12 +40,16 @@
     <br>
     <hr>
     <label><b>Introduccion: </b></label> <br>
+    <div>
     <p>{{ introduccion }}</p>
+</div>
     <hr>
-<form method="POST" action="{{ url_for('enviar_solicitud') }}" style="color:orangered">
-    <button class="home_butt"> ENVIAR SOLICITUD </button>
+
+<form method="POST" action="{{ url_for('enviar_solicitud') }}">
+    <button class="home_butt"  style="background-color:orangered"  name = "nombreAmigo" value = "{{ user_name }}"> ENVIAR SOLICITUD </button>
 </form>
-    <hr>
+    
+<hr>
     <form action="{{ url_for('home') }}">
     <button class="home_butt">Home</button>
 </form>

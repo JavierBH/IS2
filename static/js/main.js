@@ -149,7 +149,7 @@ function create_request_box(index){
 
   var f_aceptar = document.createElement("form");
   f_aceptar.setAttribute('method',"post");
-  f_aceptar.setAttribute('action',"submit.php");
+  f_aceptar.setAttribute('action',"{{ url_for('aceptar_solicitud') }}");
 
   //Se crea el botone de aceptar
   var butt_aceptar = document.createElement("button");
@@ -162,12 +162,18 @@ function create_request_box(index){
     closeButton(index);
 });
 
+f_aceptar.appendChild(butt_aceptar);
 //Se crea el boton de ver
   var butt_ver = document.createElement("button");
   butt_ver.setAttribute("id",this.id +"butt_aceptar_id");
   butt_ver.setAttribute("class","butt_ver");
   butt_ver.setAttribute("value","ver");
   butt_ver.innerHTML = "Ver";
+
+  var f_eliminar = document.createElement("form");
+  f_eliminar.setAttribute('method',"post");
+  f_eliminar.setAttribute('action',"{{ url_for('eliminar_solicitud') }}");
+
 
   //Se crea el boton de eliminar
   var butt_eliminar = document.createElement("button");
@@ -179,13 +185,15 @@ function create_request_box(index){
     closeButton(index);
 });
 
+f_eliminar.appendChild(butt_eliminar);
+
   var hr = document.createElement("HR");
   //Se añaden los elementos al activity_box div
   node.appendChild(img);
   node.appendChild(h2);
-  node.appendChild(butt_aceptar);
+  node.appendChild(f_aceptar);
   node.appendChild(butt_ver);
-  node.appendChild(butt_eliminar);
+  node.appendChild(f_eliminar);
   node.appendChild(hr);
   document.getElementById("solicitudes").appendChild(node);
 

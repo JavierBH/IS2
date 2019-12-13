@@ -36,7 +36,7 @@ def home():
     image_file=None
     if rows[3] is not None:
         image_file = url_for('static', filename=rows[3])
-    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'])
+    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -492,21 +492,11 @@ def enviar_solicitud():
         cursor = conn.cursor()
         cursor.execute('''INSERT INTO Solicitudes ('Nombre_Usuario','Nombre_Amigo','Validacion') VALUES (?,?,?)'''
             ,(session["username"], nombre_amigo, 0))
-        Id = cursor.lastrowid
-        cursor.execute("SELECT Solicitudes FROM Users WHERE usuario = ?", (session["username"],))
-        for row in cursor:
-            solicitudes_User = row[0]
-        if solicitudes_User is None:
-            cursor.execute("UPDATE Users SET Solicitudes=? WHERE usuario=?",(str(Id)+" -> "+str(datetime.datetime.now())+", ",session["username"]))
-        else:
-            addSolicitud = addLista(str(Id)+" -> "+str(datetime.datetime.now())+", ",solicitudes_User)
-            cursor.execute("UPDATE Users SET Solicitudes=? WHERE usuario=?",(addSolicitud,session["username"]))
         conn.commit()
         cursor.close()
         conn.close()
-        return "enviado"
-        return render_template("enviar_solicitud.html")
-    return render_template("enviar_solicitud.html")
+        flash("Solicitud enviada", "success")
+    return redirect(url_for("home"))
 
 @app.route("/mostrar_solicitud", methods=['GET','POST'])
 def mostrar_solicitud():
@@ -613,7 +603,7 @@ def conectar_db():
                                 Nombre TEXT NOT NULL,
                                 Direccion TEXT,
                                 Reseña TEXT,
-                                Foto TEXT
+                                Foto TEXT,
                                 Degustaciones TEXT);'''
     cursor.execute(sqlite_create_locales_table_query)
     #CREA TABLA GALARDONES
@@ -627,7 +617,7 @@ def conectar_db():
     sqlite_create_solicitudes_table_query = '''CREATE TABLE IF NOT EXISTS Solicitudes (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 Nombre_Usuario TEXT NOT NULL,
-                                Id_Amigo TEXT NOT NULL,
+                                Nombre_Amigo TEXT NOT NULL,
                                 Validacion INT);'''
     cursor.execute(sqlite_create_solicitudes_table_query)
     conn.commit()
