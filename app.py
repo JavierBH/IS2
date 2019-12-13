@@ -226,10 +226,13 @@ def search():
                 locales = list()
                 fotos = list()
                 for x in rows:
+                    print(x[0])
                     locales.append(x[0])
                     cursor.execute("SELECT Foto FROM Locales WHERE Nombre = ?",(x[0],))
                     raws = cursor.fetchone()
+                    print(raws)
                     fotos.append(raws[0])
+                print(fotos)
                 return render_template("ver_locales_degus.html",locales=locales,fotos=fotos)
 
         elif var_filter == "Locales":

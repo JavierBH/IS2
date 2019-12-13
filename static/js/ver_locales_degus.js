@@ -26,7 +26,8 @@ function degustaciones_window(img_url,name,ver){
 
   /* 
   Esta funcion recibe un array con los nombres de los locales*/
-function create_boxes(arr){
+function create_boxes(arr,fotos){
+  console.log(fotos)
 var locales = split_array(arr);
 var n_boxes = locales.length;
   if(n_boxes%3 != 0){

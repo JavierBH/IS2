@@ -21,7 +21,8 @@
     <div id="local_box_id">
         <script>
             var locales =' "{{ locales | tojson | safe }}" ' ;
-            create_boxes(locales);
+            var fotos =' "{{ fotos | tojson | safe }}" ' ;
+            create_boxes(locales,fotos);
         </script>
 
     </div>
