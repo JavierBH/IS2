@@ -498,6 +498,15 @@ def enviar_solicitud():
         cursor = conn.cursor()
         cursor.execute('''INSERT INTO Solicitudes ('Nombre_Usuario','Nombre_Amigo','Validacion') VALUES (?,?,?)'''
             ,(session["username"], nombre_amigo, 0))
+        Id = cursor.lastrowid
+        cursor.execute("SELECT Solicitudes FROM Users WHERE usuario = ?", (session["username"],))
+        for row in cursor:
+            solicitudes_User = row[0]
+        if solicitudes_User is None:
+            cursor.execute("UPDATE Users SET Solicitudes=? WHERE usuario=?",(str(Id)+" -> "+str(datetime.datetime.now())+", ",session["username"]))
+        else:
+            addSolicitud = addLista(str(Id)+" -> "+str(datetime.datetime.now())+", ",solicitudes_User)
+            cursor.execute("UPDATE Users SET Solicitudes=? WHERE usuario=?",(addSolicitud,session["username"]))
         conn.commit()
         cursor.close()
         conn.close()
@@ -505,7 +514,7 @@ def enviar_solicitud():
         return render_template("enviar_solicitud.html")
     return render_template("enviar_solicitud.html")
 
-@app.route("/morstrar_solicitud", methods=['GET','POST'])
+@app.route("/mostrar_solicitud", methods=['GET','POST'])
 def mostrar_solicitud():
     conexion = conectar_db()
     cursor = conexion.cursor()
@@ -587,7 +596,8 @@ def conectar_db():
                                 verificado INTEGER NOT NULL,
                                 Amigos TEXT,
                                 Degustaciones TEXT,
-                                Locales TEXT);'''
+                                Locales TEXT,
+                                Solicitudes TEXT);'''
     cursor.execute(sqlite_create_users_table_query)
     #CREA TABLA DEGUSTACIONES
     sqlite_create_degustaciones_table_query = '''CREATE TABLE IF NOT EXISTS Degustaciones (
