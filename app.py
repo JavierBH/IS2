@@ -503,7 +503,7 @@ def enviar_solicitud():
         cursor.execute('''INSERT INTO Solicitudes ('Nombre_Usuario','Nombre_Amigo','Validacion') VALUES (?,?,?)'''
             ,(session["username"], nombre_amigo, 0))
         Id = cursor.lastrowid
-        cursor.execute("SELECT * FROM Solicitudes WHERE id = ?", Id))
+        cursor.execute("SELECT * FROM Solicitudes WHERE id = ?", Id)
         for row1 in cursor:
             solicitado = row[0]
         cursor.execute("SELECT Amigos FROM Users WHERE usuario = ?", session["username"])
