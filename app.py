@@ -29,12 +29,12 @@ format_end = ["com","es"]
 def home():
     conexion = conectar_db()
     cursor = conexion.cursor()
-    cursor.execute("SELECT nombre,email,fecha,foto,nacionalidad,introduccion FROM Users WHERE usuario=?",(session['username'],))
+    cursor.execute("SELECT nombre,email,fecha,foto,nacionalidad,introduccion,genero FROM Users WHERE usuario=?",(session['username'],))
     rows = cursor.fetchone()
     cursor.close()
     conexion.close()
     image_file = url_for('static', filename=rows[3])
-    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'])
+    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],genero=rows[6],usuario=session['username'])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -506,7 +506,7 @@ def enviar_solicitud():
         #return render_template("enviar_solicitud.html")
     #return render_template("enviar_solicitud.html")
 
-@app.route("/morstrar_solicitud", methods=['GET','POST'])
+@app.route("/mostrar_solicitud", methods=['GET','POST'])
 def mostrar_solicitud():
     conexion = conectar_db()
     cursor = conexion.cursor()
