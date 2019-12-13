@@ -510,6 +510,17 @@ def enviar_solicitud():
         nombre_amigo = request.form['nombreAmigo']
         conn = conectar_db()
         cursor = conn.cursor()
+        cursor.execute("SELECT Amigos FROM Users WHERE usuario = ?", (session["username"],))
+        amigos = None
+        for row in cursor:
+            am = row[0]
+            amigos = str(am)
+        cursor.execute("SELECT id FROM Users WHERE usuario = ?", (nombre_amigo,))
+        for row in cursor:
+            Id = row[0]
+        if amigos is not None :
+            if  (str(Id) in amigos):
+                return "Ya son amigos"
         cursor.execute('''INSERT INTO Solicitudes ('Nombre_Usuario','Nombre_Amigo','Validacion') VALUES (?,?,?)'''
             ,(session["username"], nombre_amigo, 0))
         conn.commit()
@@ -561,13 +572,12 @@ def eliminar_solicitud():
         id_solicitud = request.form['idAmigo']
         conn = conectar_db()
         cursor = conn.cursor()
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM Solicitudes WHERE id=?",(id_solicitud))
+        cursor.execute("DELETE FROM Solicitudes WHERE id=?",(id_solicitud,))
         conn.commit()
         cursor.close()
         conn.close()
-        return render_template("eliminar_solicitud.html")
-    return render_template("eliminar_solicitud.html")
+        return "eliminado"
+    return "elimanado"
 
 
 #Devuelve elementos en array de una lista de bbdd
