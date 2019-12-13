@@ -562,13 +562,12 @@ def eliminar_solicitud():
         id_solicitud = request.form['idAmigo']
         conn = conectar_db()
         cursor = conn.cursor()
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM Solicitudes WHERE id=?",(id_solicitud))
+        cursor.execute("DELETE FROM Solicitudes WHERE id=?",(id_solicitud,))
         conn.commit()
         cursor.close()
         conn.close()
-        return render_template("eliminar_solicitud.html")
-    return render_template("eliminar_solicitud.html")
+        return "eliminado"
+    return "elimanado"
 
 
 #Devuelve elementos en array de una lista de bbdd
