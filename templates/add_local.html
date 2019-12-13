@@ -14,7 +14,7 @@
     </head>
 
     <body>
-        <form method="post" action="{{ url_for('local') }}">
+        <form method="post" action="{{ url_for('local') }}" enctype="multipart/form-data">
                 {{render_messages_error(messages)}}
             <div class="container">
                 <h1>Registrar local</h1>
@@ -28,6 +28,9 @@
             
                 <label><b>Reseña</b></label>
                 <input type="text" placeholder="Reseña" name="reseña" required>
+
+                <label ><b>Foto de perfil</b></label>
+                <input type="file" name="file">
 
                 <hr>
                 <button type="submit" class="registerbtn" value="Submit">Registrar</button>
