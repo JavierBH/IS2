@@ -497,15 +497,6 @@ def enviar_solicitud():
         cursor = conn.cursor()
         cursor.execute('''INSERT INTO Solicitudes ('Nombre_Usuario','Nombre_Amigo','Validacion') VALUES (?,?,?)'''
             ,(session["username"], nombre_amigo, 0))
-        Id = cursor.lastrowid
-        cursor.execute("SELECT Solicitudes FROM Users WHERE usuario = ?", (session["username"],))
-        for row in cursor:
-            solicitudes_User = row[0]
-        if solicitudes_User is None:
-            cursor.execute("UPDATE Users SET Solicitudes=? WHERE usuario=?",(str(Id)+" -> "+str(datetime.datetime.now())+", ",session["username"]))
-        else:
-            addSolicitud = addLista(str(Id)+" -> "+str(datetime.datetime.now())+", ",solicitudes_User)
-            cursor.execute("UPDATE Users SET Solicitudes=? WHERE usuario=?",(addSolicitud,session["username"]))
         conn.commit()
         cursor.close()
         conn.close()
