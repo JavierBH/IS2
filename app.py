@@ -492,19 +492,27 @@ def local():
 
 @app.route("/enviar_solicitud", methods=['GET','POST'])
 def enviar_solicitud():
-    #if request.method == 'POST': 
-        #nombre_amigo = request.form['nombreAmigo']
-        nombre_amigo = "amigoooS"
+    if request.method == 'POST': 
+        nombre_amigo = request.form['nombreAmigo']
         conn = conectar_db()
         cursor = conn.cursor()
         cursor.execute('''INSERT INTO Solicitudes ('Nombre_Usuario','Nombre_Amigo','Validacion') VALUES (?,?,?)'''
             ,(session["username"], nombre_amigo, 0))
+        Id = cursor.lastrowid
+        cursor.execute("SELECT Solicitudes FROM Users WHERE usuario = ?", (session["username"],))
+        for row in cursor:
+            solicitudes_User = row[0]
+        if solicitudes_User is None:
+            cursor.execute("UPDATE Users SET Solicitudes=? WHERE usuario=?",(str(Id)+" -> "+str(datetime.datetime.now())+", ",session["username"]))
+        else:
+            addSolicitud = addLista(str(Id)+" -> "+str(datetime.datetime.now())+", ",solicitudes_User)
+            cursor.execute("UPDATE Users SET Solicitudes=? WHERE usuario=?",(addSolicitud,session["username"]))
         conn.commit()
         cursor.close()
         conn.close()
         return "enviado"
-        #return render_template("enviar_solicitud.html")
-    #return render_template("enviar_solicitud.html")
+        return render_template("enviar_solicitud.html")
+    return render_template("enviar_solicitud.html")
 
 @app.route("/mostrar_solicitud", methods=['GET','POST'])
 def mostrar_solicitud():
@@ -517,7 +525,7 @@ def mostrar_solicitud():
         lista.append(row[1])
     cursor.close()
     conexion.close()
-    return render_template("mostrar_solicitud.html",result)
+    return render_template("mostrar_solicitud.html",r = result)
 
 
 @app.route("/aceptar_solicitud", methods=['GET','POST'])
@@ -588,7 +596,8 @@ def conectar_db():
                                 verificado INTEGER NOT NULL,
                                 Amigos TEXT,
                                 Degustaciones TEXT,
-                                Locales TEXT);'''
+                                Locales TEXT,
+                                Solicitudes TEXT);'''
     cursor.execute(sqlite_create_users_table_query)
     #CREA TABLA DEGUSTACIONES
     sqlite_create_degustaciones_table_query = '''CREATE TABLE IF NOT EXISTS Degustaciones (
