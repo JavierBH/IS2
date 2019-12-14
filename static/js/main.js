@@ -137,11 +137,6 @@ function create_request_box(index){
   node.setAttribute("id","request_box_id" + index);
   node.setAttribute("class","request_box");
   
-  //Se crea la imagen
-  var img = document.createElement("img");
-  img.setAttribute("class","img_request_box");
-  img.setAttribute("src", "images/hydrangeas.jpg");
-
   //Se crea el titulo del usuario
   var h2 = document.createElement("H4");
   var t = document.createTextNode("Usuario 1");     // Create a text node
@@ -189,7 +184,6 @@ f_eliminar.appendChild(butt_eliminar);
 
   var hr = document.createElement("HR");
   //Se añaden los elementos al activity_box div
-  node.appendChild(img);
   node.appendChild(h2);
   node.appendChild(f_aceptar);
   node.appendChild(butt_ver);

@@ -340,21 +340,9 @@
 /*---------------- Request Box ------------------*/
 
 .request_box form {
-  color:white;
-  padding: 16px 20px;
-  margin: 10px 10px 0px 10px;
-  border: none;
-  cursor: pointer;
   opacity: 0.9;
   flex-grow: 1;
   width: 30%;
-}
-
-form button{
-  color:white;
-  padding: 16px 20px;
-  margin: 10px 10px 0px 10px;
-
 }
 
 .butt_aceptar{

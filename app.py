@@ -226,10 +226,13 @@ def search():
                 locales = list()
                 fotos = list()
                 for x in rows:
+                    print(x[0])
                     locales.append(x[0])
                     cursor.execute("SELECT Foto FROM Locales WHERE Nombre = ?",(x[0],))
                     raws = cursor.fetchone()
+                    print(raws)
                     fotos.append(raws[0])
+                print(fotos)
                 return render_template("ver_locales_degus.html",locales=locales,fotos=fotos)
 
         elif var_filter == "Locales":
@@ -263,14 +266,15 @@ def search():
 @app.route("/ver_degus",methods=['GET','POST'])
 def ver_degus():
     if request.method == 'GET':
-        local = request.args.get("local_var")
+        local = request.args.get("local_button")
         degust = request.args.get("degust_var")
         option_var = request.args.get("option_var")
         conexion = conectar_db()
         cursor = conexion.cursor()
         cursor.execute("SELECT Nombre,Foto,Descripcion,Tipo,Region,Tamaño,Calificacion_Gusto,Calificacion FROM Degustaciones WHERE Local = ?",(local,))
         rows = cursor.fetchone()
-        return render_template("ver_degustacion.html",name=rows[0],foto=rows[1],descr=rows[2],tipo=rows[3],region=rows[4],tamaño=rows[5],calif_gusto=rows[6],calif=rows[7],option=option_var)
+        return render_template("ver_degustacion.html",name=rows[0],foto=rows[1],descr=rows[2],tipo=rows[3],region=rows[4],tamaño=rows[5],calif_gusto=rows[6],calif=rows[7],option=option_var,local_name=local)
+
 
 @app.route("/degustacion", methods=['GET','POST'])
 def add_degustacion():
@@ -486,7 +490,7 @@ def local():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         conexion = conectar_db()
         cursor = conexion.cursor()
-        cursor.execute('''INSERT INTO Locales ('Nombre','Direccion','Reseña','Degustaciones','Foto) VALUES (?,?,?,?)'''
+        cursor.execute('''INSERT INTO Locales ('Nombre','Direccion','Reseña','Degustaciones','Foto') VALUES (?,?,?,?,?)'''
         ,(local, direccion, reseña, degustaciones,filename))
         Id = cursor.lastrowid
         cursor.execute("SELECT Locales FROM Users WHERE usuario = ?", (session["username"],))

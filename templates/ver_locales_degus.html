@@ -18,12 +18,14 @@
 <body>
     <h1>LOCALES QUE TIENEN ESTA DEGUSTACIÓN</h1>
     <hr>
+    <form method="get" action="{{ url_for('ver_degus') }}">
     <div id="local_box_id">
         <script>
             var locales =' "{{ locales | tojson | safe }}" ' ;
-            create_boxes(locales);
+            var fotos =' "{{ fotos | tojson | safe }}" ' ;
+            create_boxes(locales,fotos);
         </script>
-
+    </form>
     </div>
     <hr>
     <form action="{{ url_for('home') }}">
