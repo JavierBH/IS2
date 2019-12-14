@@ -31,13 +31,9 @@ def home():
     cursor = conexion.cursor()
     cursor.execute("SELECT nombre,email,fecha,foto,nacionalidad,introduccion,genero FROM Users WHERE usuario=?",(session['username'],))
     rows = cursor.fetchone()
-    cursor.close()
-    conexion.close()
     image_file=None
     if rows[3] is not None:
         image_file = url_for('static', filename=rows[3])
-    conexion = conectar_db()
-    cursor = conexion.cursor()
     cursor.execute("SELECT Nombre_Amigo, id FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
     cols = cursor.fetchone()
     cursor.close()
