@@ -19,25 +19,31 @@
     <h1>INFORMACIÓN DE LA DEGUSTACIÓN</h1>
     <hr>
     <label ><b>Imagen de la degustacion: </b></label>
+    {{ foto }} 
+    <br>
+    <hr>
+    <label ><b>Nombre de la degustacion: </b></label>
     {{ name }} 
     <br>
     <hr>
-    <label for="email"><b>Nombre de la degustacion: </b></label>
-    {{ name }} 
-    <br>
-    <hr>
-    <label for="email"><b>Valoración: </b></label>
+    <label ><b>Valoración: </b></label>
     {{ val }} 
     <br>
-    <label for="email"><b>Valoración del gusto: </b></label>
-    {{ val }} 
-    <br>
-    <label for="email"><b>Local: </b></label>
-    {{ loc }} 
+    <hr>
+    <label ><b>Calificación del gusto: </b></label>
+    {{ calif_gusto }} 
     <br>
     <hr>
-    <label for="email"><b>RESEÑA: </b></label> <br>
-   <p>{{ resena }}</p>
+    <label ><b>Region: </b></label>
+    {{ region }} 
+    <br>
+    <hr>
+    <label ><b>Local: </b></label>
+    {{ local_name }} 
+    <br>
+    <hr>
+    <label ><b>RESEÑA: </b></label> <br>
+    {{ descr }}
     <hr>
     <form action="{{ url_for('home') }}">
     <button class="home_butt">Home</button>
