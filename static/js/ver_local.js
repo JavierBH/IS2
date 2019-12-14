@@ -1,5 +1,5 @@
 
-function degustaciones_window(img_url,name,ver){
+function degustaciones_window(img_url,name,ver,local_name){
     //Se crea un div donde se colocan los elementos de la degustacion
     var card = document.createElement("DIV");
     card.setAttribute("class","content");
@@ -10,10 +10,17 @@ function degustaciones_window(img_url,name,ver){
     var text = document.createTextNode(name);
     var H4 = document.createElement("H4");
     var hr = document.createElement("HR");
+
+    var button = document.createElement("button");
+    button.innerHTML="Ver Más";
+    button.setAttribute("name","local_button");
+    button.setAttribute("value",local_name.split('"')[2]);
+
     H4.appendChild(text);
     card.appendChild(img);
     card.appendChild(hr);
     card.appendChild(H4);
+    card.appendChild(button);
     if(ver!=1){
     document.getElementById("row_id").appendChild(card);
   }
@@ -32,9 +39,9 @@ function create_boxes(arr,fotos){
   }
     for(var i = 0; i<n_boxes;i++){
       if(i>degustaciones.length-1){
-        degustaciones_window("https://66.media.tumblr.com/21ceabba01c5c84f86331f6cb9fa98a3/tumblr_o4zjfrrpFJ1rlwpsao8_500.png","CACA",1);
+        degustaciones_window("https://66.media.tumblr.com/21ceabba01c5c84f86331f6cb9fa98a3/tumblr_o4zjfrrpFJ1rlwpsao8_500.png","CACA",1,"PEDO");
       } else{
-        degustaciones_window("static/"+ fotos_arr[i],degustaciones[i],0)
+        degustaciones_window("static/"+ fotos_arr[i],degustaciones[i],0,local_name)
       }
     }
   }
