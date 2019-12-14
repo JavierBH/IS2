@@ -16,7 +16,7 @@ from dateutil.relativedelta import relativedelta
 MY_ADDRESS = "proyectois2upm@gmail.com"
 script_dir = path.dirname(path.abspath(__file__))
 PASSWORD = "softwareupm"
-UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir+"/static/")
+UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir+"/static/img")
 print(UPLOAD_FOLDER)
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
@@ -528,6 +528,15 @@ def enviar_solicitud():
         conn.close()
         flash("Solicitud enviada", "success")
     return redirect(url_for("home"))
+
+@app.route("/loc_megusta", methods=['GET','POST'])
+def loc_megusta():
+    if request.method == 'GET':
+        conn = conectar_db()
+        cursor.execute("SELECT Loc_Gusta FROM Users WHERE usuario = ?", (session["username"],))
+        for row in cursor:
+            loc = row[0]
+        if 
 
 @app.route("/mostrar_solicitud", methods=['GET','POST'])
 def mostrar_solicitud():
