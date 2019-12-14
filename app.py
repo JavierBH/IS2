@@ -36,7 +36,13 @@ def home():
     image_file=None
     if rows[3] is not None:
         image_file = url_for('static', filename=rows[3])
-    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6])
+    conexion = conectar_db()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT Nombre_Amigo, id FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
+    cols = cursor.fetchone()
+    cursor.close()
+    conexion.close()
+    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6],amigosSolicitud=cols[0],idSolicitud=cols[1])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -622,7 +628,44 @@ def eliminar_solicitud():
         return "eliminado"
     return "elimanado"
 
-
+@app.route("/actividad_reciente", methods=['GET','POST'])
+def actividad_reciente():
+    actividades = None
+    conn = conectar_db()
+    cursor = conn.cursor()
+    print("entra")
+    amigos = list()
+    cursor.execute("SELECT Amigos FROM Users WHERE usuario = ?", (session["username"],))
+    for row in cursor:
+        amig = row[0]
+    list_amigos = getLista(amig)
+    for x in list_amigos:
+        print("dentro del for x" + str(x))
+        amigos.append(x)
+    for y in amigos:
+        print("dentro del for y" + str(y))
+        cursor.execute("SELECT Locales FROM Users WHERE usuario = ?", (y,))
+        print("despues de select locales")
+        rows = cursor.fetchone()
+        print("fetchone" + str(rows))
+        for row2 in cursor:
+            print("row2 de locales" + str(row[0]))
+            if actividades is None:
+                actividades = row2[0]
+            else:
+                actividades = "," + row2[0]
+        cursor.execute("SELECT Degustaciones FROM Users WHERE usuario = ?", (y,))
+        for row3 in cursor:
+            actividades = "," + row3[0]
+        cursor.execute("SELECT Deg_Gusta FROM Users WHERE usuario = ?", (y,))
+        for row4 in cursor:
+            actividades = "," + row4[0]
+        cursor.execute("SELECT Loc_Gusta FROM Users WHERE usuario = ?", (y,))
+        for row5 in cursor:
+            actividades = "," + row5[0]
+    print("actividades" + str(actividades))
+    #return "actividad reciente"
+    return "actividades recientes"
 
 #Devuelve elementos en array de una lista de bbdd
 def getLista(bbddText):
