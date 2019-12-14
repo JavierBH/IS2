@@ -16,7 +16,7 @@ from dateutil.relativedelta import relativedelta
 MY_ADDRESS = "proyectois2upm@gmail.com"
 script_dir = path.dirname(path.abspath(__file__))
 PASSWORD = "softwareupm"
-UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir+"/static/img")
+UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir)
 print(UPLOAD_FOLDER)
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
@@ -595,9 +595,8 @@ def mostrar_solicitud():
 
 
 @app.route("/aceptar_solicitud", methods=['GET','POST'])
-def aceptar_solicitud():
+def aceptar_solicitud(id_solicitud):
     if request.method == 'POST': 
-        id_solicitud = request.form['idAmigo']
         conn = conectar_db()
         cursor = conn.cursor()
         cursor.execute("UPDATE Solicitudes SET Validacion=? WHERE id=?",(1,id_solicitud))
@@ -613,8 +612,8 @@ def aceptar_solicitud():
             conn.commit()
         cursor.close()
         conn.close()
-        return render_template("aceptar_solicitud.html")
-    return render_template("aceptar_solicitud.html")
+        return render_template("home.html")
+    return render_template("home.html")
 
 @app.route("/eliminar_solicitud", methods=['GET','POST'])
 def eliminar_solicitud():

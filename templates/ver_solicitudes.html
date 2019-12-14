@@ -14,14 +14,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="{{ url_for('static', filename='js/ver_solicitudes.js') }}"></script>
 </head>
 
 <body>
-    <form method="post" action="{{ url_for('aceptar_solicitud') }}" >
-        <form method="post" action="{{ url_for('eliminar_solicitud') }}" >
+    <form method="post" action="{{ url_for('aceptar_solicitud') }}">
+        <form method="get" action="{{ url_for('ver_degus') }}">                        
+            <form method="post" action="{{ url_for('eliminar_solicitud') }}">
+                
             <div class="info_menu" id="solicitudes">
-        
+                <script>
+                    var nombre_amigos =' "{{ nombresAmigos | tojson | safe }}" ' ;
+                    var idsAmigos =' "{{ idsAmigos | tojson | safe }}" ' ;
+                    create_solicitudes_box(nombre_amigos,idsAmigos);
+                </script>
             </div>
+            </form>
         </form>
     </form>
-</body>
+            </body>
