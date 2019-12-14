@@ -529,6 +529,41 @@ def enviar_solicitud():
         flash("Solicitud enviada", "success")
     return redirect(url_for("home"))
 
+@app.route("/loc_megusta", methods=['GET','POST'])
+def loc_megusta():
+    if request.method == 'GET':
+        conn = conectar_db()
+        cursor.execute("SELECT Loc_Gusta FROM Users WHERE usuario = ?", (session["username"],))
+        for row in cursor:
+            loc = row[0]
+        if loc is None:
+            cursor.execute
+            cursor.execute("UPDATE Users SET Loc_Gusta=? WHERE usuario=?",(str(loc)+" -> "+str(datetime.datetime.now())+", ",session["username"]))
+        else:
+            addLoc = addLista(str(loc)+" -> "+str(datetime.datetime.now())+", ",loc)
+            cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(addLoc,session["username"]))
+        conexion.commit()
+        cursor.close()
+        conexion.close()
+    return redirect(url_for("home"))
+
+@app.route("/deg_megusta", methods=['GET','POST'])
+def deg_megusta():
+    if request.method == 'GET':
+        conn = conectar_db()
+        cursor.execute("SELECT Deg_Gusta FROM Users WHERE usuario = ?", (session["username"],))
+        for row in cursor:
+            deg = row[0]
+        if deg is None:
+            cursor.execute
+            cursor.execute("UPDATE Users SET Deg_Gusta=? WHERE usuario=?",(str(deg)+" -> "+str(datetime.datetime.now())+", ",session["username"]))
+        else:
+            addDeg = addLista(str(deg)+" -> "+str(datetime.datetime.now())+", ",deg)
+            cursor.execute("UPDATE Users SET Deg_Gusta=? WHERE usuario=?",(addDeg,session["username"]))
+        conexion.commit()
+        cursor.close()
+        conexion.close()
+    return redirect(url_for("home"))
 
 
 @app.route("/mostrar_solicitud", methods=['GET','POST'])
