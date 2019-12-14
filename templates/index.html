@@ -192,9 +192,7 @@
     <form method="post" action="{{ url_for('aceptar_solicitud') }}" >
     <form method="post" action="{{ url_for('eliminar_solicitud') }}" >
     <script>
-      var nombre_amigos =' "{{ nombre_amigos | tojson | safe }}" ' ;
-      var ids_amigos =' "{{ ids_amigos | tojson | safe }}" ' ;
-      create_solicitudes_box(nombre_amigos,ids_amigos);
+   
     </script>
 
     </form>

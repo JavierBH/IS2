@@ -36,13 +36,14 @@ def home():
         image_file = url_for('static', filename=rows[3])
     cursor.close()
     conexion.close()
-    conexion2 = conectar_db()
-    cursor2 = conexion2.cursor()
-    cursor2.execute("SELECT Nombre_Amigo, id FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
-    cols = cursor2.fetchone()
-    cursor2.close()
-    conexion2.close()
-    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6],amigosSolicitud=cols[0],idSolicitud=cols[1])
+#    conexion2 = conectar_db()
+#    cursor2 = conexion2.cursor()
+#    cursor2.execute("SELECT Nombre_Amigo, id FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
+#   cols = cursor2.fetchone()
+#    cursor2.close()
+#    conexion2.close()
+    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6])
+    #,amigosSolicitud=cols[0],idSolicitud=cols[1])
 
 def allowed_file(filename):
     return '.' in filename and \
