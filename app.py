@@ -479,7 +479,7 @@ def local():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         conexion = conectar_db()
         cursor = conexion.cursor()
-        cursor.execute('''INSERT INTO Locales ('Nombre','Direccion','Reseña','Degustaciones','Foto) VALUES (?,?,?,?)'''
+        cursor.execute('''INSERT INTO Locales ('Nombre','Direccion','Reseña','Degustaciones','Foto') VALUES (?,?,?,?,?)'''
         ,(local, direccion, reseña, degustaciones,filename))
         Id = cursor.lastrowid
         cursor.execute("SELECT Locales FROM Users WHERE usuario = ?", (session["username"],))
