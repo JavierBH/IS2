@@ -17,6 +17,7 @@
 
 </head>
 <body>
+<form method="get" action="{{ url_for('ver_degus') }}">
     <div>
     <h1>INFORMACIÓN DEL LOCAL</h1>
   
@@ -31,7 +32,7 @@
     <br>
     <hr>
     <label for="email"><b>RESEÑA: </b></label> <br>
-   <p>{{ resena }}</p>
+     <p>{{ resena }}</p>
     <br>
     <hr>
     <h2> Degustaciones asociadas al local: </h2>
@@ -42,11 +43,13 @@
             <script>
             var degustaciones =' "{{ degustaciones | tojson | safe }}" ' ;
             var fotos =' "{{ fotos | tojson | safe }}" ' ;
-            create_boxes(degustaciones,fotos);
+            var local_name = ' "{{ name | tojson | safe }}" ' ;
+            create_boxes(degustaciones,fotos,local_name);
             </script>
         </div>
     </div>
     <hr>
+</form>
     <form action="{{ url_for('home') }}">
     <button class="home_butt">Home</button>
 </form>

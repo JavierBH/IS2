@@ -45,6 +45,9 @@
     <label ><b>RESEÑA: </b></label> <br>
     {{ descr }}
     <hr>
+    <form get="get"action="{{ url_for('deg_megusta') }}">
+    <button class="home_butt">Me gusta</button>
+</form>
     <form action="{{ url_for('home') }}">
     <button class="home_butt">Home</button>
 </form>

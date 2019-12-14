@@ -542,7 +542,8 @@ def enviar_solicitud():
 @app.route("/loc_megusta", methods=['GET','POST'])
 def loc_megusta():
     if request.method == 'GET':
-        conn = conectar_db()
+        conexion = conectar_db()
+        cursor = conexion.cursor()
         cursor.execute("SELECT Loc_Gusta FROM Users WHERE usuario = ?", (session["username"],))
         for row in cursor:
             loc = row[0]
@@ -560,7 +561,8 @@ def loc_megusta():
 @app.route("/deg_megusta", methods=['GET','POST'])
 def deg_megusta():
     if request.method == 'GET':
-        conn = conectar_db()
+        conexion = conectar_db()
+        cursor = conexion.cursor()
         cursor.execute("SELECT Deg_Gusta FROM Users WHERE usuario = ?", (session["username"],))
         for row in cursor:
             deg = row[0]
