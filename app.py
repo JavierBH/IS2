@@ -543,16 +543,20 @@ def enviar_solicitud():
 @app.route("/loc_megusta", methods=['GET','POST'])
 def loc_megusta():
     if request.method == 'GET':
+        nombre_loc = request.form['nombreLoc']
         conexion = conectar_db()
         cursor = conexion.cursor()
         cursor.execute("SELECT Loc_Gusta FROM Users WHERE usuario = ?", (session["username"],))
         for row in cursor:
             loc = row[0]
+            loc_str = str(loc)
+        if loc_str is not None :
+            if  (str(nombre_loc) in loc_str):
+                return "Ya está nla lista de me gusta"
         if loc is None:
-            cursor.execute
-            cursor.execute("UPDATE Users SET Loc_Gusta=? WHERE usuario=?",(str(loc)+" -> "+str(datetime.datetime.now())+", ",session["username"]))
+            cursor.execute("UPDATE Users SET Loc_Gusta=? WHERE usuario=?",(str(nombre_loc)+" -> "+str(datetime.datetime.now())+", ",session["username"]))
         else:
-            addLoc = addLista(str(loc)+" -> "+str(datetime.datetime.now())+", ",loc)
+            addLoc = addLista(str(nombre_loc)+" -> "+str(datetime.datetime.now())+", ",loc)
             cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(addLoc,session["username"]))
         conexion.commit()
         cursor.close()
