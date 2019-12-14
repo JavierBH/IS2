@@ -16,7 +16,7 @@ from dateutil.relativedelta import relativedelta
 MY_ADDRESS = "proyectois2upm@gmail.com"
 script_dir = path.dirname(path.abspath(__file__))
 PASSWORD = "softwareupm"
-UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir+"/static/img")
+UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir+"/static/")
 print(UPLOAD_FOLDER)
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
