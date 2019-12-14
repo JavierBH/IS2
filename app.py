@@ -575,14 +575,16 @@ def mostrar_solicitud():
     if request.method == 'POST': 
         conexion = conectar_db()
         cursor = conexion.cursor()
-        result = list()
+        result = ""
         cursor.execute("SELECT Nombre_Amigo, id FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
         for row in cursor:
-            lista.append(row[0])
-            lista.append(row[1])
+            if result == "":
+                result = str(row[0]) + "," + str(row[1]) + ","
+            else:
+                result = result + str(row[0]) + "," + str(row[1])
         cursor.close()
         conexion.close()
-    return render_template("mostrar_solicitud.html",r = result)
+    return render_template("mostrar_solicitud.html",res = result)
 
 
 @app.route("/aceptar_solicitud", methods=['GET','POST'])
@@ -620,36 +622,7 @@ def eliminar_solicitud():
         return "eliminado"
     return "elimanado"
 
-@app.route("/actividad_reciente", methods=['GET','POST'])
-def actividad_reciente():
-    actividades = None
-    conn = conectar_db()
-    cursor = conn.cursor()
-    print("entra")
-    cursor.execute("SELECT Amigos FROM Users WHERE usuario = ?", (session["username"],))
-    for row in cursor:
-        amigos = row[0]
-    list_amigos = getLista(amigos)
-    for x in list_amigos:
-        cursor.execute("SELECT Locales FROM Users WHERE usuario = ?", (x,))
-        for row in cursor:
-            print(str(row[0]))
-            if actividades is None:
-                actividades = row[0]
-            else:
-                actividades = "," + row[0]
-        cursor.execute("SELECT Degustaciones FROM Users WHERE usuario = ?", (x,))
-        for row in cursor:
-            actividades = "," + row[0]
-        cursor.execute("SELECT Deg_Gusta FROM Users WHERE usuario = ?", (x,))
-        for row in cursor:
-            actividades = "," + row[0]
-        cursor.execute("SELECT Loc_Gusta FROM Users WHERE usuario = ?", (x,))
-        for row in cursor:
-            actividades = "," + row[0]
-    print(str(actividades))
-    #return "actividad reciente"
-    return "actividades recientes"
+
 
 #Devuelve elementos en array de una lista de bbdd
 def getLista(bbddText):
