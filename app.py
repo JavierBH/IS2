@@ -529,14 +529,7 @@ def enviar_solicitud():
         flash("Solicitud enviada", "success")
     return redirect(url_for("home"))
 
-@app.route("/loc_megusta", methods=['GET','POST'])
-def loc_megusta():
-    if request.method == 'GET':
-        conn = conectar_db()
-        cursor.execute("SELECT Loc_Gusta FROM Users WHERE usuario = ?", (session["username"],))
-        for row in cursor:
-            loc = row[0]
-        if 
+
 
 @app.route("/mostrar_solicitud", methods=['GET','POST'])
 def mostrar_solicitud():
