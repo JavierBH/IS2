@@ -584,16 +584,14 @@ def mostrar_solicitud():
     if request.method == 'POST': 
         conexion = conectar_db()
         cursor = conexion.cursor()
-        result = ""
         cursor.execute("SELECT Nombre_Amigo, id FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
-        for row in cursor:
-            if result == "":
-                result = str(row[0]) + "," + str(row[1]) + ","
-            else:
-                result = result + str(row[0]) + "," + str(row[1])
+        row = cursor.fetchone()
         cursor.close()
         conexion.close()
-    return render_template("mostrar_solicitud.html",res = result)
+        if row is not None:
+            return render_template("ver_solicitudes.html",nombresAmigos=row[0],idsAmigos=row[1])
+        flash("No hay solicitudes","error")
+        return redirect(url_for("home"))
 
 
 @app.route("/aceptar_solicitud", methods=['GET','POST'])
