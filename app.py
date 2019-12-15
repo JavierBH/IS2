@@ -33,13 +33,13 @@ def home():
     image_file=None
     if rows[3] is not None:
         image_file = url_for('static', filename=rows[3])
-    result = actividad_reciente()
+    #result = actividad_reciente()
     cols = list()
     cols.append(1)
     cols.append(2)
-    if result is None:
-        return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6],nombre_amigos=cols[0],ids_amigos=cols[1],users_act=None,actividades=None)
-    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6],nombre_amigos=cols[0],ids_amigos=cols[1],users_act=result[0],actividades=result[1])
+    #if result is None:
+        #return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6],nombre_amigos=cols[0],ids_amigos=cols[1],users_act=None,actividades=None)
+    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6],nombre_amigos=cols[0],ids_amigos=cols[1])#,users_act=result[0],actividades=result[1])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -597,8 +597,8 @@ def op_solicitudes():
         cursor = conexion.cursor()
         cursor.execute("SELECT Nombre_Usuario FROM Solicitudes WHERE id=?",(operacion,))
         emisor = cursor.fetchone()
-        print("Emisor: " + str(emisor))
-        cursor.execute("SELECT nombre,email,fecha,foto,nacionalidad,introduccion,genero FROM Users WHERE usuario=?",(emisor,))
+        print("Emisor: " + str(emisor[0]))
+        cursor.execute("SELECT nombre,email,fecha,foto,nacionalidad,introduccion,genero FROM Users WHERE usuario=?",(str(emisor[0]),))
         rows = cursor.fetchone()
         image_file=None
         if rows[3] is not None:
@@ -624,15 +624,27 @@ def op_solicitudes():
         cursor = conn.cursor()
         cursor.execute("UPDATE Solicitudes SET Validacion=? WHERE id=?",(1,id_solicitud))
         conn.commit()
+        cursor.execute("SELECT Nombre_Usuario FROM Solicitudes WHERE id=?",(id_solicitud,))
+        emisor = cursor.fetchone()
+        cursor.execute("SELECT Amigos FROM Users WHERE usuario = ?", (str(emisor[0]),))
+        for row in cursor:
+            solicitud_User = row[0]
+        if solicitud_User is None:
+            cursor.execute("UPDATE Users SET Amigos=? WHERE usuario=?",(str(session["username"]),str(emisor[0])))
+            conn.commit()
+        else:
+            addAmigo = addLista(str(session["username"]),solicitud_User)
+            cursor.execute("UPDATE Users SET Amigos=? WHERE usuario=?",(addAmigo,str(emisor[0])))
+            conn.commit()
         cursor.execute("SELECT Amigos FROM Users WHERE usuario = ?", (session["username"],))
         for row in cursor:
             solicitud_User = row[0]
         if solicitud_User is None:
-            cursor.execute("UPDATE Users SET Amigos=? WHERE usuario=?",(str(id_solicitud),session["username"]))
+            cursor.execute("UPDATE Users SET Amigos=? WHERE usuario=?",(str(emisor[0]),session["username"]))
             cursor.execute("DELETE FROM Solicitudes WHERE id=?",(id_solicitud,))
             conn.commit()
         else:
-            addAmigo = addLista(id_solicitud,solicitud_User)
+            addAmigo = addLista(str(emisor[0]),solicitud_User)
             cursor.execute("UPDATE Users SET Amigos=? WHERE usuario=?",(addAmigo,session["username"]))
             cursor.execute("DELETE FROM Solicitudes WHERE id=?",(id_solicitud,))
             conn.commit()
@@ -660,7 +672,7 @@ def mostrar_solicitud():
 
 
 #@app.route("/actividad_reciente", methods=['GET','POST'])
-def actividad_reciente():
+'''def actividad_reciente():
     conexion=conectar_db()
     cursor = conexion.cursor()
     cursor.execute("SELECT Amigos FROM Users WHERE usuario=?",(session['username'],))
@@ -763,7 +775,7 @@ def actividad_reciente():
     result.append(actividad)
     cursor.close()
     conexion.close()
-    return result
+    return result'''
     
     
 
