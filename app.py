@@ -36,13 +36,17 @@ def home():
     image_file=None
     if rows[3] is not None:
         image_file = url_for('static', filename=rows[3])
-    conexion = conectar_db()
+    """conexion = conectar_db()
     cursor = conexion.cursor()
-    cursor.execute("SELECT Nombre_Amigo, id FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
+    cursor.execute("SELECT id,Nombre_Amigo FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
     cols = cursor.fetchone()
     cursor.close()
-    conexion.close()
-    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6],amigosSolicitud=cols[0],idSolicitud=cols[1])
+    conexion.close()"""
+    result = actividad_reciente
+    cols = list()
+    cols.append(1)
+    cols.append(2)
+    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6],nombre_amigos=cols[0],ids_amigos=cols[1],users_act=result[0],actividades=result[1])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -630,44 +634,124 @@ def eliminar_solicitud():
         return "eliminado"
     return "elimanado"
 
-@app.route("/actividad_reciente", methods=['GET','POST'])
+#@app.route("/actividad_reciente", methods=['GET','POST'])
 def actividad_reciente():
-    actividades = None
-    conn = conectar_db()
-    cursor = conn.cursor()
-    print("entra")
-    amigos = list()
-    cursor.execute("SELECT Amigos FROM Users WHERE usuario = ?", (session["username"],))
-    for row in cursor:
-        amig = row[0]
-    list_amigos = getLista(amig)
-    for x in list_amigos:
-        print("dentro del for x" + str(x))
-        amigos.append(x)
-    for y in amigos:
-        print("dentro del for y" + str(y))
-        cursor.execute("SELECT Locales FROM Users WHERE usuario = ?", (y,))
-        print("despues de select locales")
-        rows = cursor.fetchone()
-        print("fetchone" + str(rows))
-        for row2 in cursor:
-            print("row2 de locales" + str(row[0]))
-            if actividades is None:
-                actividades = row2[0]
+    conexion=conectar_db()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT Amigos FROM Users WHERE usuario=?",(session['username'],))
+    rows = cursor.fetchone()
+    ultimas_act=list()
+    x = 0
+    while x < len(rows[0]):
+        cursor.execute("SELECT Degustaciones,Locales,usuario FROM Users WHERE id=?",(rows[0][x],))
+        results = cursor.fetchone()
+        y2 = results[0].split(", ")
+        for sl in range(len(y2)-1):
+            sl2 = y2[sl].split(" -> ")
+            cursor.execute("SELECT Nombre FROM Degustaciones WHERE id=?",(sl2[0],))
+            r = cursor.fetchone()
+            tupla = (results[2],r[0],sl2[1])
+            if len(ultimas_act) < 6:
+                if len(ultimas_act) == 0:
+                    ultimas_act.append(tupla)
+                else:
+                    punt = len(ultimas_act)-1
+                    while punt >= 0:
+                        date1 = datetime.datetime.strptime(sl2[1], '%Y-%m-%d %H:%M:%S.%f')
+                        date2 = datetime.datetime.strptime(ultimas_act[punt][2], '%Y-%m-%d %H:%M:%S.%f')
+                        if date1 > date2:
+                            punt -= 1
+                        else:
+                            ultimas_act.insert(punt+1,tupla)
+                            break
+                    if punt == -1:
+                        ultimas_act.insert(0,tupla)
             else:
-                actividades = "," + row2[0]
-        cursor.execute("SELECT Degustaciones FROM Users WHERE usuario = ?", (y,))
-        for row3 in cursor:
-            actividades = "," + row3[0]
-        cursor.execute("SELECT Deg_Gusta FROM Users WHERE usuario = ?", (y,))
-        for row4 in cursor:
-            actividades = "," + row4[0]
-        cursor.execute("SELECT Loc_Gusta FROM Users WHERE usuario = ?", (y,))
-        for row5 in cursor:
-            actividades = "," + row5[0]
-    print("actividades" + str(actividades))
-    #return "actividad reciente"
-    return "actividades recientes"
+                #time_index = calcular_menor(ultimas_act)
+                punt = len(ultimas_act)-1
+                while punt >= 0:
+                    date1 = datetime.datetime.strptime(sl2[1], '%Y-%m-%d %H:%M:%S.%f')
+                    date2 = datetime.datetime.strptime(ultimas_act[punt][2], '%Y-%m-%d %H:%M:%S.%f')
+                    if date1 > date2:
+                        punt -= 1
+                    elif date2 > date1:
+                        if punt != len(ultimas_act)-1:
+                            ultimas_act.insert(punt+1,tupla)
+                            ultimas_act.pop(6)
+                        break
+                if punt == -1:
+                        ultimas_act.insert(0,tupla)
+                        ultimas_act.pop(6)
+
+        y2 = results[1].split(", ")
+        for sl in range(len(y2)-1):
+            sl2 = y2[sl].split(" -> ")
+            cursor.execute("SELECT Nombre FROM Locales WHERE id=?",(sl2[0],))
+            r = cursor.fetchone()
+            tupla = (results[2],r[0],sl2[1])
+            if len(ultimas_act) < 6:
+                if len(ultimas_act) == 0:
+                    ultimas_act.append(tupla)
+                else:
+                    punt = len(ultimas_act)-1
+                    while punt >= 0:
+                        date1 = datetime.datetime.strptime(sl2[1], '%Y-%m-%d %H:%M:%S.%f')
+                        date2 = datetime.datetime.strptime(ultimas_act[punt][2], '%Y-%m-%d %H:%M:%S.%f')
+                        if date1 > date2:
+                            punt -= 1
+                        else:
+                            ultimas_act.insert(punt+1,tupla)
+                            break
+                    if punt == -1:
+                        ultimas_act.insert(0,tupla)
+                    
+            else:
+                #time_index = calcular_menor(ultimas_act)
+                punt = len(ultimas_act)-1
+                while punt >= 0:
+                    date1 = datetime.datetime.strptime(sl2[1], '%Y-%m-%d %H:%M:%S.%f')
+                    date2 = datetime.datetime.strptime(ultimas_act[punt][2], '%Y-%m-%d %H:%M:%S.%f')
+                    if date1 > date2:
+                        punt -= 1
+                    elif date2 > date1:
+                        if punt != len(ultimas_act)-1:
+                            ultimas_act.insert(punt+1,tupla)
+                            ultimas_act.pop(6)
+                        break
+                if punt == -1:
+                        ultimas_act.insert(0,tupla)
+                        ultimas_act.pop(6)
+        x += 2
+    print(ultimas_act)
+    users=list()
+    actividad=list()
+    result = list()
+    for x in ultimas_act:
+        users.append(x[0])
+        actividad.append(x[1])
+    result.append(users)
+    result.append(actividad)
+    return result
+    
+    
+
+
+
+
+
+
+def calcular_menor(lista):
+    i = 0
+    result = 0
+    while i < len(lista):
+        if result == 0:
+            result = i
+        else:
+            if lista[i][2] < lista[result][2]:
+                result = i
+        i+=1
+    return result
+
 
 #Devuelve elementos en array de una lista de bbdd
 def getLista(bbddText):
