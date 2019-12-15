@@ -644,7 +644,7 @@ def mostrar_solicitud():
     if request.method == 'POST': 
         conexion = conectar_db()
         cursor = conexion.cursor()
-        cursor.execute("SELECT Nombre_Usuario, id FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
+        cursor.execute("SELECT Nombre_Usuario, id FROM Solicitudes WHERE Nombre_Amigo = ?", (session["username"],))
         row = cursor.fetchone()
         cursor.close()
         conexion.close()
