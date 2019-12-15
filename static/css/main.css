@@ -338,26 +338,6 @@
 }
 
 /*---------------- Request Box ------------------*/
-
-.request_box form {
-  opacity: 0.9;
-  flex-grow: 1;
-  width: 30%;
-}
-
-.butt_aceptar{
-  background-color: green;
-}
-
-.butt_ver{
-  background-color: orange;
-}
-
-
-.butt_eliminar{
-  background-color: red;
-}
-
 /*-------------- VER MAS BOTON --------------*/
 .ver_mas_perfil_butt{
   width: 100%;

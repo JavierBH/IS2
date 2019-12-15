@@ -12,15 +12,11 @@ function create_request_box(index,name,id){
   
     //Se crea el botone de aceptar
     var butt_aceptar = document.createElement("button");
-    butt_aceptar.setAttribute("id",this.id +"butt_aceptar_id");
+    butt_aceptar.setAttribute("id","butt_aceptar_id");
     butt_aceptar.setAttribute("class","butt_aceptar");
     butt_aceptar.setAttribute("name","aceptar_solicitud");
     butt_aceptar.setAttribute("value",id);
     butt_aceptar.innerHTML = "Aceptar";
-    butt_aceptar.addEventListener("click", function () {
-      window.location = "{{url_for('aceptar_solicitud, id=" +id+")";
-      closeButton(index);
-  });
   
   //Se crea el boton de ver
     var butt_ver = document.createElement("button");
@@ -34,11 +30,11 @@ function create_request_box(index,name,id){
     butt_eliminar.setAttribute("id",this.id +"butt_eliminar");
     butt_eliminar.setAttribute("class","butt_eliminar");
     butt_eliminar.setAttribute("value",id);
+    butt_eliminar.setAttribute("name","eliminar_solicitud");
+    butt_eliminar.setAttribute("value",id);
+    
     butt_eliminar.innerHTML = "Eliminar";
-    butt_eliminar.addEventListener("click", function () {
-      closeButton(index);
-  });
-  
+
     var hr = document.createElement("HR");
     //Se añaden los elementos al activity_box div
     node.appendChild(h2);

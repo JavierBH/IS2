@@ -16,14 +16,8 @@ from dateutil.relativedelta import relativedelta
 MY_ADDRESS = "proyectois2upm@gmail.com"
 script_dir = path.dirname(path.abspath(__file__))
 PASSWORD = "softwareupm"
-<<<<<<< HEAD
-UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir)
-=======
-UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir+"/static/")
->>>>>>> 53ba546fa2dc45a30e7686ab419f341d8191bf54
-print(UPLOAD_FOLDER)
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
+UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir)
 app.secret_key = 'random string'
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 format_email = ["gmail","yahoo"]
@@ -160,7 +154,6 @@ def login():
         cursor = conexion.cursor()
         cursor.execute("SELECT verificado FROM Users WHERE usuario = ? AND password=?",(request.form["usuario"],request.form["password"]))
         rows = cursor.fetchone()
-        print(rows)
         if rows is not None:
             if rows[0] == 1:
                 session["username"] = request.form['usuario']
@@ -603,8 +596,12 @@ def mostrar_solicitud():
 
 
 @app.route("/aceptar_solicitud", methods=['GET','POST'])
-def aceptar_solicitud(id_solicitud):
-    if request.method == 'POST': 
+def aceptar_solicitud():
+    print("lalalala")
+    if request.method == 'GET': 
+        id_solicitud = request.args.get("aceptar_solicitud")
+        if id_solicitud is None:
+            return redirect(url_for("eliminar_solicitud"))
         conn = conectar_db()
         cursor = conn.cursor()
         cursor.execute("UPDATE Solicitudes SET Validacion=? WHERE id=?",(1,id_solicitud))
@@ -620,21 +617,21 @@ def aceptar_solicitud(id_solicitud):
             conn.commit()
         cursor.close()
         conn.close()
-        return render_template("home.html")
-    return render_template("home.html")
+        return redirect(url_for("home"))
+    return redirect(url_for("home"))
 
 @app.route("/eliminar_solicitud", methods=['GET','POST'])
 def eliminar_solicitud():
-    if request.method == 'POST':
-        id_solicitud = request.form['idAmigo']
+    if request.method == 'GET':
+        id_solicitud = request.args.get('eliminar_solicitud')
         conn = conectar_db()
         cursor = conn.cursor()
         cursor.execute("DELETE FROM Solicitudes WHERE id=?",(id_solicitud,))
         conn.commit()
         cursor.close()
         conn.close()
-        return "eliminado"
-    return "elimanado"
+        flash("Petición Eliminada","success")
+    return redirect(url_for("home"))
 
 @app.route("/actividad_reciente", methods=['GET','POST'])
 def actividad_reciente():
