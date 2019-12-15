@@ -552,7 +552,7 @@ def loc_megusta():
             cursor.execute("UPDATE Users SET Loc_Gusta=? WHERE usuario=?",(str(nombre_loc)+" -> "+str(datetime.datetime.now())+", ",session["username"]))
         else:
             addLoc = addLista(str(nombre_loc)+" -> "+str(datetime.datetime.now())+", ",loc)
-            cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(addLoc,session["username"]))
+            cursor.execute("UPDATE Users SET Loc_Gusta=? WHERE usuario=?",(addLoc,session["username"]))
         conexion.commit()
         cursor.close()
         conexion.close()
