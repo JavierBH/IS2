@@ -28,6 +28,12 @@
     </form>
     </div>
     <hr>
+
+    <form  method="post" action="{{ url_for('add_degus_local') }}">
+        <button class="home_butt" style="background-color: blue;">Añadir Otro Local</button>
+    </form>
+    
+    <hr>
     <form action="{{ url_for('home') }}">
     <button class="home_butt">Home</button>
 </form>
