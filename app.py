@@ -664,7 +664,7 @@ def actividad_reciente():
     while x < len(rows[0]):
         cursor.execute("SELECT Degustaciones,Locales,usuario FROM Users WHERE id=?",(rows[0][x],))
         results = cursor.fetchone()
-        if results[0] is None:
+        if results is None or  results[0] is None:
             return 
         y2 = results[0].split(", ")
         for sl in range(len(y2)-1):
