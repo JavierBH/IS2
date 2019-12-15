@@ -82,19 +82,13 @@
         
             <label ><b>Calificacion</b> <br /></label>
             <div>
-                        <span class="fa fa-star" id="star1" onclick="change_color(1)" value="1" name= "calificacion"></span>
-                        <span class="fa fa-star" id="star2" onclick="change_color(2)"></span>
-                        <span class="fa fa-star" id="star3" onclick="change_color(3)"></span>
-                        <span class="fa fa-star" id="star4" onclick="change_color(4)"></span>
-                        <span class="fa fa-star" id="star5" onclick="change_color(5)"></span>
-                    </div>
-
-                    
+                <input type="number" autocomplete="off" name= "calificacion" min="1" max="5"> 
+                <hr>
 
                 <label ><b>Descripcion </b></label>
                 <textarea type="text" name="descripcion" autocomplete="off" placeholder="descripcion" style="height:200px"></textarea>
                 <hr>
-                        <hr>
+
                 <button type="submit" class="registerbtn" value="Submit">Añadir</button>
              
               </div>
