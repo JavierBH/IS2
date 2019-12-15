@@ -731,6 +731,8 @@ def actividad_reciente():
         actividad.append(x[1])
     result.append(users)
     result.append(actividad)
+    cursor.close()
+    conexion.close()
     return result
     
     
