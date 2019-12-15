@@ -487,7 +487,6 @@ def local():
         reseña = request.form['reseña']
         degustaciones = None
         filename = None
-
         #EXTRAE FOTO
         if 'file' not in request.files:
             filename = "usuario.png"
