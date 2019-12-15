@@ -15,7 +15,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="{{ url_for('static', filename='js/search_bar_home.js') }}"></script>
-
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </head>
 <body>
@@ -100,6 +100,13 @@
     <h2>Actividades recientes</h2>
     <hr>
     <div class="recentBox" id="recents">
+
+  <script>
+    var user_act =' "{{ users_act | tojson | safe }}" ' ;
+    var actividades =' "{{ actividades | tojson | safe }}" ' ;
+    create_activity_box(user_act,actividades);
+  </script>
+
     </div>
   </div>
 
@@ -109,8 +116,9 @@
     <div class="navbar">
         <button class="tablink" id="defaultOpenSide" onclick="tab_info_menu(event,'perfil')" >Perfil</button>
         <button class="tablink" onclick="tab_info_menu(event,'estadisticas')">Estadisticas</button>   
-        <form method="post" action="{{ url_for('mostrar_solicitud') }}">
-        <button class="tablink"></button>   
+        <form method="post" action="{{ url_for('mostrar_solicitud') }}"> 
+          <button> Solicitudes </button>
+        </form>
       </form>
     </div>
   <div class="info_menu" id="perfil">
@@ -192,5 +200,4 @@
 
 </section>
 
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
