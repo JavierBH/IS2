@@ -18,6 +18,7 @@ script_dir = path.dirname(path.abspath(__file__))
 PASSWORD = "softwareupm"
 app = Flask(__name__)
 UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir)
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app.secret_key = 'random string'
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 format_email = ["gmail","yahoo"]
@@ -38,7 +39,7 @@ def home():
     cols = cursor.fetchone()
     cursor.close()
     conexion.close()"""
-    result = actividad_reciente
+    result = actividad_reciente()
     cols = list()
     cols.append(1)
     cols.append(2)
@@ -641,6 +642,11 @@ def actividad_reciente():
     cursor.execute("SELECT Amigos FROM Users WHERE usuario=?",(session['username'],))
     rows = cursor.fetchone()
     ultimas_act=list()
+    print(rows)
+    if rows[0] is None:
+        print("lalal")
+        return [[],[]]
+
     x = 0
     while x < len(rows[0]):
         cursor.execute("SELECT Degustaciones,Locales,usuario FROM Users WHERE id=?",(rows[0][x],))
@@ -734,11 +740,6 @@ def actividad_reciente():
     return result
     
     
-
-
-
-
-
 
 def calcular_menor(lista):
     i = 0

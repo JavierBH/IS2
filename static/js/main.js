@@ -116,41 +116,39 @@ window.onclick = function(event) {
 }
 /*-----------------RECENT ACTIVITY MENU--------------------------*/ 
 
-function create_activity_box(){
+function activity_box(name,activity){
   //Se crea la div en la que estan las acciones
   var node = document.createElement("DIV"); //Create Div activity_box node
   node.setAttribute("id",this.id + "activity_box_id");
   node.setAttribute("class","activity_box");
   
-  //Se crea la imagen
-  var img = document.createElement("img");
-  img.setAttribute("class","img_activity_box");
-  img.setAttribute("src", "images/hydrangeas.jpg");
-
   //Se crea el titulo del usuario
   var h2 = document.createElement("H4");
-  var t = document.createTextNode("Usuario 1");     // Create a text node
+  var t = document.createTextNode(name + " acaba de hacer:");     // Create a text node
   h2.appendChild(t);
 
   //Se crea el parrafo con el texto
   var p = document.createElement("P");
-  var t = document.createTextNode("JAJAJAJAJ COSAS SI COSAS JAJAJA"); 
+  var t = document.createTextNode(activity); 
   p.appendChild(t);
   
   var hr = document.createElement("HR");
   //Se añaden los elementos al activity_box div
-  node.appendChild(img);
   node.appendChild(h2);
   node.appendChild(p);
   document.getElementById("recents").appendChild(node);
   document.getElementById("recents").appendChild(hr);
 }
 
-for ( var i = 0; i < 6; i++) {
-  create_activity_box()
+function create_activity_box(arr_name,arr_activity){
+  console.log(name.length);
+  name = split_array(arr_name);
+  activity = split_array(arr_activity);
+  console.log(activity);
+  for ( var i = 0; i < name.length; i++) {
+    activity_box(name,activity)
+  }
 }
-
-/*------------------- SOLICITUDES -------------------*/
 /*------------- INDICADOR DEL NUMERO DE PETICIONES -------------------*/
 
 function split_array(arr){
