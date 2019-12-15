@@ -588,9 +588,12 @@ def op_solicitudes():
     operacion = request.args.get('ver_solicitud')
     print(operacion)
     if(operacion is not None):
+        id_solicitud = request.args.get("aceptar_solicitud")
         conexion = conectar_db()
         cursor = conexion.cursor()
-        cursor.execute("SELECT nombre,email,fecha,foto,nacionalidad,introduccion,genero FROM Users WHERE usuario=?",(session['username'],))
+        cursor.execute("SELECT Nombre_Usuario FROM Solicitudes WHERE id=?",(id_solicitud,))
+        emisor = cursor.fetchone()
+        cursor.execute("SELECT nombre,email,fecha,foto,nacionalidad,introduccion,genero FROM Users WHERE usuario=?",(emisor,))
         rows = cursor.fetchone()
         image_file=None
         if rows[3] is not None:
@@ -639,7 +642,7 @@ def mostrar_solicitud():
     if request.method == 'POST': 
         conexion = conectar_db()
         cursor = conexion.cursor()
-        cursor.execute("SELECT Nombre_Amigo, id FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
+        cursor.execute("SELECT Nombre_Usuario, id FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
         row = cursor.fetchone()
         cursor.close()
         conexion.close()
