@@ -589,12 +589,15 @@ def deg_megusta():
 def op_solicitudes():
    if request.method == 'GET': 
     operacion = request.args.get('ver_solicitud')
+    op2 = request.args.get('aceptar_solicitud')
+    op3 = request.args.get('eliminar_solicitud')
+    print("OPERACION DE SOLICITUD  " + str(operacion) + str(op2) + str(op3))
     if(operacion is not None):
-        id_solicitud = request.args.get("aceptar_solicitud")
         conexion = conectar_db()
         cursor = conexion.cursor()
-        cursor.execute("SELECT Nombre_Usuario FROM Solicitudes WHERE id=?",(id_solicitud,))
+        cursor.execute("SELECT Nombre_Usuario FROM Solicitudes WHERE id=?",(operacion,))
         emisor = cursor.fetchone()
+        print("Emisor: " + str(emisor))
         cursor.execute("SELECT nombre,email,fecha,foto,nacionalidad,introduccion,genero FROM Users WHERE usuario=?",(emisor,))
         rows = cursor.fetchone()
         image_file=None
@@ -649,6 +652,7 @@ def mostrar_solicitud():
         cursor.close()
         conexion.close()
         if row is not None:
+            print("IdSol : " + str(row[1]))
             return render_template("ver_solicitudes.html",nombresAmigos=row[0],idsAmigos=row[1])
         flash("No hay solicitudes","error")
         return redirect(url_for("home"))
