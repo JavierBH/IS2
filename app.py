@@ -78,13 +78,15 @@ def register():
         filename = None
 
         #EXTRAE FOTO
-        if 'file' not in request.files:
-            filename = "usuario.png"
+        #if 'file' not in request.files:
+            #filename = "usuario.png"
         file = request.files['file']
         foto = None
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        if filename is None:
+            filename = "usuario.png"
         #COMPROBACION DE CAMPOS OBLIGATORIOS
         if (usuario == "") or (contrasena == "") or (repite_contrasena == "") or (email == ""):
             return "Campo incompleto"
