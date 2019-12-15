@@ -17,7 +17,7 @@ MY_ADDRESS = "proyectois2upm@gmail.com"
 script_dir = path.dirname(path.abspath(__file__))
 PASSWORD = "softwareupm"
 app = Flask(__name__)
-UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir)
+UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir+"/static/")
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app.secret_key = 'random string'
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -78,13 +78,15 @@ def register():
         filename = None
 
         #EXTRAE FOTO
-        if 'file' not in request.files:
-            filename = "usuario.png"
+        #if 'file' not in request.files:
+            #filename = "usuario.png"
         file = request.files['file']
         foto = None
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        if filename is None:
+            filename = "usuario.png"
         #COMPROBACION DE CAMPOS OBLIGATORIOS
         if (usuario == "") or (contrasena == "") or (repite_contrasena == "") or (email == ""):
             return "Campo incompleto"
