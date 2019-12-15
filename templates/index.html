@@ -187,13 +187,6 @@
   </div>
     
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-
-  <script>
-    var user_act =' "{{ users_act | tojson | safe }}" ' ;
-    var actividades =' "{{ actividades | tojson | safe }}" ' ;
-    create_activity_box(user_act,actividades);
-  </script>
-
 </section>
 
 </body>

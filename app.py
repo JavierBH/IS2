@@ -295,15 +295,16 @@ def add_degustacion():
         filename = None
 
         #PARTE DE FOTO
-        if 'file' not in request.files:
-            file = None
-            return "file = None"
+        #if 'file' not in request.files:
+            #file = None
+            #return "file = None"
         file = request.files['file']
         foto = None
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
+        if filename is None:
+            filename = "degustacion.jpg"
         conexion = conectar_db()
         cursor = conexion.cursor()
         cursor.execute("SELECT Nombre FROM Locales WHERE Nombre = ?",(local,))
@@ -485,13 +486,15 @@ def local():
         degustaciones = None
         filename = None
         #EXTRAE FOTO
-        if 'file' not in request.files:
-            filename = "usuario.png"
+        #if 'file' not in request.files:
+            #filename = "usuario.png"
         file = request.files['file']
         foto = None
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        if filename is None:
+            filename = "local.png"
         conexion = conectar_db()
         cursor = conexion.cursor()
         cursor.execute('''INSERT INTO Locales ('Nombre','Direccion','Reseña','Degustaciones','Foto') VALUES (?,?,?,?,?)'''
@@ -579,6 +582,52 @@ def deg_megusta():
         conexion.close()
     return redirect(url_for("home"))
 
+app.route("/solicitudes",  methods=['GET','POST'])
+def op_solicitudes():
+    operacion = request.form['operacion']
+    if(operacion == "ver"):
+        conexion = conectar_db()
+        cursor = conexion.cursor()
+        cursor.execute("SELECT nombre,email,fecha,foto,nacionalidad,introduccion,genero FROM Users WHERE usuario=?",(session['username'],))
+        rows = cursor.fetchone()
+        cursor.close()
+        conexion.close()
+        return render_template("detalle_solicitud.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6])
+    if(operacion == "aceptar"):
+        id_solicitud = request.args.get("aceptar_solicitud")
+        if id_solicitud is None:
+            return redirect(url_for("eliminar_solicitud"))
+        conn = conectar_db()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE Solicitudes SET Validacion=? WHERE id=?",(1,id_solicitud))
+        conn.commit()
+        cursor.execute("SELECT Amigos FROM Users WHERE usuario = ?", (session["username"],))
+        for row in cursor:
+            solicitud_User = row[0]
+        if solicitud_User is None:
+            cursor.execute("UPDATE Users SET Amigos=? WHERE usuario=?",(str(id_solicitud),session["username"]))
+            cursor.execute("DELETE FROM Solicitudes WHERE id=?",(id_solicitud,))
+            conn.commit()
+        else:
+            addAmigo = addLista(id_solicitud,solicitud_User)
+            cursor.execute("UPDATE Users SET Amigos=? WHERE usuario=?",(addAmigo,session["username"]))
+            cursor.execute("DELETE FROM Solicitudes WHERE id=?",(id_solicitud,))
+            conn.commit()
+        cursor.close()
+        conn.close()
+        return redirect(url_for("home"))
+    if(operacion == "eliminar"):
+        id_solicitud = request.args.get('eliminar_solicitud')
+        conn = conectar_db()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM Solicitudes WHERE id=?",(id_solicitud,))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        flash("Petición Eliminada","success")
+        return redirect(url_for("home"))
+    return redirect(url_for("ver_solicitudes.html"))
+
 
 @app.route("/mostrar_solicitud", methods=['GET','POST'])
 def mostrar_solicitud():
@@ -595,42 +644,6 @@ def mostrar_solicitud():
         return redirect(url_for("home"))
 
 
-@app.route("/aceptar_solicitud", methods=['GET','POST'])
-def aceptar_solicitud():
-    if request.method == 'GET': 
-        id_solicitud = request.args.get("aceptar_solicitud")
-        if id_solicitud is None:
-            return redirect(url_for("eliminar_solicitud"))
-        conn = conectar_db()
-        cursor = conn.cursor()
-        cursor.execute("UPDATE Solicitudes SET Validacion=? WHERE id=?",(1,id_solicitud))
-        conn.commit()
-        cursor.execute("SELECT Amigos FROM Users WHERE usuario = ?", (session["username"],))
-        for row in cursor:
-            solicitud_User = row[0]
-        if solicitud_User is None:
-            cursor.execute("UPDATE Users SET Amigos=? WHERE usuario=?",(str(id_solicitud),session["username"]))
-        else:
-            addAmigo = addLista(id_solicitud,solicitud_User)
-            cursor.execute("UPDATE Users SET Amigos=? WHERE usuario=?",(addAmigo,session["username"]))
-            conn.commit()
-        cursor.close()
-        conn.close()
-        return redirect(url_for("home"))
-    return redirect(url_for("home"))
-
-@app.route("/eliminar_solicitud", methods=['GET','POST'])
-def eliminar_solicitud():
-    if request.method == 'GET':
-        id_solicitud = request.args.get('eliminar_solicitud')
-        conn = conectar_db()
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM Solicitudes WHERE id=?",(id_solicitud,))
-        conn.commit()
-        cursor.close()
-        conn.close()
-        flash("Petición Eliminada","success")
-    return redirect(url_for("home"))
 
 #@app.route("/actividad_reciente", methods=['GET','POST'])
 def actividad_reciente():
