@@ -1,0 +1,37 @@
+{% from "_render_macros.html" import render_messages_success %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<title>DesTapIS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/ver_solicitud.css') }}" />
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="{{ url_for('static', filename='js/ver_solicitudes.js') }}"></script>
+</head>
+
+<body>
+    <h1>SOLICITUDES</h1>
+    <hr>
+    <form method="get" action="{{ url_for('aceptar_solicitud') }}">
+            <div class="info_menu" id="solicitudes">
+                <script>
+                    var nombre_amigos =' "{{ nombresAmigos | tojson | safe }}" ' ;
+                    var idsAmigos =' "{{ idsAmigos | tojson | safe }}" ' ;
+                    create_solicitudes_box(nombre_amigos,idsAmigos);
+                </script>
+            </form>
+            </div>
+            <hr>
+            <form action="{{ url_for('home') }}">
+                <button class="home_butt">Home</button>
+            </form>
+            </body>

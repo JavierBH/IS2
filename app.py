@@ -16,10 +16,8 @@ from dateutil.relativedelta import relativedelta
 MY_ADDRESS = "proyectois2upm@gmail.com"
 script_dir = path.dirname(path.abspath(__file__))
 PASSWORD = "softwareupm"
-UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir+"/static/img")
-print(UPLOAD_FOLDER)
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
+UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir)
 app.secret_key = 'random string'
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 format_email = ["gmail","yahoo"]
@@ -31,8 +29,6 @@ def home():
     cursor = conexion.cursor()
     cursor.execute("SELECT nombre,email,fecha,foto,nacionalidad,introduccion,genero FROM Users WHERE usuario=?",(session['username'],))
     rows = cursor.fetchone()
-    cursor.close()
-    conexion.close()
     image_file=None
     if rows[3] is not None:
         image_file = url_for('static', filename=rows[3])
@@ -159,7 +155,6 @@ def login():
         cursor = conexion.cursor()
         cursor.execute("SELECT verificado FROM Users WHERE usuario = ? AND password=?",(request.form["usuario"],request.form["password"]))
         rows = cursor.fetchone()
-        print(rows)
         if rows is not None:
             if rows[0] == 1:
                 session["username"] = request.form['usuario']
@@ -546,16 +541,20 @@ def enviar_solicitud():
 @app.route("/loc_megusta", methods=['GET','POST'])
 def loc_megusta():
     if request.method == 'GET':
+        nombre_loc = request.form['nombreLoc']
         conexion = conectar_db()
         cursor = conexion.cursor()
         cursor.execute("SELECT Loc_Gusta FROM Users WHERE usuario = ?", (session["username"],))
         for row in cursor:
             loc = row[0]
+            loc_str = str(loc)
+        if loc_str is not None :
+            if  (str(nombre_loc) in loc_str):
+                return "Ya está nla lista de me gusta"
         if loc is None:
-            cursor.execute
-            cursor.execute("UPDATE Users SET Loc_Gusta=? WHERE usuario=?",(str(loc)+" -> "+str(datetime.datetime.now())+", ",session["username"]))
+            cursor.execute("UPDATE Users SET Loc_Gusta=? WHERE usuario=?",(str(nombre_loc)+" -> "+str(datetime.datetime.now())+", ",session["username"]))
         else:
-            addLoc = addLista(str(loc)+" -> "+str(datetime.datetime.now())+", ",loc)
+            addLoc = addLista(str(nombre_loc)+" -> "+str(datetime.datetime.now())+", ",loc)
             cursor.execute("UPDATE Users SET locales=? WHERE usuario=?",(addLoc,session["username"]))
         conexion.commit()
         cursor.close()
@@ -587,22 +586,23 @@ def mostrar_solicitud():
     if request.method == 'POST': 
         conexion = conectar_db()
         cursor = conexion.cursor()
-        result = ""
         cursor.execute("SELECT Nombre_Amigo, id FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
-        for row in cursor:
-            if result == "":
-                result = str(row[0]) + "," + str(row[1]) + ","
-            else:
-                result = result + str(row[0]) + "," + str(row[1])
+        row = cursor.fetchone()
         cursor.close()
         conexion.close()
-    return render_template("mostrar_solicitud.html",res = result)
+        if row is not None:
+            return render_template("ver_solicitudes.html",nombresAmigos=row[0],idsAmigos=row[1])
+        flash("No hay solicitudes","error")
+        return redirect(url_for("home"))
 
 
 @app.route("/aceptar_solicitud", methods=['GET','POST'])
 def aceptar_solicitud():
-    if request.method == 'POST': 
-        id_solicitud = request.form['idAmigo']
+    print("lalalala")
+    if request.method == 'GET': 
+        id_solicitud = request.args.get("aceptar_solicitud")
+        if id_solicitud is None:
+            return redirect(url_for("eliminar_solicitud"))
         conn = conectar_db()
         cursor = conn.cursor()
         cursor.execute("UPDATE Solicitudes SET Validacion=? WHERE id=?",(1,id_solicitud))
@@ -618,21 +618,21 @@ def aceptar_solicitud():
             conn.commit()
         cursor.close()
         conn.close()
-        return render_template("aceptar_solicitud.html")
-    return render_template("aceptar_solicitud.html")
+        return redirect(url_for("home"))
+    return redirect(url_for("home"))
 
 @app.route("/eliminar_solicitud", methods=['GET','POST'])
 def eliminar_solicitud():
-    if request.method == 'POST':
-        id_solicitud = request.form['idAmigo']
+    if request.method == 'GET':
+        id_solicitud = request.args.get('eliminar_solicitud')
         conn = conectar_db()
         cursor = conn.cursor()
         cursor.execute("DELETE FROM Solicitudes WHERE id=?",(id_solicitud,))
         conn.commit()
         cursor.close()
         conn.close()
-        return "eliminado"
-    return "elimanado"
+        flash("Petición Eliminada","success")
+    return redirect(url_for("home"))
 
 #@app.route("/actividad_reciente", methods=['GET','POST'])
 def actividad_reciente():

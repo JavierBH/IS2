@@ -90,17 +90,8 @@
     </div>
 
    <div id="locales" class="main">
-    <div class="section1">
-        <div class="degus_img" >Locales</div>
-        <div class="degus_img" >Locales</div>
-    </div>    
-    <div class="section2">
-        <div class="degus_img" >Locales</div>
-        <div class="degus_img" >Locales</div>
-    </div>
-    <div class="section3">
-        <div class="degus_img" >Locales</div>
-        <div class="degus_img" >Locales</div>
+    <div class="degustaciones_flex_div " id="locales_flex_div_id">
+      <!--AUTOCOMPLETAR main.js, funcion: degustaciones_window-->
     </div>
  </div>
 
@@ -114,10 +105,13 @@
 
 
   <div class="side">
+    
     <div class="navbar">
         <button class="tablink" id="defaultOpenSide" onclick="tab_info_menu(event,'perfil')" >Perfil</button>
-        <button class="tablink" onclick="tab_info_menu(event,'estadisticas')">Estadisticas</button>
-        <button class="tablink" onclick="tab_info_menu(event,'solicitudes')">Solicitudes</button>    
+        <button class="tablink" onclick="tab_info_menu(event,'estadisticas')">Estadisticas</button>   
+        <form method="post" action="{{ url_for('mostrar_solicitud') }}">
+        <button class="tablink"></button>   
+      </form>
     </div>
   <div class="info_menu" id="perfil">
     <h2>Perfil</h2>
@@ -183,51 +177,20 @@
   </div>
 </div>
 </div>
+
   <div class="info_menu" id="estadisticas">
       <h2>Estadisticas</h2>
       <p>Aaron tio ponme bien las cosas de la BBDD</p>  
     </div>
-  
-  <div class="info_menu" id="solicitudes">
-    <form method="post" action="{{ url_for('aceptar_solicitud') }}" >
-    <form method="post" action="{{ url_for('eliminar_solicitud') }}" >
-    <script>
-      var nombre_amigos =' "{{ nombre_amigos | tojson | safe }}" ' ;
-      var ids_amigos =' "{{ ids_amigos | tojson | safe }}" ' ;
-      create_solicitudes_box(nombre_amigos,ids_amigos);
-    </script>
 
-    </form>
-    </form>
+    <div class="info_menu" id="solicitudes">
+  caca
   </div>
-        
+
+  </div>
     
 
 </section>
-
-
-<section class="secondary-menus1">
-  <div class="menus">
-   <div class="menu1">
-     <h2>Submenu1</h2>
-   </div>
-   <div class="menu1">
-      <h2>Submenu2</h2>
-   </div>
-  </div>
-</section>
-
-<section class="secondary-menus2">
-  <div class="menus">
-    <div class="menu3">
-        <h2>Submenu3</h2>
-    </div>
-    <div class="menu4">
-        <h2>Submenu4</h2>
-    </div>
-  </div>
-</section>
-
 
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
