@@ -17,7 +17,7 @@ MY_ADDRESS = "proyectois2upm@gmail.com"
 script_dir = path.dirname(path.abspath(__file__))
 PASSWORD = "softwareupm"
 app = Flask(__name__)
-UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir+"/static/")
+UPLOAD_FOLDER = join(dirname(realpath(__file__)), script_dir + "/static/")
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app.secret_key = 'random string'
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -33,12 +33,6 @@ def home():
     image_file=None
     if rows[3] is not None:
         image_file = url_for('static', filename=rows[3])
-    """conexion = conectar_db()
-    cursor = conexion.cursor()
-    cursor.execute("SELECT id,Nombre_Amigo FROM Solicitudes WHERE Nombre_Usuario = ?", (session["username"],))
-    cols = cursor.fetchone()
-    cursor.close()
-    conexion.close()"""
     result = actividad_reciente()
     cols = list()
     cols.append(1)
@@ -600,7 +594,6 @@ def mostrar_solicitud():
 
 @app.route("/aceptar_solicitud", methods=['GET','POST'])
 def aceptar_solicitud():
-    print("lalalala")
     if request.method == 'GET': 
         id_solicitud = request.args.get("aceptar_solicitud")
         if id_solicitud is None:
@@ -643,11 +636,8 @@ def actividad_reciente():
     cursor.execute("SELECT Amigos FROM Users WHERE usuario=?",(session['username'],))
     rows = cursor.fetchone()
     ultimas_act=list()
-    print(rows)
     if rows[0] is None:
-        print("lalal")
         return [[],[]]
-
     x = 0
     while x < len(rows[0]):
         cursor.execute("SELECT Degustaciones,Locales,usuario FROM Users WHERE id=?",(rows[0][x],))

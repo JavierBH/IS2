@@ -141,12 +141,11 @@ function activity_box(name,activity){
 }
 
 function create_activity_box(arr_name,arr_activity){
-  console.log(name.length);
   name = split_array(arr_name);
   activity = split_array(arr_activity);
   console.log(activity);
   for ( var i = 0; i < name.length; i++) {
-    activity_box(name,activity)
+    activity_box(name[i],activity[i])
   }
 }
 /*------------- INDICADOR DEL NUMERO DE PETICIONES -------------------*/
