@@ -275,10 +275,14 @@ def ver_degus():
         option_var = request.args.get("option_var")
         conexion = conectar_db()
         cursor = conexion.cursor()
-        cursor.execute("SELECT Nombre,Foto,Descripcion,Tipo,Region,Tamaño,Calificacion_Gusto,Calificacion FROM Degustaciones WHERE Local = ?",(local,))
+        print(degust)
+        print(local)
+        cursor.execute("SELECT Foto,Descripcion,Tipo,Region,Tamaño,Calificacion_Gusto,Calificacion FROM Degustaciones WHERE Nombre=? AND Local=?",(degust,local))
         rows = cursor.fetchone()
-        image_file = url_for('static', filename=rows[1])
-        return render_template("ver_degustacion.html",name=rows[0],foto=image_file,descr=rows[2],tipo=rows[3],region=rows[4],tamaño=rows[5],calif_gusto=rows[6],calif=rows[7],option=option_var,local_name=local)
+        print("dkfnkkn")
+        print(rows)
+        image_file = url_for('static', filename=rows[0])
+        return render_template("ver_degustacion.html",name=degust,foto=image_file,descr=rows[1],tipo=rows[2],region=rows[3],tamaño=rows[4],calif_gusto=rows[5],calif=rows[6],option=option_var,local_name=local)
 
 @app.route("/add_degus_local",methods=['GET','POST'])
 def add_degus_local():
@@ -296,6 +300,15 @@ def add_degustacion():
         local = request.form.get('local')
         descripcion = request.form.get('descripcion')
         filename = None
+        conexion = conectar_db()
+        cursor = conexion.cursor()
+
+        cursor.execute("SELECT Local FROM Degustaciones WHERE Nombre = ?",(nombre_deg,))
+        rows = cursor.fetchone()
+        if rows is not None:
+            if rows[0] == local:
+                flash("Ya existe la degustacion %s asociada al local %s, añade un nuevo local" % (nombre_deg,local),"error")
+                return render_template("add_degustacion.html")
 
         #PARTE DE FOTO
         #if 'file' not in request.files:
@@ -308,8 +321,7 @@ def add_degustacion():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         if filename is None:
             filename = "degustacion.jpg"
-        conexion = conectar_db()
-        cursor = conexion.cursor()
+        
         cursor.execute("SELECT Nombre FROM Locales WHERE Nombre = ?",(local,))
         rows = cursor.fetchone()
         if rows is None:
