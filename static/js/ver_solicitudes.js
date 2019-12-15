@@ -22,14 +22,14 @@ function create_request_box(index,name,id){
     var butt_ver = document.createElement("button");
     butt_ver.setAttribute("id","butt_aceptar_id");
     butt_ver.setAttribute("class","butt_ver");
-    butt_ver.setAttribute("value",name);
+    butt_ver.setAttribute("name","ver_solicitud");
+    butt_ver.setAttribute("value",id);
     butt_ver.innerHTML = "Ver";
   
     //Se crea el boton de eliminar
     var butt_eliminar = document.createElement("button");
-    butt_eliminar.setAttribute("id",this.id +"butt_eliminar");
+    butt_eliminar.setAttribute("id","butt_eliminar");
     butt_eliminar.setAttribute("class","butt_eliminar");
-    butt_eliminar.setAttribute("value",id);
     butt_eliminar.setAttribute("name","eliminar_solicitud");
     butt_eliminar.setAttribute("value",id);
     

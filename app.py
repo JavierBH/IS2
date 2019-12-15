@@ -577,21 +577,36 @@ def deg_megusta():
         conexion.close()
     return redirect(url_for("home"))
 
-app.route("/solicitudes",  methods=['GET','POST'])
+@app.route("/solicitudes",  methods=['GET','POST'])
 def op_solicitudes():
-    operacion = request.form['operacion']
-    if(operacion == "ver"):
+   if request.method == 'GET': 
+    operacion = request.args.get('ver_solicitud')
+    print(operacion)
+    if(operacion is not None):
         conexion = conectar_db()
         cursor = conexion.cursor()
         cursor.execute("SELECT nombre,email,fecha,foto,nacionalidad,introduccion,genero FROM Users WHERE usuario=?",(session['username'],))
         rows = cursor.fetchone()
+        image_file=None
+        if rows[3] is not None:
+            image_file = url_for('static', filename=rows[3])
         cursor.close()
         conexion.close()
-        return render_template("detalle_solicitud.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6])
-    if(operacion == "aceptar"):
+        return render_template("ver_perfil.html",nombre=rows[0],email=rows[1],fecha=rows[2],nacionalidad=rows[4],introduccion=rows[5],user_name=session['username'],genero=rows[6])
+    
+    if(operacion is None):
         id_solicitud = request.args.get("aceptar_solicitud")
         if id_solicitud is None:
-            return redirect(url_for("eliminar_solicitud"))
+            id_solicitud = request.args.get('eliminar_solicitud')
+            conn = conectar_db()
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM Solicitudes WHERE id=?",(id_solicitud,))
+            conn.commit()
+            cursor.close()
+            conn.close()
+            flash("Petición Eliminada","success")
+            return redirect(url_for("home"))
+
         conn = conectar_db()
         cursor = conn.cursor()
         cursor.execute("UPDATE Solicitudes SET Validacion=? WHERE id=?",(1,id_solicitud))
@@ -610,16 +625,6 @@ def op_solicitudes():
             conn.commit()
         cursor.close()
         conn.close()
-        return redirect(url_for("home"))
-    if(operacion == "eliminar"):
-        id_solicitud = request.args.get('eliminar_solicitud')
-        conn = conectar_db()
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM Solicitudes WHERE id=?",(id_solicitud,))
-        conn.commit()
-        cursor.close()
-        conn.close()
-        flash("Petición Eliminada","success")
         return redirect(url_for("home"))
     return redirect(url_for("ver_solicitudes.html"))
 
@@ -647,12 +652,17 @@ def actividad_reciente():
     cursor.execute("SELECT Amigos FROM Users WHERE usuario=?",(session['username'],))
     rows = cursor.fetchone()
     ultimas_act=list()
+    print(rows)
     if rows[0] is None:
         return [[],[]]
     x = 0
     while x < len(rows[0]):
         cursor.execute("SELECT Degustaciones,Locales,usuario FROM Users WHERE id=?",(rows[0][x],))
         results = cursor.fetchone()
+        print(results)
+
+        if results is None:
+            return [[],[]]
         y2 = results[0].split(", ")
         for sl in range(len(y2)-1):
             sl2 = y2[sl].split(" -> ")
