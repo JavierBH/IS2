@@ -34,7 +34,12 @@ def home():
     if rows[3] is not None:
         image_file = url_for('static', filename=rows[3])
     result = actividad_reciente()
-    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6],users_act=result[0],actividades=result[1])
+    cols = list()
+    cols.append(1)
+    cols.append(2)
+    if result is None:
+        return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6],nombre_amigos=cols[0],ids_amigos=cols[1],users_act=None,actividades=None)
+    return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6],nombre_amigos=cols[0],ids_amigos=cols[1],users_act=result[0],actividades=result[1])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -272,7 +277,8 @@ def ver_degus():
         cursor = conexion.cursor()
         cursor.execute("SELECT Nombre,Foto,Descripcion,Tipo,Region,Tamaño,Calificacion_Gusto,Calificacion FROM Degustaciones WHERE Local = ?",(local,))
         rows = cursor.fetchone()
-        return render_template("ver_degustacion.html",name=rows[0],foto=rows[1],descr=rows[2],tipo=rows[3],region=rows[4],tamaño=rows[5],calif_gusto=rows[6],calif=rows[7],option=option_var,local_name=local)
+        image_file = url_for('static', filename=rows[1])
+        return render_template("ver_degustacion.html",name=rows[0],foto=image_file,descr=rows[2],tipo=rows[3],region=rows[4],tamaño=rows[5],calif_gusto=rows[6],calif=rows[7],option=option_var,local_name=local)
 
 
 @app.route("/degustacion", methods=['GET','POST'])
@@ -479,7 +485,6 @@ def local():
         reseña = request.form['reseña']
         degustaciones = None
         filename = None
-
         #EXTRAE FOTO
         #if 'file' not in request.files:
             #filename = "usuario.png"
@@ -653,6 +658,8 @@ def actividad_reciente():
     while x < len(rows[0]):
         cursor.execute("SELECT Degustaciones,Locales,usuario FROM Users WHERE id=?",(rows[0][x],))
         results = cursor.fetchone()
+        if results[0] is None:
+            return 
         y2 = results[0].split(", ")
         for sl in range(len(y2)-1):
             sl2 = y2[sl].split(" -> ")
@@ -739,6 +746,8 @@ def actividad_reciente():
         actividad.append(x[1])
     result.append(users)
     result.append(actividad)
+    cursor.close()
+    conexion.close()
     return result
     
     
