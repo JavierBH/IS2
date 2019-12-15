@@ -280,7 +280,10 @@ def ver_degus():
         image_file = url_for('static', filename=rows[1])
         return render_template("ver_degustacion.html",name=rows[0],foto=image_file,descr=rows[2],tipo=rows[3],region=rows[4],tamaño=rows[5],calif_gusto=rows[6],calif=rows[7],option=option_var,local_name=local)
 
-
+@app.route("/add_degus_local",methods=['GET','POST'])
+def add_degus_local():
+    return render_template("add_degustacion.html")
+    
 @app.route("/degustacion", methods=['GET','POST'])
 def add_degustacion():
     if request.method == 'POST':
@@ -586,7 +589,6 @@ def deg_megusta():
 def op_solicitudes():
    if request.method == 'GET': 
     operacion = request.args.get('ver_solicitud')
-    print(operacion)
     if(operacion is not None):
         id_solicitud = request.args.get("aceptar_solicitud")
         conexion = conectar_db()
