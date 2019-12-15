@@ -14,7 +14,8 @@ function degustaciones_window(img_url,name,ver,local_name){
     var button = document.createElement("button");
     button.innerHTML="Ver Más";
     button.setAttribute("name","local_button");
-    button.setAttribute("value",local_name.split('"')[2]);
+    var value = local_name.split('"')[2] + "," + name;
+    button.setAttribute("value",value);
 
     H4.appendChild(text);
     card.appendChild(img);
