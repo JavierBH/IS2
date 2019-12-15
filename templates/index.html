@@ -116,8 +116,9 @@
     <div class="navbar">
         <button class="tablink" id="defaultOpenSide" onclick="tab_info_menu(event,'perfil')" >Perfil</button>
         <button class="tablink" onclick="tab_info_menu(event,'estadisticas')">Estadisticas</button>   
-        <form method="post" action="{{ url_for('mostrar_solicitud') }}">
-        <button class="tablink"></button>   
+        <form method="post" action="{{ url_for('mostrar_solicitud') }}"> 
+          <button> Solicitudes </button>
+        </form>
       </form>
     </div>
   <div class="info_menu" id="perfil">
