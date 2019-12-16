@@ -1,0 +1,60 @@
+  /*IMG BOXES CSS*/
+h4{
+  font-size: 1.5rem;font-size: 1.5rem;
+}
+
+body{
+  padding: 40px;
+}
+
+.content{
+  float:left;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+  flex: 20%;
+  align-items: center;
+  border-width: 2px;
+  border-color: brown;
+  border-style: solid;
+}
+
+.content img{
+  width: 300px;
+  height: 300px;
+}
+/*ELEMENTS CSS*/
+.div_img_text{
+    margin-top: 40px;
+    margin-left: 20px;
+    width: 100%;
+  }
+  
+  .div_img{
+    display: flex;
+  }
+  
+  .div_img_text{
+    flex-wrap: wrap;
+  }
+  
+ img{
+    width: 30%;
+    height: 30%;
+    flex-wrap: wrap;
+  }
+  
+  .home_butt {
+    background-color: green;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    opacity: 0.9;
+    width: 100%;
+  }
+  
+  .home_butt:hover {
+    opacity: 1;
+  }

@@ -1,0 +1,65 @@
+{% from "_render_macros.html" import render_messages_success %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>DesTapIS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/ver_local.css') }}" />
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="{{ url_for('static', filename='js/ver_local.js') }}"></script>
+
+</head>
+<body>
+<form method="get" action="{{ url_for('ver_degus') }}">
+    <div>
+    <h1>INFORMACIÓN DEL LOCAL</h1>
+  
+    </div>
+    <hr>
+    <label for="email"><b>Nombre del local: </b></label>
+    {{ name }} 
+    <br>
+    <hr>
+    <label for="email"><b>Direccion: </b></label>
+    {{ dir }} 
+    <br>
+    <hr>
+    <label for="email"><b>RESEÑA: </b></label> <br>
+     <p>{{ resena }}</p>
+    <br>
+    <hr>
+    <h2> Degustaciones asociadas al local: </h2>
+    <div class="degus_box" id="degus_box_id">
+
+<!-- Portfolio Gallery Grid -->
+        <div class="row" id="row_id">
+            <script>
+            var degustaciones =' "{{ degustaciones | tojson | safe }}" ' ;
+            var fotos =' "{{ fotos | tojson | safe }}" ' ;
+            var local_name = ' "{{ name | tojson | safe }}" ' ;
+            create_boxes(degustaciones,fotos,local_name);
+            </script>
+        </div>
+    </div>
+    <hr>
+</form>
+    <form  method="post" action="{{ url_for('add_degus_local') }}">
+        <button class="home_butt" style="background-color: rgb(62, 62, 255);">Añadir Otro Degustacion</button>
+    </form>
+    
+<form  method="post" action="{{ url_for('loc_megusta') }}">
+    <button class="home_butt" style="background-color: rgb(248, 176, 43);">Me gusta</button>
+</form>
+
+
+    <form action="{{ url_for('home') }}">
+    <button class="home_butt">Home</button>
+</form>
+</body>

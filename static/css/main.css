@@ -1,12 +1,93 @@
 * {
     box-sizing: border-box;
   }
-  
   /* Style the body */
   body {
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
   }
+  
+/*---------MODAL BOX HELP -----------*/
+/* Style the navigation bar links */
+.navbar button {
+  float: left;
+  display: block;
+  margin: 5px;
+  color: white;
+  text-align: center;
+  padding: 14px 20px;
+  flex-grow: 1;
+}
+
+
+
+/* Change color on hover */
+.navbar button:hover {
+  background-color: #ddd;
+  opacity: 1;
+  color: black;
+}
+.navbar form{
+  flex-grow: 1;
+  margin:5px; 
+}
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: scroll; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.div_img_text{
+  margin-top: 40px;
+  margin-left: 20px;
+  width: 100%;
+}
+
+.div_img{
+  display: flex;
+}
+
+.div_img_text{
+  flex-wrap: wrap;
+}
+
+.modal-style img{
+  width: 30%;
+  height: 30%;
+  flex-wrap: wrap;
+}
+
+/* Modal Content/Box */
+.modal-style {
+  background-color: #fefefe;
+  margin: 3% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
   
   /* Style the top navigation bar */
   .navbar {
@@ -14,6 +95,29 @@
     background-color: #333;
     display: flex;
     justify-content: space-around;
+  }
+
+   /* Style the navigation bar links */
+   .navbar button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    opacity: 0.9;
+    flex-grow: 1;
+  }
+  
+.navbar button:hover{
+  opacity: 1;
+}
+
+  
+  /* Change color on hover */
+  .navbar button:hover {
+    background-color: #ddd;
+    color: black;
   }
   
   /* Style the navigation bar links */
@@ -23,23 +127,13 @@
     color: white;
     text-align: center;
     padding: 14px 20px;
-    text-decoration: none;
-    border-style: solid;
     flex-grow: 1;
   }
-  
-.navbar a:hover{
-  opacity: 1;
-}
 
-  /* Right-aligned link */
-  .navbar a.right {
-    float: right;
-  }
-  
   /* Change color on hover */
   .navbar a:hover {
     background-color: #ddd;
+    opacity: 1;
     color: black;
   }
   
@@ -52,13 +146,60 @@
   /* Create two unequal columns that sits next to each other */
   /* Sidebar/left column */
   .side {
+    height: 500px;
     flex: 50%;
     background-color: #f1f1f1;
     padding: 20px;
     border-right-style: solid;
     border-left-style: solid;
+    overflow: scroll;
   }
   
+  /*----------------- DEGUSTACIONES MENU BOX -------------------------*/
+  .degustaciones_flex_div{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+  }
+  .card {
+    margin: auto;
+    text-align: center;
+    font-family: arial;
+    flex: 50%;
+    align-items: center;
+  }
+
+  .card img{
+    width: 50%;
+  }
+  .card button {
+    border: none;
+    outline: 0;
+    padding: 12px;
+    color: white;
+    background-color:gold;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+  }
+
+  .card button:hover {
+    opacity: 0.7;
+  }
+  /*------------------------- RECENT BOXES ------------------------- */
+  
+  .recentBox{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .side h2{
+    position: sticky;
+  }
+
   /* Main column */
   .main {   
     background-color: white;
@@ -82,13 +223,7 @@
     flex-wrap: wrap;  
   }
 
-  .menu1,.menu2,.menu3,.menu4{
-    flex: 25%;
-    background-color:red;
-    padding: 20px;
-  }
-
-  .logoutbtn{
+  .navbar form button{
     background-color: red;
     color: white;
     padding: 16px 20px;
@@ -103,6 +238,110 @@
     opacity: 1;
   }
 
+  form.example select{
+    float: left;
+    width: 20%;
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid grey;
+    border-left: none;
+    cursor: pointer;
+    
+    background: #f1f1f1;
+  }
+
+  form.example button {
+    float: left;
+    width: 20%;
+    padding: 10px;
+    background: #2196F3;
+    color: white;
+    font-size: 17px;
+    border: 1px solid grey;
+    border-left: none;
+    cursor: pointer;
+    border: 1px solid grey;
+  }
+  
+  form.example button:hover {
+    background: #0b7dda;
+  }
+  
+  form.example::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+  /*-------------------AUTOCOMPLETE --------------------- */
+
+/*the container must be positioned relative:*/
+.autocomplete {
+  width: 60%;
+  float:left;
+  position: relative;
+  display: inline-block;
+}
+  /* Search bar propierties */
+  .autocomplete input[type=text] {
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid grey;
+    float: left;
+    width: 100%;
+    background: #f1f1f1;
+  }
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+  overflow: scroll;
+  max-height: 200px;
+}
+
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff; 
+  border-bottom: 1px solid #d4d4d4; 
+}
+
+/*when hovering an item:*/
+.autocomplete-items div:hover {
+  background-color: #e9e9e9; 
+}
+
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+  background-color: DodgerBlue !important; 
+  color: #ffffff; 
+}
+
+/*-------------------------Perfil Elements-------------------------*/
+.img-perfil-box{
+  display: flex;
+}
+
+.perfil_img{
+  width: 50%;
+  flex-wrap: wrap;
+  margin: 0px 30px 0 20px;
+}
+
+/*---------------- Request Box ------------------*/
+/*-------------- VER MAS BOTON --------------*/
+.ver_mas_perfil_butt{
+  width: 100%;
+  padding: 10px;
+  margin: 10px;
+}
   /* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
   @media screen and (max-width: 700px) {
     .row {   

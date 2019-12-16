@@ -1,0 +1,44 @@
+body{
+    padding: 50px;
+}
+.request_box{
+    padding: 20px;
+}
+.request_box button {
+    opacity: 0.9;
+    flex-grow: 1;
+    width: 30%;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    opacity: 0.9;
+  }
+  
+  .butt_aceptar{
+    background-color: green;
+  }
+  
+  .butt_ver{
+    background-color: orange;
+  }
+  
+  .butt_eliminar{
+    background-color: red;
+  }
+  
+  .home_butt {
+    background-color: green;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    opacity: 0.9;
+    width: 100%;
+  }
+  
+  button:hover {
+    opacity: 1;
+  }

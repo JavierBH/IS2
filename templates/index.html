@@ -7,87 +7,185 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/main.css') }}" />
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/autocomplete.css') }}" />
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="{{ url_for('static', filename='js/search_bar_home.js') }}"></script>
+
+
 </head>
 <body>
   {{render_messages_success(messages)}}
-<div class="logout">
+
+<div class="navbar">
+  <button id="helpBtn">Ayuda</button>
+  <!-- The Modal -->
+<div id="helpModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-style">
+    <span class="close">&times;</span>
+    <p>·Navegación básica:<br>
+        Degustaciones-> Muestra las desgustaciones más valoradas<br>
+        Configuración-> Permite al usuario modificar sus datos personales(Nombre de usuario, email, password, 
+        Fecha de nacimiento, nombre y apellidos, genero, introducción), así como la posibilidad de reportar errores encontrados en el sistema<br>
+      ·Barra de busqueda:<br>
+        Pestaña que permite seleccionar entre Locales, Degustaciones y Usuarios, para que la buqueda solo de centre en esa elección.<br>
+        -Si el local no existe te permite añadirlo en la página, en caso contrario te mostraría la información relevante del mismo<br>
+        -Si la degustación no existiera te permite añadirla en la página siempre y cuando el local donde se ha probado existiera, sino habría que añadirlo. 
+         Si la degustación existiera se vería la información más importante de la misma (nombre, local, foto) añadiendo la posibilidad de añadir otro local donde se haya probado la misma degustación.<br>
+      ·Pestañas de degustaciones y locales: <br>
+        Se muestran las degustaciones más valoradas por el usuario y los locales en donde de pueden degustar. <br>
+      ·Actividades recientes:<br>
+        Se muestra las actividades recientes de los amigos que el usuario tenga aceptados. <br>
+      ·Perfil(Dispone de 3 pestañas):<br>
+        -Perfil-> Muestra los datos personales del usuario (Nombre de usuario, email, fecha, nombre).<br>
+        -Estadisticas-> Muestra las estadisticas del usuario. <br>
+        -Solicitudes-> Muestra las solicitudes de amistad que el usuario ha recibido de los diferenets usuarios que utilizan el sistema. para las solicitudes de dispone la posibildad de aceptar,
+         ver los datos del usuario que te ha mandado dicha solicitud, y eliminarla. <br>
+      ·Submenus: <br>
+
+    </p>
+  </div>
+
+</div>
+  <a href="{{ url_for('modificar_perfil') }}">Configuracion</a>
   <form method="post" action="{{ url_for('logout') }}">
-    <button type="submit" class="logoutbtn" >Logout</button>
+      <button type="submit" class="logoutbtn" >Logout</button>
   </form>
 </div>
-<div class="navbar">
-  <a href="#">Ayuda</a>
-  <a href="#">Degustaciones</a>
-  <a href="#">Perfil</a>
-</div>
+
+<form class="example" autocomplete="off" method="get" action="{{ url_for('search') }}">
+  <select name="selector">
+    <option value="Locales" >Locales</option>
+    <option value="Degustaciones">Degustaciones</option>
+    <option value ="usuarios"> Usuarios</option>
+  </select>
+
+  <div class="autocomplete">
+    
+  <input id="searchBar" type="text" autocomplete="off" placeholder="Search.." name="var_search">
+  
+  </div>
+  <button type="submit"><i class="fa fa-search"></i></button>
+
+</form>
+
 
 <section class= "main_page">
-    <div class="main">
-        <div class="navbar">
-            <a href="#">Degustaciones</a>
-            <a href="#">Locales</a>
-          </div>
-      <div class="section1">
-          <div class="degus_img" >Image</div>
-          <div class="degus_img" >Image</div>
-      </div>    
-      <div class="section2">
-          <div class="degus_img" >Image</div>
-          <div class="degus_img" >Image</div>
-      </div>
-      <div class="section3">
-          <div class="degus_img" >Image</div>
-          <div class="degus_img" >Image</div>
-      </div>
-   </div>
+
+    <div class="navbar">
+        <button class="tablink" onclick="tab_main(event,'degustaciones')" id="defaultOpen">Degustaciones</button>
+        <button class="tablink" onclick="tab_main(event,'locales')">Locales</button>
+    </div>
+          
+    <div id="degustaciones" class="main">
+      <div class="degustaciones_flex_div " id="degustaciones_flex_div_id">
+      <!--AUTOCOMPLETAR main.js, funcion: degustaciones_window-->
+    </div>
+    </div>
+
+   <div id="locales" class="main">
+    <div class="degustaciones_flex_div " id="locales_flex_div_id">
+      <!--AUTOCOMPLETAR main.js, funcion: degustaciones_window-->
+    </div>
+ </div>
 
   <div class="row">
   <div class="side">
     <h2>Actividades recientes</h2>
-    <h5>Photo of me:</h5>
-    <div class="fakeimg" style="height:200px;">Image</div>
-    <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
-    <h3>More Text</h3>
-    <p>Lorem ipsum dolor sit ame.</p>
-    <div class="fakeimg" style="height:60px;">Image</div><br>
-    <div class="fakeimg" style="height:60px;">Image</div><br>
-    <div class="fakeimg" style="height:60px;">Image</div>
+    <hr>
+    <div class="recentBox" id="recents">
+
+    </div>
   </div>
+
+
   <div class="side">
+    
     <div class="navbar">
-          <a href="#">Perfil</a>    
-          <a href="#">Estadísticas</a>
-          <a href="#">Solicitudes de amistad</a>       
+        <button class="tablink" id="defaultOpenSide" onclick="tab_info_menu(event,'perfil')" >Perfil</button>
+        <button class="tablink" onclick="tab_info_menu(event,'estadisticas')">Estadisticas</button>   
+        <form method="post" action="{{ url_for('mostrar_solicitud') }}"> 
+          <button> Solicitudes </button>
+        </form>
+      </form>
     </div>
+  <div class="info_menu" id="perfil">
     <h2>Perfil</h2>
-    <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod doloribus illo sit, cupiditate fugit quis consequatur esse veniam quidem ab, voluptatem incidunt libero nesciunt ipsum vitae amet accusamus numquam qui!</h3>
+    <div class="img-perfil-box">
+    <img class="perfil_img" src={{foto}} alt="https://i.blogs.es/2b7c9a/moon-colors/450_1000.jpg"/>  
+    <div class="data-box">
+    <label for="email"><b>Nombre de usuario: </b></label>
+    {{usuario}}
+    <hr>
+    <label for="email"><b>Email: </b></label>
+      {{correo}}
+    <hr>
+    <label for="date"><b>Date: </b></label>
+      {{fecha}}
+    <hr>
+    <label for="email"><b>Name: </b></label>
+      {{nombre}}
   </div>
-</section>
+  </div>
 
+  <button class="ver_mas_perfil_butt" id="ver_mas_perfil_butt_id"> Ver Mas</button>
+  <div id="ver_mas_perfil_Modal" class="modal">
 
-<section class="secondary-menus1">
-  <div class="menus">
-   <div class="menu1">
-     <h2>Submenu1</h2>
-   </div>
-   <div class="menu1">
-      <h2>Submenu2</h2>
-   </div>
+    <!-- Modal content -->
+     <div class="modal-style">
+        <span class="close">&times;</span>
+        <div class="div_img">
+            <img src= {{foto}} >
+            <div class= "div_img_text">
+                <label for="email"><b>Nombre de usuario: </b></label>
+                {{usuario}}
+                <br>
+                <hr>
+                <label ><b>Email: </b></label>
+                {{correo}}
+                <br>
+                <hr>
+                <label ><b>Fecha de nacimiento: </b></label>
+                {{fecha}}
+                <br>
+                <hr>
+            </div>
+
+      </div>
+      <div class="div_text">
+          <label ><b>Nombre: </b></label>
+                {{nombre}}
+                <br>
+                <hr>
+                <label ><b>Nacionalidad: </b></label>
+                {{nacionalidad}}
+                <br>
+                <hr>
+                <label ><b>Genero: </b></label>
+                {{genero}}
+                <br>
+                <hr>
+                <label for="email"><b>Introduccion: </b></label> <br>
+          {{introduccion}}
+          <br>
+      </div>  
   </div>
-</section>
-<section class="secondary-menus2">
-  <div class="menus">
-    <div class="menu3">
-        <h2>Submenu3</h2>
-    </div>
-    <div class="menu4">
-        <h2>Submenu4</h2>
+</div>
+</div>
+
+  <div class="info_menu" id="estadisticas">
+      <h2>Estadisticas</h2>
+  
     </div>
   </div>
+    
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </section>
 
 </body>

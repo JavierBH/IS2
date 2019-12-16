@@ -1,0 +1,53 @@
+{% from "_render_macros.html" import render_messages_success %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>DesTapIS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/ver_local.css') }}" />
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body>
+    <h1>INFORMACIÓN DE LA DEGUSTACIÓN</h1>
+    <hr>
+    <img class="perfil_img" src={{foto}} alt="https://i.blogs.es/2b7c9a/moon-colors/450_1000.jpg"/>  
+    <br>
+    <hr>
+    <label ><b>Nombre de la degustacion: </b></label>
+    {{ name }} 
+    <br>
+    <hr>
+    <label ><b>Valoración: </b></label>
+    {{ val }} 
+    <br>
+    <hr>
+    <label ><b>Calificación del gusto: </b></label>
+    {{ calif_gusto }} 
+    <br>
+    <hr>
+    <label ><b>Region: </b></label>
+    {{ region }} 
+    <br>
+    <hr>
+    <label ><b>Local: </b></label>
+    {{ local_name }} 
+    <br>
+    <hr>
+    <label ><b>RESEÑA: </b></label> <br>
+    {{ descr }}
+    <hr>
+    <form get="get"action="{{ url_for('deg_megusta') }}">
+    <button class="home_butt" value={{local_name}} >Me gusta</button>
+</form>
+    <form action="{{ url_for('home') }}">
+    <button class="home_butt">Home</button>
+</form>
+    </body>

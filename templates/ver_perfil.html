@@ -1,0 +1,59 @@
+{% from "_render_macros.html" import render_messages_success %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>DesTapIS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/ver_local.css') }}" />
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+{{render_messages_success(messages)}}
+<h1>INFORMACIÓN DEL USUARIO</h1>
+    <hr> 
+    <img src= {{foto}} style="width: 300px; height:300px;"> 
+    <br>
+    <hr>
+    <label ><b>Nombre de usuario: </b></label>
+    {{ user_name }} 
+    <br>
+    <hr>
+    <label><b>Nombre y Apellidos del usuario: </b></label>
+    {{ nombre }} 
+    <br>
+    <hr>
+    <label><b>Email de usuario: </b></label>
+    {{ email }} 
+    <br>
+    <hr>
+    <label><b>Genero: </b></label>
+    {{ genero }} 
+    <br>
+    <hr>
+    <label><b>Fecha de Nacimiento: </b></label>
+    {{ fecha }} 
+    <br>
+    <hr>
+    <label><b>Introduccion: </b></label> <br>
+    <div>
+    <p>{{ introduccion }}</p>
+</div>
+    <hr>
+
+<form method="POST" action="{{ url_for('enviar_solicitud') }}">
+    <button class="home_butt"  style="background-color:orangered"  name = "nombreAmigo" value = "{{ user_name }}"> ENVIAR SOLICITUD </button>
+</form>
+    
+<hr>
+    <form action="{{ url_for('home') }}">
+    <button class="home_butt">Home</button>
+</form>
+    </body>
