@@ -95,7 +95,7 @@
 
    /* Style the navigation bar links */
    .navbar button {
-    background-color: green;
+    background-color: #4CAF50;
     color: white;
     padding: 16px 20px;
     margin: 8px 0;
@@ -217,12 +217,6 @@
   .menus{
     display:flex;
     flex-wrap: wrap;  
-  }
-
-  .menu1,.menu2,.menu3,.menu4{
-    flex: 25%;
-    background-color:red;
-    padding: 20px;
   }
 
   .navbar form button{
