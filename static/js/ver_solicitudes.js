@@ -20,7 +20,7 @@ function create_request_box(index,name,id){
   
   //Se crea el boton de ver
     var butt_ver = document.createElement("button");
-    butt_ver.setAttribute("id","butt_aceptar_id");
+    butt_ver.setAttribute("id","butt_ver_id");
     butt_ver.setAttribute("class","butt_ver");
     butt_ver.setAttribute("name","ver_solicitud");
     butt_ver.setAttribute("value",id);
