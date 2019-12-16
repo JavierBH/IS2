@@ -278,7 +278,7 @@ def ver_degus():
         cursor.execute("SELECT Foto,Descripcion,Tipo,Region,Tamaño,Calificacion_Gusto,Calificacion FROM Degustaciones WHERE Nombre=? AND Local=?",(local.split(",")[1],local.split(",")[0]))
         rows = cursor.fetchone()
         image_file = url_for('static', filename=rows[0])
-        return render_template("ver_degustacion.html",name=degust,foto=image_file,descr=rows[1],tipo=rows[2],region=rows[3],tamaño=rows[4],calif_gusto=rows[5],calif=rows[6],option=option_var,local_name=local)
+        return render_template("ver_degustacion.html",name=local.split(",")[1],foto=image_file,descr=rows[1],tipo=rows[2],region=rows[3],tamaño=rows[4],calif_gusto=rows[5],calif=rows[6],option=option_var,local_name=local.split(",")[0])
 
 @app.route("/add_degus_local",methods=['GET','POST'])
 def add_degus_local():
