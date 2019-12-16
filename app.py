@@ -263,7 +263,9 @@ def search():
                 flash("El usuario no existe","error")
                 return redirect(url_for("home"))
             else:
-                return render_template("ver_perfil.html", user_name=rows[0],genero=rows[1],email=rows[2],nombre=rows[3],fecha=rows[4],nacionalidad=rows[5],introduccion=rows[6],foto=rows[7])
+                if rows[7] is not None:
+                    image_file = url_for('static', filename=rows[7])
+                return render_template("ver_perfil.html", user_name=rows[0],genero=rows[1],email=rows[2],nombre=rows[3],fecha=rows[4],nacionalidad=rows[5],introduccion=rows[6],foto=image_file)
         cursor.close()  
         conexion.close()
     

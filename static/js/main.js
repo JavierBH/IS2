@@ -58,8 +58,8 @@ function locales_window(img_url,name){
 
 /* Se crean 6 de prueba*/
 for(var i = 0; i<6;i++){
-  degustaciones_window("https://66.media.tumblr.com/21ceabba01c5c84f86331f6cb9fa98a3/tumblr_o4zjfrrpFJ1rlwpsao8_500.png","Degus" + i);
-  locales_window("https://66.media.tumblr.com/21ceabba01c5c84f86331f6cb9fa98a3/tumblr_o4zjfrrpFJ1rlwpsao8_500.png","Local_" + i);
+  degustaciones_window("https://images.unsplash.com/photo-1535332371349-a5d229f49cb5?ixlib=rb-1.2.1&w=1000&q=80","Degus" + i);
+  locales_window("https://images.unsplash.com/photo-1535332371349-a5d229f49cb5?ixlib=rb-1.2.1&w=1000&q=80","Local_" + i);
 
 }
   /*-------------MENUS DE USUARIO, ESTADISTICAS Y SOLICITUDES---------------- */
