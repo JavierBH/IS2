@@ -275,12 +275,8 @@ def ver_degus():
         option_var = request.args.get("option_var")
         conexion = conectar_db()
         cursor = conexion.cursor()
-        print(degust)
-        print(local)
-        cursor.execute("SELECT Foto,Descripcion,Tipo,Region,Tamaño,Calificacion_Gusto,Calificacion FROM Degustaciones WHERE Nombre=? AND Local=?",(degust,local))
+        cursor.execute("SELECT Foto,Descripcion,Tipo,Region,Tamaño,Calificacion_Gusto,Calificacion FROM Degustaciones WHERE Nombre=? AND Local=?",(local.split(",")[1],local.split(",")[0]))
         rows = cursor.fetchone()
-        print("dkfnkkn")
-        print(rows)
         image_file = url_for('static', filename=rows[0])
         return render_template("ver_degustacion.html",name=degust,foto=image_file,descr=rows[1],tipo=rows[2],region=rows[3],tamaño=rows[4],calif_gusto=rows[5],calif=rows[6],option=option_var,local_name=local)
 
