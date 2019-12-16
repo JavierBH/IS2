@@ -12,11 +12,14 @@
 .navbar button {
   float: left;
   display: block;
+  margin: 5px;
   color: white;
   text-align: center;
   padding: 14px 20px;
   flex-grow: 1;
 }
+
+
 
 /* Change color on hover */
 .navbar button:hover {
@@ -25,7 +28,8 @@
   color: black;
 }
 .navbar form{
-  flex-grow: 1
+  flex-grow: 1;
+  margin:5px; 
 }
 /* The Modal (background) */
 .modal {
@@ -245,6 +249,7 @@
     
     background: #f1f1f1;
   }
+
   form.example button {
     float: left;
     width: 20%;
@@ -256,7 +261,6 @@
     border-left: none;
     cursor: pointer;
     border: 1px solid grey;
-
   }
   
   form.example button:hover {
