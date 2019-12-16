@@ -55,7 +55,6 @@ function create_request_box(index,name,id){
       }
       x.parentNode.removeChild(x);
     }
-  
   }
   
   function create_solicitudes_box(arr_names,arr_ids){

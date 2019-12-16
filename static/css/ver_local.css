@@ -20,7 +20,8 @@ body{
 }
 
 .content img{
-  width: 50%;
+  width: 300px;
+  height: 300px;
 }
 /*ELEMENTS CSS*/
 .div_img_text{

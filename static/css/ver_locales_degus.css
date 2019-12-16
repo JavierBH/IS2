@@ -17,7 +17,8 @@
   }
   
   .content img{
-    width: 50%;
+    width: 300px;
+    height: 300px;
   }
     .content button{
         background-color: orange; 

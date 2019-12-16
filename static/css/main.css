@@ -12,11 +12,14 @@
 .navbar button {
   float: left;
   display: block;
+  margin: 5px;
   color: white;
   text-align: center;
   padding: 14px 20px;
   flex-grow: 1;
 }
+
+
 
 /* Change color on hover */
 .navbar button:hover {
@@ -25,7 +28,8 @@
   color: black;
 }
 .navbar form{
-  flex-grow: 1
+  flex-grow: 1;
+  margin:5px; 
 }
 /* The Modal (background) */
 .modal {
@@ -95,7 +99,7 @@
 
    /* Style the navigation bar links */
    .navbar button {
-    background-color: green;
+    background-color: #4CAF50;
     color: white;
     padding: 16px 20px;
     margin: 8px 0;
@@ -219,12 +223,6 @@
     flex-wrap: wrap;  
   }
 
-  .menu1,.menu2,.menu3,.menu4{
-    flex: 25%;
-    background-color:red;
-    padding: 20px;
-  }
-
   .navbar form button{
     background-color: red;
     color: white;
@@ -251,6 +249,7 @@
     
     background: #f1f1f1;
   }
+
   form.example button {
     float: left;
     width: 20%;
@@ -262,7 +261,6 @@
     border-left: none;
     cursor: pointer;
     border: 1px solid grey;
-
   }
   
   form.example button:hover {
