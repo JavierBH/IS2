@@ -37,6 +37,8 @@ def home():
     cols = list()
     cols.append(1)
     cols.append(2)
+    cursor.close()
+    conexion.close()
     #if result is None:
         #return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6],nombre_amigos=cols[0],ids_amigos=cols[1],users_act=None,actividades=None)
     return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6],nombre_amigos=cols[0],ids_amigos=cols[1])#,users_act=result[0],actividades=result[1])
@@ -158,6 +160,8 @@ def login():
             if rows[0] == 1:
                 session["username"] = request.form['usuario']
                 flash("You are logged. Welcome !!!!","success")
+                cursor.close()
+                conexion.close()
                 return redirect(url_for("home"))
             else:
                 flash("You are not verified. Check your e-mail","warning")
@@ -225,6 +229,8 @@ def search():
             cursor.execute("SELECT Local FROM Degustaciones WHERE Nombre = ?",(var_search,))
             rows = cursor.fetchall()
             if not rows:
+                cursor.close()
+                conexion.close()
                 return render_template("add_degustacion.html",name=var_search)
             else:
                 locales = list()
@@ -237,13 +243,17 @@ def search():
                     print(raws)
                     fotos.append(raws[0])
                 print(fotos)
-                return render_template("ver_locales_degus.html",locales=locales,fotos=fotos)
+                cursor.close()
+                conexion.close()
+                return render_template("ver_locales_degus.html",locales=locales,fotos=fotos,degus=var_search)
 
         elif var_filter == "Locales":
             cursor.execute("SELECT Nombre,Direccion,Reseña FROM Locales WHERE Nombre = ?",(var_search,))
             rows = cursor.fetchone()
             if rows is None:
                 flash("El local no existe", "error")
+                cursor.close()
+                conexion.close()
                 return render_template("add_local.html",name=var_search)
             else:
                 degust = list()
@@ -254,6 +264,8 @@ def search():
                     degust.append(x[0])
                     fotos.append(x[1])
                 print(degust)
+                cursor.close()
+                conexion.close()
                 return render_template("ver_local.html",name=rows[0],dir=rows[1],resena=rows[2],degustaciones=degust,fotos=fotos)
         else:
             cursor.execute("SELECT usuario,genero,email,nombre,fecha,nacionalidad,introduccion,foto FROM Users WHERE usuario=?",(var_search,))
@@ -261,10 +273,14 @@ def search():
             print(rows)
             if rows is None:
                 flash("El usuario no existe","error")
+                cursor.close()
+                conexion.close()
                 return redirect(url_for("home"))
             else:
                 if rows[7] is not None:
                     image_file = url_for('static', filename=rows[7])
+                    cursor.close()
+                    conexion.close()
                 return render_template("ver_perfil.html", user_name=rows[0],genero=rows[1],email=rows[2],nombre=rows[3],fecha=rows[4],nacionalidad=rows[5],introduccion=rows[6],foto=image_file)
         cursor.close()  
         conexion.close()
@@ -280,6 +296,8 @@ def ver_degus():
         cursor.execute("SELECT Foto,Descripcion,Tipo,Region,Tamaño,Calificacion_Gusto,Calificacion FROM Degustaciones WHERE Nombre=? AND Local=?",(local.split(",")[1],local.split(",")[0]))
         rows = cursor.fetchone()
         image_file = url_for('static', filename=rows[0])
+        cursor.close()
+        conexion.close()
         return render_template("ver_degustacion.html",name=local.split(",")[1],foto=image_file,descr=rows[1],tipo=rows[2],region=rows[3],tamaño=rows[4],calif_gusto=rows[5],calif=rows[6],option=option_var,local_name=local.split(",")[0])
 
 @app.route("/add_degus_local",methods=['GET','POST'])
@@ -306,6 +324,8 @@ def add_degustacion():
         if rows is not None:
             if rows[0] == local:
                 flash("Ya existe la degustacion %s asociada al local %s, añade un nuevo local" % (nombre_deg,local),"error")
+                cursor.close()
+                conexion.close()
                 return render_template("add_degustacion.html")
 
         #PARTE DE FOTO
@@ -324,6 +344,8 @@ def add_degustacion():
         rows = cursor.fetchone()
         if rows is None:
             flash("El local no existe, por favor añadelo primero","error")
+            cursor.close()
+            conexion.close()
             return render_template("add_local.html")
         cursor.execute('''INSERT INTO Degustaciones ('Nombre','Foto','Descripcion','Tipo',
         'Region','Tamaño','Calificacion_Gusto','Calificacion','Local') VALUES (?,?,?,?,?,?,?,?,?)'''
@@ -544,6 +566,8 @@ def enviar_solicitud():
             Id = row[0]
         if amigos is not None :
             if  (str(Id) in amigos):
+                cursor.close()
+                conn.close()
                 return "Ya son amigos"
         cursor.execute('''INSERT INTO Solicitudes ('Nombre_Usuario','Nombre_Amigo','Validacion') VALUES (?,?,?)'''
             ,(session["username"], nombre_amigo, 0))
@@ -585,7 +609,6 @@ def deg_megusta():
         for row in cursor:
             deg = row[0]
         if deg is None:
-            cursor.execute
             cursor.execute("UPDATE Users SET Deg_Gusta=? WHERE usuario=?",(str(deg)+" -> "+str(datetime.datetime.now())+", ",session["username"]))
         else:
             addDeg = addLista(str(deg)+" -> "+str(datetime.datetime.now())+", ",deg)
@@ -615,7 +638,7 @@ def op_solicitudes():
             image_file = url_for('static', filename=rows[3])
         cursor.close()
         conexion.close()
-        return render_template("ver_perfil.html",nombre=rows[0],email=rows[1],fecha=rows[2],nacionalidad=rows[4],introduccion=rows[5],user_name=session['username'],genero=rows[6])
+        return render_template("ver_perfil.html",nombre=rows[0],email=rows[1],fecha=rows[2],nacionalidad=rows[4],introduccion=rows[5],user_name=session['username'],genero=rows[6],foto=image_file)
     
     if(operacion is None):
         id_solicitud = request.args.get("aceptar_solicitud")
