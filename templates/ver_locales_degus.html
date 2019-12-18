@@ -23,7 +23,8 @@
         <script>
             var locales =' "{{ locales | tojson | safe }}" ' ;
             var fotos =' "{{ fotos | tojson | safe }}" ' ;
-            create_boxes(locales,fotos);
+            var degus =' "{{ degus | tojson | safe }}" ' ;
+            create_boxes(locales,fotos,degus);
         </script>
     </form>
     </div>
