@@ -33,12 +33,9 @@ def home():
     image_file=None
     if rows[3] is not None:
         image_file = url_for('static', filename=rows[3])
-    #result = actividad_reciente()
     cols = list()
     cols.append(1)
     cols.append(2)
-    #if result is None:
-        #return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6],nombre_amigos=cols[0],ids_amigos=cols[1],users_act=None,actividades=None)
     return render_template("index.html",nombre=rows[0],correo=rows[1],fecha=rows[2],foto=image_file,nacionalidad=rows[4],introduccion=rows[5],usuario=session['username'],genero=rows[6],nombre_amigos=cols[0],ids_amigos=cols[1])#,users_act=result[0],actividades=result[1])
 
 def allowed_file(filename):
